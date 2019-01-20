@@ -19,8 +19,6 @@ public class TestTwo {
         LOGGER.debug("debug");
         LOGGER.info("info");
         LOGGER.error("error");
-
-
         LOGGER.info(JSON.toJSONString(Lists.newArrayList("hello","test")));
 
     }

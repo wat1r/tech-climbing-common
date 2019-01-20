@@ -1,14 +1,14 @@
 Buffering
-The stream classes all wrap around streams provided by the calling code and they work on them directly without any additional buffering. On the other hand most of them will benefit from buffering so it is highly recommended that users wrap their stream in Buffered(In|Out)putStreams before using the Commons Compress API.
+The lambda.stream classes all wrap around streams provided by the calling code and they work on them directly without any additional buffering. On the other hand most of them will benefit from buffering so it is highly recommended that users wrap their lambda.stream in Buffered(In|Out)putStreams before using the Commons Compress API.
 
 Factories
-Compress provides factory methods to create input/output streams based on the names of the compressor or archiver format as well as factory methods that try to guess the format of an input stream.
+Compress provides factory methods to create input/output streams based on the names of the compressor or archiver format as well as factory methods that try to guess the format of an input lambda.stream.
 
 To create a compressor writing to a given output by using the algorithm name:
 
 CompressorOutputStream gzippedOut = new CompressorStreamFactory()
     .createCompressorOutputStream(CompressorStreamFactory.GZIP, myOutputStream);
-Make the factory guess the input format for a given archiver stream:
+Make the factory guess the input format for a given archiver lambda.stream:
 
 ArchiveInputStream input = new ArchiveStreamFactory()
     .createArchiveInputStream(originalInput);
