@@ -11,6 +11,7 @@
     <modules>
         <module>basic-tech-core</module>
         <module>basic-concurrent-service</module>
+        <module>basic-tech-bigdata</module>
     </modules>
 
 

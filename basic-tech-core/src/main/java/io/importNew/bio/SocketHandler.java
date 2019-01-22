@@ -1,4 +1,4 @@
-package io.importNew;
+package io.importNew.bio;
 
 import org.apache.commons.io.IOUtils;
 
@@ -10,6 +10,8 @@ import java.nio.channels.*;
  * Created by FrankCooper
  * Date 2019/1/20 23:28
  * Description
+ *
+ * http://www.importnew.com/28021.html
  */
 public class SocketHandler implements Runnable {
 
