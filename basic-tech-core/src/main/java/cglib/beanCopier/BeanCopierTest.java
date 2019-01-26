@@ -7,7 +7,8 @@ package cglib.beanCopier;
 public class BeanCopierTest {
 
 
+    public static void main(String[] args) {
 
-
+    }
 
 }
