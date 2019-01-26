@@ -7,7 +7,8 @@ package io;
 public class TestTwo {
 
     public static void main(String[] args) {
-//        System.out.printf("this is a %s","hello");
+        System.out.printf("this is a %s\n","hello");
+
 
 
         System.out.println("he");
