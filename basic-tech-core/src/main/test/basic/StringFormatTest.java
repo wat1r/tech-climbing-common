@@ -19,5 +19,12 @@ public class StringFormatTest {
 
     }
 
+    @Test
+    public void testTwo() {
+
+
+
+    }
+
 
 }

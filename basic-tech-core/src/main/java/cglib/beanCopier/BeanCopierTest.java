@@ -9,6 +9,8 @@ public class BeanCopierTest {
 
     public static void main(String[] args) {
 
+        System.out.printf("if %s\nelse %s","hello","world");
+
     }
 
 }
