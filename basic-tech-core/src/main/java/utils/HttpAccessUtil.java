@@ -141,13 +141,15 @@ public class HttpAccessUtil {
                     log.error("Failed to download file:" + desc);
                 } finally {
                     try {
-                        if (is != null)
+                        if (is != null) {
                             is.close();
+                        }
                     } catch (IOException e) {
                     }
                     try {
-                        if (fos != null)
+                        if (fos != null) {
                             fos.close();
+                        }
                     } catch (IOException e) {
                     }
                 }

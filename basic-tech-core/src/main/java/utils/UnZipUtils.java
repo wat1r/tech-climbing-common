@@ -60,6 +60,7 @@ public class UnZipUtils {
 
                     //解压缩处理带密码的程序
                     result = item.extractSlow(new ISequentialOutStream() {
+                                                  @Override
                                                   public int write(byte[] data) throws SevenZipException {
 
                                                       try {

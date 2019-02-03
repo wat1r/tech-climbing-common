@@ -16,44 +16,45 @@ public class StreamUtil {
      * 1KB
      */
     public static final int BUF_SIZE = 256;
-    
+
     public static final String ENCODE = "UTF-8";
-    
+
     /**
      * zip file
+     *
      * @param zipfile
      * @param inputFile
      * @throws Exception
      */
     public static void zip(File zipfile, File inputFile)
-        throws Exception {
+            throws Exception {
         ZipOutputStream out = null;
         BufferedOutputStream bo = null;
         try {
             out = new ZipOutputStream(new FileOutputStream(zipfile));
             bo = new BufferedOutputStream(out);
             zip(out, inputFile, inputFile.getName(), bo);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             throw e;
-        }
-        finally {
+        } finally {
             IOUtils.closeQuietly(out);
             IOUtils.closeQuietly(bo);
         }
     }
-    
+
     public static void zip(ZipOutputStream out, File f, String base, BufferedOutputStream bo)
-        throws Exception {
+            throws Exception {
         if (f.isDirectory()) {
             List<File> files = Arrays.asList(f.listFiles());
             Collections.sort(files, new Comparator<File>() {
                 @Override
                 public int compare(File o1, File o2) {
-                    if (o1.isDirectory() && o2.isFile())
+                    if (o1.isDirectory() && o2.isFile()) {
                         return -1;
-                    if (o1.isFile() && o2.isDirectory())
+                    }
+                    if (o1.isFile() && o2.isDirectory()) {
                         return 1;
+                    }
                     return o1.getName().compareTo(o2.getName());
                 }
             });
@@ -61,14 +62,12 @@ public class StreamUtil {
                 String dir = base;
                 if (StringUtils.isNotEmpty(dir)) {
                     dir = base + File.separator + subFile.getName();
-                }
-                else {
+                } else {
                     dir = subFile.getName();
                 }
                 zip(out, subFile, dir, bo);
             }
-        }
-        else {
+        } else {
             out.putNextEntry(new ZipEntry(base));
             BufferedInputStream bi = null;
             try {
@@ -79,25 +78,24 @@ public class StreamUtil {
                     bo.write(b, 0, length);
                 }
                 bo.flush();
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 throw e;
-            }
-            finally {
+            } finally {
                 IOUtils.closeQuietly(bi);
                 out.closeEntry();
             }
         }
     }
-    
+
     /**
      * compress String to bytebuffer as UTF-8
+     *
      * @param input
      * @return
      * @throws Exception
      */
     public static ByteBuffer compressString(String input)
-        throws Exception {
+            throws Exception {
         ByteArrayOutputStream baos = null;
         GZIPOutputStream os = null;
         ByteBuffer buffer = null;
@@ -110,25 +108,24 @@ public class StreamUtil {
             os.finish();
             byte[] compressedBytes = baos.toByteArray();
             buffer = ByteBuffer.wrap(compressedBytes);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             throw e;
-        }
-        finally {
+        } finally {
             IOUtils.closeQuietly(baos);
             IOUtils.closeQuietly(os);
         }
         return buffer;
     }
-    
+
     /**
      * decode bytebuffer to String with UTF-8
+     *
      * @param input
      * @return
      * @throws Exception
      */
     public static String decodeBinary2String(ByteBuffer input)
-        throws Exception {
+            throws Exception {
         byte[] bytes = input.array();
         ByteArrayOutputStream baos = null;
         GZIPInputStream is = null;
@@ -142,25 +139,23 @@ public class StreamUtil {
                 baos.write(buffer, 0, length);
             }
             bytes = baos.toByteArray();
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             throw e;
-        }
-        finally {
+        } finally {
             IOUtils.closeQuietly(is);
             IOUtils.closeQuietly(baos);
         }
         return new String(bytes, ENCODE);
     }
-    
+
     /**
      * combine bytebuffer to string
+     *
      * @param list
      * @return
      * @throws Exception
      */
-    public static ByteBuffer combineBytebuffers(List<ByteBuffer> list)
-    {
+    public static ByteBuffer combineBytebuffers(List<ByteBuffer> list) {
         int length = 0;
         for (ByteBuffer bt : list) {
             length += bt.capacity();
@@ -173,9 +168,10 @@ public class StreamUtil {
         }
         return ByteBuffer.wrap(bytes);
     }
-    
+
     /**
      * splite bytebuffer to array by max length
+     *
      * @param buffer
      * @param max_length
      * @return
@@ -191,5 +187,5 @@ public class StreamUtil {
         }
         return list;
     }
-    
+
 }

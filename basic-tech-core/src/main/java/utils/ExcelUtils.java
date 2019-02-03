@@ -16,6 +16,8 @@ import java.util.regex.Pattern;
 public class ExcelUtils {
 
     private static Logger logger = Logger.getLogger(ExcelUtils.class);
+    private static Pattern pCells = Pattern.compile("(\"[^\"]*(\"{2})*[^\"]*\")*[^,]*,");
+
 
     public static List<String[]> readExcel(String fileName, InputStream is, int start, int totalCells) {
         List<String[]> dataList = new ArrayList<String[]>();
@@ -123,9 +125,8 @@ public class ExcelUtils {
             // 读取一行
             while ((rec = br.readLine()) != null) {
                 int count = 0;
-                Pattern pCells = Pattern.compile("(\"[^\"]*(\"{2})*[^\"]*\")*[^,]*,");
-                Matcher mCells = pCells.matcher(rec);
 
+                Matcher mCells = pCells.matcher(rec);
                 String[] cells = new String[10];// 每行记录一个list
                 // 读取每个单元格
                 while (mCells.find()) {

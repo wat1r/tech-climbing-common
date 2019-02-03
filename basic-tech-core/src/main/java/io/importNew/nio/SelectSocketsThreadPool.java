@@ -46,6 +46,7 @@ public class SelectSocketsThreadPool extends SelectSockets {
      *            <p>
      *            de-register the channel on the next select call.
      */
+    @Override
     protected void readDataFromSocket(SelectionKey key) throws Exception {
         WorkerThread worker = pool.getWorker();
         if (worker == null) {
@@ -121,6 +122,7 @@ public class SelectSocketsThreadPool extends SelectSockets {
         }
 
         // Loop forever waiting for work to do
+        @Override
         public synchronized void run() {
             System.out.println(this.getName() + " is ready");
             while (true) {
@@ -131,7 +133,7 @@ public class SelectSocketsThreadPool extends SelectSockets {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                     // Clear interrupt status
-                    this.interrupted();
+                    interrupted();
                 }
                 if (key == null) {
                     continue; // just in case

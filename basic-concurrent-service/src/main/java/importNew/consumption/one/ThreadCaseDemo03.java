@@ -75,6 +75,7 @@ class Producer implements Runnable { // 通过Runnable实现多线程
         this.info = info;
     }
 
+    @Override
     public void run() {
         boolean flag = true;   // 定义标记位
         for (int i = 0; i < 10; i++) {
@@ -96,6 +97,7 @@ class Consumer implements Runnable {
         this.info = info;
     }
 
+    @Override
     public void run() {
         for (int i = 0; i < 10; i++) {
             this.info.get();
