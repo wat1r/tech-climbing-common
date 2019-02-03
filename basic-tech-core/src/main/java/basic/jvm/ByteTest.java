@@ -7,7 +7,7 @@ package basic.jvm;
  */
 public class ByteTest {
 
-    private static final int _1MB = 1024 * 1024;
+    private static final int ONE_MB = 1024 * 1024;
 
     public static void main(String[] args) {
 
@@ -45,7 +45,7 @@ public class ByteTest {
      * -XX:PretenureSizeThreshold=6MB
      */
     private static void testPretenureSizeThreshold() {
-        byte[] b1 = new byte[7 * _1MB];
+        byte[] b1 = new byte[7 * ONE_MB];
     }
 
 

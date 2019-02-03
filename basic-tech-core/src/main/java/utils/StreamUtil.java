@@ -173,13 +173,13 @@ public class StreamUtil {
      * splite bytebuffer to array by max length
      *
      * @param buffer
-     * @param max_length
+     * @param maxLength
      * @return
      */
-    public static List<ByteBuffer> spliteBytebuffer(ByteBuffer buffer, int max_length) {
+    public static List<ByteBuffer> spliteBytebuffer(ByteBuffer buffer, int maxLength) {
         List<ByteBuffer> list = new ArrayList<ByteBuffer>();
-        for (int i = 0; i < buffer.capacity(); i += max_length) {
-            int length = buffer.capacity() - i >= max_length ? max_length : buffer.capacity() - i;
+        for (int i = 0; i < buffer.capacity(); i += maxLength) {
+            int length = buffer.capacity() - i >= maxLength ? maxLength : buffer.capacity() - i;
             byte[] bytes = new byte[length];
             buffer.get(bytes, 0, length);
             ByteBuffer descBuffer = ByteBuffer.wrap(bytes);

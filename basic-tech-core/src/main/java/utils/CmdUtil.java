@@ -28,7 +28,7 @@ public class CmdUtil {
     /**
      * true未超时 false 超时
      */
-    private boolean no_timeout = true;
+    private boolean noTimeout = true;
 
     /**
      * @param command 需要执行的命令
@@ -75,7 +75,7 @@ public class CmdUtil {
                 StringBuffer errSr = new StringBuffer();
                 try {
                     while ((errtemp = errReader.readLine()) != null
-                            && no_timeout) {
+                            && noTimeout) {
                         // System.out.println("错误流 " + errtemp);
                         append(errSr, errtemp);
                     }
@@ -111,7 +111,7 @@ public class CmdUtil {
                 String intemp;
                 StringBuffer inSr = new StringBuffer();
                 try {
-                    while ((intemp = inReader.readLine()) != null && no_timeout) {
+                    while ((intemp = inReader.readLine()) != null && noTimeout) {
                         // System.out.println("输出流  " + intemp);
                         append(inSr, intemp);
                     }
@@ -158,7 +158,7 @@ public class CmdUtil {
                     // 超时 -->> Thread.interrupted() -->> wautfor抛出异常
                     // callback[0].onFailed(e);
                     callback[0].onTimeout();
-                    no_timeout = false;
+                    noTimeout = false;
                 }
 
                 if (process[0] != null) {

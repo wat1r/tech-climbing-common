@@ -56,7 +56,7 @@ public class ExcelUtils {
                         rowList[c] = (cellValue);
                         continue;
                     }
-                    cellValue = ConvertCellStr(cell, cellValue);
+                    cellValue = convertCellStr(cell, cellValue);
                     rowList[c] = (cellValue);
                 }
                 dataList.add(rowList);
@@ -65,7 +65,7 @@ public class ExcelUtils {
         return dataList;
     }
 
-    private static String ConvertCellStr(Cell cell, String cellStr) {
+    private static String convertCellStr(Cell cell, String cellStr) {
         switch (cell.getCellType()) {
             case Cell.CELL_TYPE_STRING:
                 // 读取String
@@ -88,6 +88,8 @@ public class ExcelUtils {
             case Cell.CELL_TYPE_FORMULA:
                 // 读取公式
                 cellStr = cell.getCellFormula().toString();
+                break;
+            default:
                 break;
         }
         return cellStr;
