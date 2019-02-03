@@ -80,7 +80,7 @@ public class CmdUtil {
                         append(errSr, errtemp);
                     }
                     // 将错误流信息回调
-                    if (!errSr.toString().trim().equals("")) {
+                    if (!"".equals(errSr.toString().trim())) {
                         callback[0].erroutResponse(errSr.toString());
                     }
 
@@ -117,7 +117,7 @@ public class CmdUtil {
                     }
 
                     // 将输入流信息回调
-                    if (!inSr.toString().trim().equals("")) {
+                    if (!"".equals(inSr.toString().trim())) {
                         callback[0].stdoutResponse(inSr.toString());
                     }
 
@@ -190,7 +190,7 @@ public class CmdUtil {
     // 给字符换行
     private void append(StringBuffer stringBuffer, String text) {
         if (stringBuffer != null) {
-            if (!text.trim().equals("")) {
+            if (!"".equals(text.trim())) {
                 stringBuffer.append(text + "\n");
             }
         }
