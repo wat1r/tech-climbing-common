@@ -1,0 +1,172 @@
+E: \DevTools\Java\jdk1.8.0_144\bin\java"-javaagent:E:\DevTools\JetBrains\IntelliJ IDEA 2017.2\lib\idea_rt.jar=51025:E:\DevTools\JetBrains\IntelliJ IDEA 2017.2\bin"-Dfile.encoding=UTF-8-classpathE: \DevTools\Java\jdk1.8.0_144\jre\lib\charsets.jar;E: \DevTools\Java\jdk1.8.0_144\jre\lib\deploy.jar;E: \DevTools\Java\jdk1.8.0_144\jre\lib\ext\access-bridge-64.jar;E: \DevTools\Java\jdk1.8.0_144\jre\lib\ext\cldrdata.jar;E: \DevTools\Java\jdk1.8.0_144\jre\lib\ext\dnsns.jar;E: \DevTools\Java\jdk1.8.0_144\jre\lib\ext\jaccess.jar;E: \DevTools\Java\jdk1.8.0_144\jre\lib\ext\jfxrt.jar;E: \DevTools\Java\jdk1.8.0_144\jre\lib\ext\localedata.jar;E: \DevTools\Java\jdk1.8.0_144\jre\lib\ext\nashorn.jar;E: \DevTools\Java\jdk1.8.0_144\jre\lib\ext\sunec.jar;E: \DevTools\Java\jdk1.8.0_144\jre\lib\ext\sunjce_provider.jar;E: \DevTools\Java\jdk1.8.0_144\jre\lib\ext\sunmscapi.jar;E: \DevTools\Java\jdk1.8.0_144\jre\lib\ext\sunpkcs11.jar;E: \DevTools\Java\jdk1.8.0_144\jre\lib\ext\zipfs.jar;E: \DevTools\Java\jdk1.8.0_144\jre\lib\javaws.jar;E: \DevTools\Java\jdk1.8.0_144\jre\lib\jce.jar;E: \DevTools\Java\jdk1.8.0_144\jre\lib\jfr.jar;E: \DevTools\Java\jdk1.8.0_144\jre\lib\jfxswt.jar;E: \DevTools\Java\jdk1.8.0_144\jre\lib\jsse.jar;E: \DevTools\Java\jdk1.8.0_144\jre\lib\management-agent.jar;E: \DevTools\Java\jdk1.8.0_144\jre\lib\plugin.jar;E: \DevTools\Java\jdk1.8.0_144\jre\lib\resources.jar;E: \DevTools\Java\jdk1.8.0_144\jre\lib\rt.jar;E: \StudyingCourse\IntellijModule\tech-climbing-common\basic-tech-core\target\classes;E: \DevTools\maven\Repository\RepositoryForIdeaOne\cglib\cglib\2.2.2\cglib-2.2.2.jar;E: \DevTools\maven\Repository\RepositoryForIdeaOne\asm\asm\3.3.1\asm-3.3.1.jar;E: \DevTools\maven\Repository\RepositoryForIdeaOne\com\squareup\okhttp3\okhttp\3.11.0\okhttp-3.11.0.jar;E: \DevTools\maven\Repository\RepositoryForIdeaOne\com\squareup\okio\okio\1.14.0\okio-1.14.0.jar;E: \DevTools\maven\Repository\RepositoryForIdeaOne\org\apache\poi\poi\3.17\poi-3.17.jar;E: \DevTools\maven\Repository\RepositoryForIdeaOne\commons-codec\commons-codec\1.10\commons-codec-1.10.jar;E: \DevTools\maven\Repository\RepositoryForIdeaOne\org\apache\commons\commons-collections4\4.1\commons-collections4-4.1.jar;E: \DevTools\maven\Repository\RepositoryForIdeaOne\org\apache\poi\poi-ooxml\3.17\poi-ooxml-3.17.jar;E: \DevTools\maven\Repository\RepositoryForIdeaOne\org\apache\poi\poi-ooxml-schemas\3.17\poi-ooxml-schemas-3.17.jar;E: \DevTools\maven\Repository\RepositoryForIdeaOne\org\apache\xmlbeans\xmlbeans\2.6.0\xmlbeans-2.6.0.jar;E: \DevTools\maven\Repository\RepositoryForIdeaOne\stax\stax-api\1.0.1\stax-api-1.0.1.jar;E: \DevTools\maven\Repository\RepositoryForIdeaOne\com\github\virtuald\curvesapi\1.04\curvesapi-1.04.jar;E: \DevTools\maven\Repository\RepositoryForIdeaOne\net\sf\sevenzipjbinding\sevenzipjbinding\9.20-2.00beta\sevenzipjbinding-9.20-2.00beta.jar;E: \DevTools\maven\Repository\RepositoryForIdeaOne\net\sf\sevenzipjbinding\sevenzipjbinding-all-platforms\9.20-2.00beta\sevenzipjbinding-all-platforms-9.20-2.00beta.jar;E: \DevTools\maven\Repository\RepositoryForIdeaOne\com\alibaba\fastjson\1.2.47\fastjson-1.2.47.jar;E: \DevTools\maven\Repository\RepositoryForIdeaOne\org\slf4j\slf4j-api\1.7.25\slf4j-api-1.7.25.jar;E: \DevTools\maven\Repository\RepositoryForIdeaOne\org\slf4j\slf4j-log4j12\1.7.25\slf4j-log4j12-1.7.25.jar;E: \DevTools\maven\Repository\RepositoryForIdeaOne\log4j\log4j\1.2.17\log4j-1.2.17.jar;E: \DevTools\maven\Repository\RepositoryForIdeaOne\com\google\guava\guava\19.0\guava-19.0.jar;E: \DevTools\maven\Repository\RepositoryForIdeaOne\ch\qos\logback\logback-classic\1.2.3\logback-classic-1.2.3.jar;E: \DevTools\maven\Repository\RepositoryForIdeaOne\ch\qos\logback\logback-core\1.2.3\logback-core-1.2.3.jar;E: \DevTools\maven\Repository\RepositoryForIdeaOne\org\projectlombok\lombok\1.18.0\lombok-1.18.0.jar;E: \DevTools\maven\Repository\RepositoryForIdeaOne\commons-io\commons-io\2.4\commons-io-2.4.jar;E: \DevTools\maven\Repository\RepositoryForIdeaOne\commons-net\commons-net\3.6\commons-net-3.6.jar;E: \DevTools\maven\Repository\RepositoryForIdeaOne\commons-collections\commons-collections\3.2.1\commons-collections-3.2.1.jar;E: \DevTools\maven\Repository\RepositoryForIdeaOne\org\apache\commons\commons-compress\1.18\commons-compress-1.18.jar;E: \DevTools\maven\Repository\RepositoryForIdeaOne\org\apache\commons\commons-lang3\3.6\commons-lang3-3.6.jar;E: \DevTools\maven\Repository\RepositoryForIdeaOne\org\apache\commons\commons-exec\1.3\commons-exec-1.3.jarbasic.jvm.JVMToolsaaa{
+	"Thread[Finalizer,8,system]": [{
+		"fileName": "Object.java",
+		"nativeMethod": true,
+		"methodName": "wait",
+		"className": "java.lang.Object",
+		"lineNumber": -2
+	},
+	{
+		"fileName": "ReferenceQueue.java",
+		"nativeMethod": false,
+		"methodName": "remove",
+		"className": "java.lang.ref.ReferenceQueue",
+		"lineNumber": 143
+	},
+	{
+		"fileName": "ReferenceQueue.java",
+		"nativeMethod": false,
+		"methodName": "remove",
+		"className": "java.lang.ref.ReferenceQueue",
+		"lineNumber": 164
+	},
+	{
+		"fileName": "Finalizer.java",
+		"nativeMethod": false,
+		"methodName": "run",
+		"className": "java.lang.ref.Finalizer$FinalizerThread",
+		"lineNumber": 209
+	}],
+	"Thread[main,5,main]": [{
+		"fileName": "Thread.java",
+		"nativeMethod": true,
+		"methodName": "dumpThreads",
+		"className": "java.lang.Thread",
+		"lineNumber": -2
+	},
+	{
+		"fileName": "Thread.java",
+		"nativeMethod": false,
+		"methodName": "getAllStackTraces",
+		"className": "java.lang.Thread",
+		"lineNumber": 1610
+	},
+	{
+		"fileName": "JVMTools.java",
+		"nativeMethod": false,
+		"methodName": "jstack",
+		"className": "basic.jvm.JVMTools",
+		"lineNumber": 30
+	},
+	{
+		"fileName": "JVMTools.java",
+		"nativeMethod": false,
+		"methodName": "main",
+		"className": "basic.jvm.JVMTools",
+		"lineNumber": 18
+	}],
+	"Thread[Signal Dispatcher,9,system]": [],
+	"Thread[Attach Listener,5,system]": [],
+	"Thread[Reference Handler,10,system]": [{
+		"fileName": "Object.java",
+		"nativeMethod": true,
+		"methodName": "wait",
+		"className": "java.lang.Object",
+		"lineNumber": -2
+	},
+	{
+		"fileName": "Object.java",
+		"nativeMethod": false,
+		"methodName": "wait",
+		"className": "java.lang.Object",
+		"lineNumber": 502
+	},
+	{
+		"fileName": "Reference.java",
+		"nativeMethod": false,
+		"methodName": "tryHandlePending",
+		"className": "java.lang.ref.Reference",
+		"lineNumber": 191
+	},
+	{
+		"fileName": "Reference.java",
+		"nativeMethod": false,
+		"methodName": "run",
+		"className": "java.lang.ref.Reference$ReferenceHandler",
+		"lineNumber": 153
+	}],
+	"Thread[Monitor Ctrl-Break,5,main]": [{
+		"fileName": "SocketInputStream.java",
+		"nativeMethod": true,
+		"methodName": "socketRead0",
+		"className": "java.net.SocketInputStream",
+		"lineNumber": -2
+	},
+	{
+		"fileName": "SocketInputStream.java",
+		"nativeMethod": false,
+		"methodName": "socketRead",
+		"className": "java.net.SocketInputStream",
+		"lineNumber": 116
+	},
+	{
+		"fileName": "SocketInputStream.java",
+		"nativeMethod": false,
+		"methodName": "read",
+		"className": "java.net.SocketInputStream",
+		"lineNumber": 171
+	},
+	{
+		"fileName": "SocketInputStream.java",
+		"nativeMethod": false,
+		"methodName": "read",
+		"className": "java.net.SocketInputStream",
+		"lineNumber": 141
+	},
+	{
+		"fileName": "StreamDecoder.java",
+		"nativeMethod": false,
+		"methodName": "readBytes",
+		"className": "sun.nio.cs.StreamDecoder",
+		"lineNumber": 284
+	},
+	{
+		"fileName": "StreamDecoder.java",
+		"nativeMethod": false,
+		"methodName": "implRead",
+		"className": "sun.nio.cs.StreamDecoder",
+		"lineNumber": 326
+	},
+	{
+		"fileName": "StreamDecoder.java",
+		"nativeMethod": false,
+		"methodName": "read",
+		"className": "sun.nio.cs.StreamDecoder",
+		"lineNumber": 178
+	},
+	{
+		"fileName": "InputStreamReader.java",
+		"nativeMethod": false,
+		"methodName": "read",
+		"className": "java.io.InputStreamReader",
+		"lineNumber": 184
+	},
+	{
+		"fileName": "BufferedReader.java",
+		"nativeMethod": false,
+		"methodName": "fill",
+		"className": "java.io.BufferedReader",
+		"lineNumber": 161
+	},
+	{
+		"fileName": "BufferedReader.java",
+		"nativeMethod": false,
+		"methodName": "readLine",
+		"className": "java.io.BufferedReader",
+		"lineNumber": 324
+	},
+	{
+		"fileName": "BufferedReader.java",
+		"nativeMethod": false,
+		"methodName": "readLine",
+		"className": "java.io.BufferedReader",
+		"lineNumber": 389
+	},
+	{
+		"fileName": "AppMainV2.java",
+		"nativeMethod": false,
+		"methodName": "run",
+		"className": "com.intellij.rt.execution.application.AppMainV2$1",
+		"lineNumber": 64
+	}]
+}Processfinishedwithexitcode0
