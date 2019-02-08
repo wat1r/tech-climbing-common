@@ -27,7 +27,7 @@ public class Consumer {
                         @Override
                         public ConsumeConcurrentlyStatus consumeMessage(
                                 List<MessageExt> list,
-                                ConsumeConcurrentlyContext Context) {
+                                ConsumeConcurrentlyContext context) {
                             Message msg = list.get(0);
                             System.out.println(msg.toString());
                             return ConsumeConcurrentlyStatus.CONSUME_SUCCESS;
