@@ -1,7 +1,11 @@
 package basic.jvm;
 
+import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
+
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by FrankCooper
@@ -33,8 +37,19 @@ public class JVMTest {
 
     @Test
     public void referenceTest(){
-
+//        THREAD_POOL_EXECUTOR =‘ new ThreadPoolExecutor(coreNum * 3, coreNum * 4, 10, TimeUnit.MINUTES,
+//                ARRAY_BLOCKING_QUEUE, new ThreadFactoryBuilder().setNameFormat("chemical-data-automation-db-%d").build(), new ThreadPoolExecutor.AbortPolicy());
+//        FAST_READ_FILE_EXECUTOR = new ThreadPoolExecutor(coreNum, coreNum + 1, 10, TimeUnit.MINUTES,
+//                ARRAY_READ_BLOCKING_QUEUE, new ThreadFactoryBuilder().setNameFormat("chemical-data-automation-read-%d").build(), new ThreadPoolExecutor.AbortPolicy());
     }
+
+
+
+    @Test
+    public void testRuntime(){
+        System.out.println(""+Runtime.getRuntime().availableProcessors());
+    }
+
 
 
 
