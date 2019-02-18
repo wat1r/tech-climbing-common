@@ -1,11 +1,9 @@
 package algorithm.leetcode;
 
 import algorithm.utils.SortUtils;
+import com.alibaba.fastjson.JSON;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
 
 /**
  * @Author:Cooper
@@ -425,10 +423,6 @@ public class LeetCodeOne {
     }
 
 
-    /**
-     * @param prices
-     * @return
-     */
     public int maxProfitII(int[] prices) {
         if (prices == null || prices.length == 0) {
             return 0;
@@ -486,6 +480,225 @@ public class LeetCodeOne {
         return new String(chars);
     }
 
+
+    /**
+     * 20. 有效的括号
+     *
+     * @param s
+     * @return 给定一个只包括 '('，')'，'{'，'}'，'['，']' 的字符串，判断字符串是否有效。
+     * <p>
+     * 有效字符串需满足：
+     * <p>
+     * 左括号必须用相同类型的右括号闭合。
+     * 左括号必须以正确的顺序闭合。
+     * 注意空字符串可被认为是有效字符串。
+     */
+    public boolean isValid(String s) {
+
+        HashMap<Character, Character> ctrlMap = new HashMap<Character, Character>() {
+            {
+                put(')', '(');
+                put(']', '[');
+                put('}', '{');
+            }
+        };
+        Stack<Character> stack = new Stack<>();
+        for (int i = 0; i < s.length(); i++) {
+            if (ctrlMap.containsKey(s.charAt(i))) {
+                char top = stack.isEmpty() ? '#' : stack.pop();
+                if (top != ctrlMap.get(s.charAt(i))) {
+                    return false;
+                }
+            } else {
+                stack.push(s.charAt(i));
+            }
+        }
+        return stack.isEmpty();
+    }
+
+    /**
+     * @param n
+     * @return 解析
+     * https://blog.csdn.net/wutingyehe/article/details/51155231
+     */
+    public List<Integer> grayCode(int n) {
+
+        ArrayList<Integer> result = new ArrayList<Integer>();
+        if (n < 0) {
+            return result;
+        }
+        if (n == 0) {
+            result.add(0);
+            return result;
+        }
+        if (n == 1) {
+            result.add(0);
+            result.add(1);
+            return result;
+        }
+        List<Integer> list = grayCode(n - 1);
+        for (int i = 0; i < list.size(); i++) {
+            result.add(list.get(i));
+        }
+        for (int i = list.size() - 1; i >= 0; i--) {
+            result.add(((int) Math.pow(2, n - 1)) + list.get(i));
+        }
+        return result;
+    }
+
+    /**
+     * 4. 寻找两个有序数组的中位数
+     *
+     * @param nums1
+     * @param nums2
+     * @return 给定两个大小为 m 和 n 的有序数组 nums1 和 nums2。
+     * <p>
+     * 请你找出这两个有序数组的中位数，并且要求算法的时间复杂度为 O(log(m + n))。
+     * <p>
+     * 你可以假设 nums1 和 nums2 不会同时为空
+     */
+    public double findMedianSortedArrays(int[] nums1, int[] nums2) {
+
+
+        return 0.0;
+    }
+
+
+    /**
+     * 11. 盛最多水的容器
+     *
+     * @param height
+     * @return 给定 n 个非负整数 a1，a2，...，an，每个数代表坐标中的一个点 (i, ai) 。在坐标内画 n 条垂直线，垂直线 i 的两个端点分别为 (i, ai) 和 (i, 0)。
+     * 找出其中的两条线，使得它们与 x 轴共同构成的容器可以容纳最多的水。
+     */
+    public int maxArea(int[] height) {
+        int left = 0, right = height.length - 1, maxarea = 0;
+        while (left < right) {
+            maxarea = Math.max(maxarea, Math.min(height[left], height[right]) * (right - left));
+            if (height[left] < height[right]) {
+                left++;
+            } else {
+                right--;
+            }
+        }
+        return maxarea;
+    }
+
+
+    /**
+     * 14. 最长公共前缀
+     *
+     * @param strs
+     * @return 编写一个函数来查找字符串数组中的最长公共前缀。
+     * <p>
+     * 如果不存在公共前缀，返回空字符串 ""。
+     * <p>
+     * 四种解法
+     */
+    public String longestCommonPrefix(String[] strs) {
+        if (strs.length == 0) {
+            return "";
+        }
+        String prefix = strs[0];
+        for (int i = 1; i < strs.length; i++) {
+            while (strs[i].indexOf(prefix) != 0) {
+                prefix = prefix.substring(0, prefix.length() - 1);
+            }
+        }
+        return prefix;
+    }
+
+
+    /**
+     * 54. 螺旋矩阵
+     *
+     * @param matrix
+     * @return 给定一个包含 m x n 个元素的矩阵（m 行, n 列），请按照顺时针螺旋顺序，返回矩阵中的所有元素。
+     */
+    public List<Integer> spiralOrder(int[][] matrix) {
+        if (matrix.length == 0 || matrix[0].length == 0) {
+            return new ArrayList<Integer>();
+        }
+        int tR = 0, tC = 0;
+        int dR = matrix.length - 1, dC = matrix[0].length - 1;
+        List<Integer> resList = new ArrayList<>();
+        while (tR <= dR && tC <= dC) {
+            printEdge(matrix, tR++, tC++, dR--, dC--, resList);
+        }
+        return resList;
+    }
+
+    private void printEdge(int[][] matrix, int tR, int tC, int dR, int dC, List<Integer> resList) {
+        if (tR == dR) {//子矩阵只有一行
+            for (int i = tC; i <= dC; i++) {
+                resList.add(matrix[tR][i]);
+            }
+        } else if (tC == dC) {//子矩阵只有一列
+            for (int i = tR; i <= dR; i++) {
+                resList.add(matrix[i][tC]);
+            }
+        } else {
+            int curC = tC;
+            int curR = tR;
+            while (curC != dC) {
+                resList.add(matrix[tR][curC]);
+                curC++;
+            }
+            while (curR != dR) {
+                resList.add(matrix[curR][dC]);
+                curR++;
+            }
+            while (curC != tC) {
+                resList.add(matrix[dR][curC]);
+                curC--;
+            }
+            while (curR != tR) {
+                resList.add(matrix[curR][tC]);
+                curR--;
+            }
+        }
+
+    }
+
+    /**
+     * 46. 全排列
+     *
+     * @param nums
+     * @return 给定一个没有重复数字的序列，返回其所有可能的全排列。
+     * 全排列算法思路解析
+     * https://blog.csdn.net/summerxiachen/article/details/60579623
+     * <p>
+     * https://blog.csdn.net/a754112602/article/details/81109663
+     */
+    public List<List<Integer>> permute(int[] nums) {
+        List<List<Integer>> res = new ArrayList<List<Integer>>();
+        ArrayList<Integer> temp = new ArrayList<Integer>();
+        dfs(res, nums, 0);
+        return res;
+    }
+
+    private void dfs(List<List<Integer>> res, int[] nums, int j) {
+        if (j == nums.length) {
+            List<Integer> temp = new ArrayList<Integer>();
+            for (int num : nums) {
+                temp.add(num);
+            }
+            res.add(temp);
+        }
+        for (int i = j; i < nums.length; i++) {
+            swap(nums, i, j);
+            dfs(res, nums, j + 1);
+            swap(nums, i, j);
+        }
+    }
+
+    private void swap(int[] nums, int m, int n) {
+        int temp = nums[m];
+        nums[m] = nums[n];
+        nums[n] = temp;
+    }
+
+
     public static void main(String[] args) {
 //        int[] nums = {4, 1, 2, 1, 2};
 //        System.out.println(handler.singleNumber(nums));
@@ -518,6 +731,21 @@ public class LeetCodeOne {
 //        handler.climbStairs(3);
 //        int[] prices = {7, 1, 5, 3, 6, 4};
 //        System.out.println(handler.maxProfit(prices));
+
+//        System.out.println(JSON.toJSON(handler.grayCode(2)));
+
+
+//        int[] height = {1, 8, 6, 2, 5, 4, 8, 3, 7};
+//        System.out.println(handler.maxArea(height));
+
+//        String[] strs = {"flower", "flow", "flight"};
+//        System.out.println(handler.longestCommonPrefix(strs));
+        int[][] matrix = {
+                {1, 2, 3},
+                {4, 5, 6},
+                {7, 8, 9}
+        };
+        System.out.println(JSON.toJSON(handler.spiralOrder(matrix)));
     }
 
 
