@@ -672,7 +672,6 @@ public class LeetCodeOne {
      */
     public List<List<Integer>> permute(int[] nums) {
         List<List<Integer>> res = new ArrayList<List<Integer>>();
-        ArrayList<Integer> temp = new ArrayList<Integer>();
         dfs(res, nums, 0);
         return res;
     }
@@ -697,6 +696,323 @@ public class LeetCodeOne {
         nums[m] = nums[n];
         nums[n] = temp;
     }
+
+
+    /**
+     * 680. 验证回文字符串 Ⅱ
+     *
+     * @param s
+     * @return 给定一个非空字符串 s，最多删除一个字符。判断是否能成为回文字符串。
+     * <p>
+     * 使用双指针，一个指向头，一个指向尾，如果两者不相同了，则可以将尾部的往前挪一个，或者首部的往后挪一个，判断这两种情况
+     * 这两种已经相当于删除了一个字符，如果不是回文字符串，说明删除一个字符满足不了要求
+     */
+    public boolean validPalindrome(String s) {
+
+        if (s.length() == 0) {
+            return false;
+        }
+        int left = 0, right = s.length() - 1;
+        char[] chas = s.toCharArray();
+        while (left < right) {
+            if (chas[left] != chas[right]) {
+                return isPalindrome(chas, left + 1, right) || isPalindrome(chas, left, right - 1);
+            }
+            left++;
+            right--;
+        }
+        return true;
+    }
+
+    public boolean isPalindrome(char[] chas, int left, int right) {
+        while (left < right) {
+            if (chas[left] != chas[right]) {
+                return false;
+            }
+            left++;
+            right--;
+        }
+        return true;
+    }
+
+
+    /**
+     * 125. 验证回文串
+     *
+     * @param s
+     * @return 给定一个字符串，验证它是否是回文串，只考虑字母和数字字符，可以忽略字母的大小写。
+     */
+    public boolean isPalindrome(String s) {
+        char[] chas = s.toLowerCase().toCharArray();
+        StringBuffer ctrlStr = new StringBuffer();
+        for (int i = 0; i < chas.length; i++) {
+            ctrlStr.append(onlyNumAndAlphabet(chas[i]));
+        }
+        return isPalindromeWithoutCase(ctrlStr.toString().toCharArray(), 0, ctrlStr.toString().length() - 1);
+    }
+
+    public String onlyNumAndAlphabet(char cha) {
+        StringBuffer sb = new StringBuffer();
+        if ((cha >= '0' && cha <= '9') || (cha >= 'a' && cha <= 'z')) {
+            sb.append(cha);
+        }
+        return sb.toString();
+    }
+
+    public boolean isPalindromeWithoutCase(char[] chas, int left, int right) {
+        while (left < right) {
+            if (chas[left] != chas[right]) {
+                return false;
+            }
+            left++;
+            right--;
+        }
+        return true;
+    }
+
+
+    /**
+     * 235. 二叉搜索树的最近公共祖先
+     *
+     * @param root
+     * @param p
+     * @param q
+     * @return 给定一个二叉搜索树, 找到该树中两个指定节点的最近公共祖先。
+     * <p>
+     * 也是使用递归来做，但是这里多了一个条件可以辅助我们去判断。因为这个条件是二叉搜索树，二叉搜索树是排序的，如果说两个需要比较的节点的值都比当前根节点小的话，那么就在左子树中搜索，如果说都大于，那么就在右子树中搜索。如果说一个小于当前根节点，一个大于当前根节点的话，就可以确定当前的根节点就是最近公共祖先。因为上一道题，无法判断需要走哪条分支，所以说两个分支都要走，然后比较两个分支的结果
+     */
+    public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+        if ((root.val - p.val) * (root.val - q.val) <= 0) {
+            return root;
+        } else if (root.val > p.val) {
+            root = lowestCommonAncestor(root.left, p, q);
+        } else {
+            root = lowestCommonAncestor(root.right, p, q);
+        }
+        return root;
+    }
+
+    /**
+     * 104. 二叉树的最大深度
+     *
+     * @param root
+     * @return 给定一个二叉树，找出其最大深度。
+     * <p>
+     * 二叉树的深度为根节点到最远叶子节点的最长路径上的节点数。
+     * <p>
+     * 说明: 叶子节点是指没有子节点的节点。
+     */
+    public int maxDepth(TreeNode root) {
+        if (root == null) {
+            return 0;
+        } else {
+            int leftDepth = maxDepth(root.left);
+            int rightDepth = maxDepth(root.right);
+            return Math.max(leftDepth, rightDepth) + 1;
+        }
+    }
+
+
+    /**
+     * 231. 2的幂
+     *
+     * @param n
+     * @return
+     */
+    public boolean isPowerOfTwo(int n) {
+        if (n <= 0) {
+            return false;
+        }
+        int count = 0;
+        while (n != 0) {
+            count += (n & 1);
+            n >>= 1;
+        }
+        return count == 1;
+    }
+
+
+    //---------------------------排列类-开始----------------------------//
+
+    /**
+     * //441. 排列硬币
+     *
+     * @param n
+     * @return
+     */
+    public int arrangeCoins(int n) {
+        if (n == 0) {
+            return 0;
+        }
+        if (n <= 2 && n > 0) {
+            return 1;
+        }
+        int sum = 0, row = 0, count = 0;
+        while (sum <= n) {
+            row += 1;
+            count++;
+            sum += row;
+        }
+        return (sum == n) ? count : count - 1;
+    }
+
+
+    /**
+     * 46题
+     *
+     * @param nums
+     * @return
+     */
+    public List<List<Integer>> permute46(int[] nums) {
+        List<List<Integer>> result = new ArrayList<>();
+        if (nums == null || nums.length == 0) {
+            return result;
+        }
+
+        dfs46(result, new ArrayList<>(), nums);
+
+        return result;
+    }
+
+    private void dfs46(List<List<Integer>> result, ArrayList<Integer> levelList, int[] nums) {
+        if (levelList.size() == nums.length) {
+            result.add(new ArrayList<>(levelList));
+            return;
+        }
+        for (int i = 0; i < nums.length; i++) {
+            if (levelList.contains(nums[i])) {
+                continue;
+            }
+            levelList.add(nums[i]);
+            dfs46(result, levelList, nums);
+            levelList.remove(levelList.size() - 1);//此处根据index进行移除
+
+        }
+
+    }
+
+    /**
+     * 47题
+     *
+     * @param nums
+     * @return
+     */
+    boolean[] visited;
+
+    public List<List<Integer>> permuteUnique(int[] nums) {
+        List<List<Integer>> result = new ArrayList<>();
+        if (nums == null || nums.length == 0) {
+            return result;
+        }
+        Arrays.sort(nums);
+        visited = new boolean[nums.length];
+        dfs47(result, new ArrayList<>(), nums);
+        return result;
+    }
+
+    private void dfs47(List<List<Integer>> result, ArrayList<Integer> levelList, int[] nums) {
+        if (levelList.size() == nums.length) {
+            result.add(new ArrayList<>(levelList));
+            return;
+        }
+
+        for (int i = 0; i < nums.length; i++) {
+            if (visited[i] || (i - 1) >= 0 && visited[i - 1] && nums[i] == nums[i - 1]) {
+                continue;
+            }
+            visited[i] = true;
+            levelList.add(nums[i]);
+            dfs47(result, levelList, nums);
+            visited[i] = false;
+            levelList.remove(levelList.size() - 1);
+        }
+
+    }
+
+
+    //---------------------------排列类-结束----------------------------//
+
+
+    //==========================面试算法 LeetCode 刷题班-开始============================//
+    //7. 哈希表与字符串
+
+    /**
+     * 409. 最长回文串
+     *
+     * @param s
+     * @return
+     */
+    public int longestPalindrome409(String s) {
+        char[] chas = s.toCharArray();
+        HashMap<Character, Integer> ctrlMap = new HashMap<>();
+        for (int i = 0; i < chas.length; i++) {
+            if (!ctrlMap.containsKey(chas[i])) {
+                ctrlMap.put(chas[i], 1);
+            } else {
+                Integer value = ctrlMap.get(chas[i]);
+                value++;
+                ctrlMap.put(chas[i], value);
+            }
+        }
+        int res = 0, flag = 0;
+        for (Character c : ctrlMap.keySet()) {
+            Integer value = ctrlMap.get(c);
+            if (value % 2 == 0) {
+                res += value;
+            } else {
+                res += (value - 1);
+                flag = 1;
+            }
+        }
+        return res + flag;
+    }
+
+
+    /**
+     * 290. 单词模式
+     *
+     * @param pattern
+     * @param str
+     * @return 双 map的模式是为了验证:
+     * 输入: pattern = "abba", str = "dog dog dog dog"
+     * 输出: false
+     */
+    public boolean wordPattern(String pattern, String str) {
+        if (pattern != null && str != null && pattern.length() == 0 && str.length() == 0) {
+            return true;
+        }
+        if (pattern == null || pattern.length() == 0 || str == null || str.length() == 0) {
+            return false;
+        }
+        String[] strArr = str.split(" ");
+        if (pattern.length() != strArr.length) {
+            return false;
+        }
+        HashMap<Character, String> baseMap = new HashMap<>();
+        HashMap<String, Character> mirrorMap = new HashMap<>();
+        for (int i = 0; i < strArr.length; i++) {
+            char c = pattern.charAt(i);
+            String s = strArr[i];
+            if (!baseMap.containsKey(c)) {
+                baseMap.put(c, s);
+            } else {
+                if (!baseMap.get(c).equals(s)) {
+                    return false;
+                }
+            }
+            if (!mirrorMap.containsKey(s)) {
+                mirrorMap.put(s, c);
+            } else {
+                if (mirrorMap.get(s) != c) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+
+    //==========================面试算法 LeetCode 刷题班-结束============================//
 
 
     public static void main(String[] args) {
@@ -740,13 +1056,44 @@ public class LeetCodeOne {
 
 //        String[] strs = {"flower", "flow", "flight"};
 //        System.out.println(handler.longestCommonPrefix(strs));
-        int[][] matrix = {
-                {1, 2, 3},
-                {4, 5, 6},
-                {7, 8, 9}
-        };
-        System.out.println(JSON.toJSON(handler.spiralOrder(matrix)));
+//        int[][] matrix = {
+//                {1, 2, 3},
+//                {4, 5, 6},
+//                {7, 8, 9}
+//        };
+//        System.out.println(JSON.toJSON(handler.spiralOrder(matrix)));
+//        System.out.println(handler.validPalindrome("abdca"));
+//        System.out.println(handler.isPalindrome("A man, a plan, a canal: Panama"));
+
+//        System.out.println(handler.isPowerOfTwo(5));
+
+//        System.out.println(handler.arrangeCoins(8));
+
+//        int[] nums = {1, 2, 3};
+//        System.out.println(JSON.toJSON(handler.permute46(nums)));
+//        int[] nums = {1, 1, 2};
+//        System.out.println(JSON.toJSON(handler.permuteUnique(nums)));
+
+//        System.out.println(handler.longestPalindrome409("abccccdd"));
+
+        String pattern = "abba", str = "dog dog dog dog";
+        System.out.println(handler.wordPattern(pattern, str));
+
+
     }
 
 
+}
+
+/**
+ * Definition for a binary tree node.
+ */
+class TreeNode {
+    int val;
+    TreeNode left;
+    TreeNode right;
+
+    TreeNode(int x) {
+        val = x;
+    }
 }
