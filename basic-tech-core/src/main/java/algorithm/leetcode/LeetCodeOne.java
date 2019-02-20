@@ -1012,6 +1012,157 @@ public class LeetCodeOne {
     }
 
 
+    /**
+     * 49. 字母异位词分组
+     *
+     * @param strs
+     * @return 方法一：排序数组分类
+     * 思路
+     * <p>
+     * 当且仅当它们的排序字符串相等时，两个字符串是字母异位词。
+     * <p>
+     * 算法
+     * <p>
+     * 维护一个映射 ans : {String -> List}，其中每个键 \text{K}K 是一个排序字符串，每个值是初始输入的字符串列表，排序后等于 \text{K}K。
+     * <p>
+     * 在 Java 中，我们将键存储为字符串，例如，code。 在 Python 中，我们将键存储为散列化元组，例如，('c', 'o', 'd', 'e')。
+     */
+    public List<List<String>> groupAnagrams(String[] strs) {
+        if (strs == null || strs.length == 0) {
+            return new ArrayList<>();
+        }
+        Map<String, List<String>> map = new HashMap<>();
+        for (String str : strs) {
+            char[] chas = str.toCharArray();
+            Arrays.sort(chas);
+            String s = String.valueOf(chas);
+            if (!map.containsKey(s)) {
+                map.put(s, new ArrayList());
+            }
+            map.get(s).add(str);
+        }
+        return new ArrayList<>(map.values());
+    }
+
+
+    /**
+     * 3. 无重复字符的最长子串
+     * 给定一个字符串，请你找出其中不含有重复字符的 最长子串 的长度。
+     *
+     * @param s
+     * @return
+     */
+    public int lengthOfLongestSubstring(String s) {
+        HashSet<Character> set = new HashSet<>();
+        int res = 0, i = 0, j = 0;
+        int len = s.length();
+        while (i < len && j < len) {
+            if (!set.contains(s.charAt(j))) {
+                set.add(s.charAt(j++));
+                res = Math.max(res, j - i);
+            } else {
+                set.remove(s.charAt(i++));
+            }
+        }
+        return res;
+    }
+
+    /**
+     * 3. 无重复字符的最长子串
+     *
+     * @param s
+     * @return 优化的方法
+     */
+    public int lengthOfLongestSubstringI(String s) {
+        int n = s.length(), ans = 0;
+        int[] index = new int[128]; // current index of character
+        // try to extend the range [i, j]
+        for (int j = 0, i = 0; j < n; j++) {
+            i = Math.max(index[s.charAt(j)], i);
+            ans = Math.max(ans, j - i + 1);
+            index[s.charAt(j)] = j + 1;
+        }
+        return ans;
+    }
+
+
+    /**
+     * 187. 重复的DNA序列
+     *
+     * @param s
+     * @return 所有 DNA 由一系列缩写为 A，C，G 和 T 的核苷酸组成，例如：“ACGAATTCCG”。在研究 DNA 时，识别 DNA 中的重复序列有时会对研究非常有帮助。
+     * <p>
+     * 编写一个函数来查找 DNA 分子中所有出现超多一次的10个字母长的序列（子串）。
+     */
+    public List<String> findRepeatedDnaSequences(String s) {
+        HashMap<String, Integer> map = new HashMap<>();
+        for (int i = 0; i < s.length() - 9; i++) {
+            String sequences = s.substring(i, i + 10);
+            map.put(sequences, map.getOrDefault(sequences, 0) + 1);
+        }
+        ArrayList<String> res = new ArrayList<>();
+        for (Map.Entry<String, Integer> e : map.entrySet()) {
+            if (e.getValue() > 1) {
+                res.add(e.getKey());
+            }
+        }
+        return res;
+    }
+
+
+    /**
+     * 76. 最小覆盖子串
+     *
+     * @param s
+     * @param t
+     * @return 给定一个字符串 S 和一个字符串 T，请在 S 中找出包含 T 所有字母的最小子串。
+     * <p>
+     * “双指针滑动窗口”：使用两个指针分别做窗口的左、右边界指针，右边界一直往后滑动，直到窗口中的字符子串能够覆盖t串。这时判断左边界是否多余（有可能窗口中的字符种类数多于t串、或者左边界的这个字符出现的次数多于t串中的出现次数），然后记录此时的窗口长度、起始下标，并进行更新最短长度。然后尝试移动左边界，再重复上面右边界持续扩大直到覆盖t串的操作，当窗口子串覆盖了t串，重复上述操作…
+     */
+    public String minWindow(String s, String t) {
+        if (s == null || t == null || s.length() < t.length()) {
+            return "";
+        }
+        int end = 0;
+        int length = Integer.MAX_VALUE;
+        String rst = "";
+
+        // Initialize source map for validation usage
+        int[] source = new int[256];
+        int[] target = new int[256];
+        for (char c : t.toCharArray()) {
+            target[c]++;
+        }
+
+        for (int i = 0; i < s.length(); i++) {
+            while (end < s.length() && !valid(source, target)) {
+                source[s.charAt(end)]++;
+                end++;
+            }
+            if (valid(source, target)) {
+                if (end - i < length) {
+                    length = Math.min(length, end - i);
+                    rst = s.substring(i, end);
+                }
+            }
+            source[s.charAt(i)]--;
+        }
+        return rst;
+    }
+
+
+    /*
+       Validate if the count of source map matches targetMap.
+       Use target as base, since it's substring.
+   */
+    private boolean valid(int[] source, int[] target) {
+        for (int i = 0; i < 256; i++) {
+            if (source[i] < target[i]) {
+                return false;
+            }
+        }
+        return true;
+    }
     //==========================面试算法 LeetCode 刷题班-结束============================//
 
 
@@ -1076,9 +1227,15 @@ public class LeetCodeOne {
 
 //        System.out.println(handler.longestPalindrome409("abccccdd"));
 
-        String pattern = "abba", str = "dog dog dog dog";
-        System.out.println(handler.wordPattern(pattern, str));
+//        String pattern = "abba", str = "dog dog dog dog";
+//        System.out.println(handler.wordPattern(pattern, str));
 
+//        System.out.println(handler.groupAnagrams(new String[]{"eat", "tea", "tan", "ate", "nat", "bat"}));
+
+//        System.out.println(handler.lengthOfLongestSubstringI("pwwkew"));
+//        System.out.println(JSON.toJSON(handler.findRepeatedDnaSequences("AAAAACCCCCAAAAACCCCCCAAAAAGGGTTT")));
+
+        System.out.println(handler.minWindow("ADOBECODEBANC", "ABC"));
 
     }
 
