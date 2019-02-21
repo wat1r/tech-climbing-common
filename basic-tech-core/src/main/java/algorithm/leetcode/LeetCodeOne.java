@@ -1163,6 +1163,121 @@ public class LeetCodeOne {
         }
         return true;
     }
+
+
+    //==========================面试算法 LeetCode 刷题班-1. 链表============================//
+
+
+    /**
+     * 206. 反转链表
+     *
+     * @param head
+     * @return https://blog.csdn.net/puqutogether/article/details/45487797
+     */
+    public ListNode reverseList(ListNode head) {
+        ListNode current = head, next, prev = null;
+        while (current != null) {
+            // 记录后继结点
+            next = current.next;
+            // 后继指针逆向
+            current.next = prev;
+            // 记录当前结点
+            prev = current;
+            // 下一结点成为当前结点
+            current = next;
+        }
+        return prev;
+    }
+
+
+    /**
+     * 92. 反转链表 II
+     *
+     * @param head
+     * @param m
+     * @param n
+     * @return
+     */
+    public ListNode reverseBetween(ListNode head, int m, int n) {
+
+
+        return null;
+    }
+
+
+    //==========================面试算法 LeetCode 刷题班-8. 搜索============================//
+
+    /**
+     * 200. 岛屿的个数
+     *
+     * @param grid
+     * @return 用一个二维数组代表一张地图，全由“0”和“1”组成，其中“0”代表水域，“1”代表小岛，
+     * 小岛“1”被水域“0”所包围，当小岛土地“1”在水平和垂直方向相连接时，认为是同一块土地。求这张地图中小岛的数量。
+     */
+    private int[] dx = {1, -1, 0, 0};
+    private int[] dy = {0, 0, 1, -1};
+
+    public int numIslands(char[][] grid) {
+        if (grid == null || grid.length == 0 || grid[0].length == 0) {
+            return 0;
+        }
+        int count = 0;
+        for (int i = 0; i < grid.length; i++) {
+            for (int j = 0; j < grid[i].length; j++) {
+                if (grid[i][j] == '1') {
+                    dfs(grid, i, j);
+                    count++;
+                }
+            }
+        }
+        return count;
+    }
+
+    private void dfs(char[][] grid, int x, int y) {
+        if (!validateInput(grid, x, y)) {
+            return;
+        }
+        grid[x][y] = '0';
+        for (int i = 0; i < dx.length; i++) {
+            dfs(grid, x + dx[i], y + dy[i]);
+        }
+
+
+    }
+
+    private boolean validateInput(char[][] grid, int x, int y) {
+        if (x < 0 || x >= grid.length || y < 0 || y >= grid[x].length || grid[x][y] == '0') {
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * 127. 单词接龙
+     * Word Ladder
+     * BFS
+     * @param beginWord
+     * @param endWord
+     * @param wordList
+     * @return
+     */
+    public int ladderLength(String beginWord, String endWord, List<String> wordList) {
+
+        return 0;
+    }
+
+
+    /**
+     * 473. 火柴拼正方形
+     * @param nums
+     * @return
+     */
+    public boolean makesquare(int[] nums) {
+
+        return false;
+    }
+
+
     //==========================面试算法 LeetCode 刷题班-结束============================//
 
 
@@ -1235,7 +1350,28 @@ public class LeetCodeOne {
 //        System.out.println(handler.lengthOfLongestSubstringI("pwwkew"));
 //        System.out.println(JSON.toJSON(handler.findRepeatedDnaSequences("AAAAACCCCCAAAAACCCCCCAAAAAGGGTTT")));
 
-        System.out.println(handler.minWindow("ADOBECODEBANC", "ABC"));
+//        System.out.println(handler.minWindow("ADOBECODEBANC", "ABC"));
+
+//        char[][] grid = {
+//                {'1', '1', '0', '0', '0'},
+//                {'0', '1', '0', '0', '1'},
+//                {'0', '0', '0', '1', '1'},
+//                {'0', '0', '0', '0', '0'},
+//                {'0', '0', '0', '0', '1'}
+//        };
+//        handler.numIslands(grid);
+
+        String beginWord = "hit";
+        String endWord = "cog";
+        List<String> wordList = new ArrayList<String>() {{
+            add("hot");
+            add("dot");
+            add("dog");
+            add("lot");
+            add("log");
+            add("cog");
+        }};
+        handler.ladderLength(beginWord, endWord, wordList);
 
     }
 
@@ -1251,6 +1387,18 @@ class TreeNode {
     TreeNode right;
 
     TreeNode(int x) {
+        val = x;
+    }
+}
+
+/**
+ * Definition for singly-linked list.
+ */
+class ListNode {
+    int val;
+    ListNode next;
+
+    ListNode(int x) {
         val = x;
     }
 }
