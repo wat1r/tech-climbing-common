@@ -1234,10 +1234,13 @@ public class LeetCodeOne {
     }
 
     private void dfs(char[][] grid, int x, int y) {
+        //判断是到达边界
         if (!validateInput(grid, x, y)) {
             return;
         }
+        //被访问过的后，修改为0
         grid[x][y] = '0';
+        //往左右上下四个方向进行搜索
         for (int i = 0; i < dx.length; i++) {
             dfs(grid, x + dx[i], y + dy[i]);
         }
@@ -1256,25 +1259,103 @@ public class LeetCodeOne {
      * 127. 单词接龙
      * Word Ladder
      * BFS
+     *
      * @param beginWord
      * @param endWord
      * @param wordList
      * @return
      */
     public int ladderLength(String beginWord, String endWord, List<String> wordList) {
-
+        if (wordList == null || !wordList.contains(endWord)) {
+            return 0;
+        }
+        Queue<String> queue = new LinkedList<>();
+        Set<String> words = new HashSet<>(wordList);
+        queue.offer(beginWord);
+        int count = 1;
+        while (!queue.isEmpty()) {//探测队列是否为空，不为空的话继续执行下面的逻辑
+            int size = queue.size();
+            count++;
+            for (int i = 0; i < size; i++) {
+                String word = queue.poll();
+                List<String> candidates = transform(words, word);
+                for (String candidate : candidates) {
+                    if (endWord.equals(candidate)) {
+                        return count;
+                    }
+                    queue.offer(candidate);//将找到的candidate加入到queue中
+                }
+            }
+        }
         return 0;
+    }
+
+    /**
+     * 生成当前word后续的candidates
+     *
+     * @param words 所给的字典
+     * @param word  需要对比的word
+     * @return
+     */
+    private List<String> transform(Set<String> words, String word) {
+        List<String> candidates = new ArrayList<>();
+        StringBuffer sb = new StringBuffer(word);
+        for (int i = 0; i < sb.length(); i++) {
+            char temp = sb.charAt(i);//记录下当前word的第一个字母，如hit这个的h第一个，记录到temp中
+            for (char c = 'a'; c <= 'z'; c++) {
+                if (temp == c) {//当hit的第一位h被a-z的字母一个一个替换掉进行对比，当其等于自己本身的时时候，continue掉
+                    continue;
+                }
+                sb.setCharAt(i, c);
+                String newWord = new String(sb);
+                if (words.remove(newWord)) {//如果words 中有新newWord，移除掉并将newWord加入到候选者的list中
+                    candidates.add(newWord);
+                }
+
+            }
+            sb.setCharAt(i, temp);//如当前已经遍历到z后，如hit换掉h得到zit，将zit换到初始的状态，temp记录的是初始状态是的时字母
+        }
+        return candidates;
     }
 
 
     /**
+     * 126. 单词接龙 II Hard
+     *见 class Ladder 粗略看了看
+     * @param beginWord
+     * @param endWord
+     * @param wordList
+     * @return
+     */
+    public List<List<String>> findLadders(String beginWord, String endWord, List<String> wordList) {
+
+
+        return null;
+    }
+
+
+
+
+    /**
      * 473. 火柴拼正方形
+     *
      * @param nums
      * @return
      */
     public boolean makesquare(int[] nums) {
 
         return false;
+    }
+
+
+    /**
+     * 407. 接雨水 II
+     * @param heightMap
+     * @return
+     */
+    public int trapRainWater(int[][] heightMap) {
+
+        return 0;
     }
 
 
@@ -1371,7 +1452,7 @@ public class LeetCodeOne {
             add("log");
             add("cog");
         }};
-        handler.ladderLength(beginWord, endWord, wordList);
+        System.out.println(handler.ladderLength(beginWord, endWord, wordList));
 
     }
 
@@ -1401,4 +1482,141 @@ class ListNode {
     ListNode(int x) {
         val = x;
     }
+}
+
+
+class Ladder {
+
+
+    /*
+    * Distance Map<s, possible/shortest distance>: shortest distance from to mutate into target key string.
+- Mutation Map<s, List<possible src>>: list possible source strings to mutate into target key string.
+*/
+
+    Set<String> dict;
+    Map<String, List<String>> mutation = new HashMap<>();
+    Map<String, Integer> distance = new HashMap<>();
+
+    public List<List<String>> findLadders(String start, String end, List<String> wordList) {
+        List<List<String>> rst = new ArrayList<>();
+        dict = new HashSet<>(wordList);
+        if (!dict.contains(end)) {
+            return rst;
+        }
+
+        prep(start);
+        //dfs(start, end, new ArrayList<>(), rst); // option1
+        bfs(start, end, rst); // option2
+        return rst;
+    }
+
+    //BFS/Prep to populate mutation and distance map.
+    public void prep(String start) {
+        //Init
+        Queue<String> queue = new LinkedList<>();
+        dict.add(start);
+        queue.offer(start);
+        distance.put(start, 0);
+        for (String s : dict) {
+            mutation.put(s, new ArrayList<>());
+        }
+        // process queue
+        while (!queue.isEmpty()) {
+            String str = queue.poll();
+            List<String> list = transform(str);
+
+            for (String s : list) {
+                mutation.get(s).add(str);
+                if (!distance.containsKey(s)) { // only record dist->s once, as shortest
+                    distance.put(s, distance.get(str) + 1);
+                    queue.offer(s);
+                }
+            }
+        }
+    }
+
+    // Option2: bfs, bi-directional search
+    public void bfs(String start, String end, List<List<String>> rst) {
+        Queue<List<String>> queue = new LinkedList<>();
+        List<String> list = new ArrayList<>();
+        list.add(end);
+        queue.offer(new ArrayList<>(list));
+        while (!queue.isEmpty()) {
+            int size = queue.size();
+            while (size > 0) {
+                list = queue.poll();
+                String str = list.get(0);
+
+                for (String s : mutation.get(str)) {//All prior-mutation sources
+                    list.add(0, s);
+                    if (s.equals(start)) {
+                        rst.add(new ArrayList<>(list));
+                    } else if (distance.containsKey(s) && distance.get(str) - 1 == distance.get(s)) {
+                        //Only pick those that's 1 step away: keep minimum steps for optimal solution
+                        queue.offer(new ArrayList<>(list));
+                    }
+                    list.remove(0);
+                }
+                size--;
+            }
+        }
+    }
+
+    // Option1: DFS to trace back from end string to start string. If reach start string, save result.
+    // Use distance<s, distance> to make sure only trace to 1-unit distance candidate
+    public void dfs(String start, String str, List<String> path, List<List<String>> rst) {
+        path.add(0, str);
+        if (str.equals(start)) {
+            rst.add(new ArrayList<String>(path));
+            path.remove(0);
+            return;
+        }
+        //Trace 1 step towards start via dfs
+        for (String s : mutation.get(str)) {//All prior-mutation sources
+            //Only pick those that's 1 step away: keep minimum steps for optimal solution
+            if (distance.containsKey(s) && distance.get(str) - 1 == distance.get(s)) {
+                dfs(start, s, path, rst);
+            }
+        }
+        path.remove(0);
+    }
+
+    //Generate all possible mutations for word. Check against dic and skip word itself.
+    private List<String> transform(String word) {
+        List<String> candidates = new ArrayList<>();
+        StringBuffer sb = new StringBuffer(word);
+        for (int i = 0; i < sb.length(); i++) {
+            char temp = sb.charAt(i);
+            for (char c = 'a'; c <= 'z'; c++) {
+                if (temp == c) {
+                    continue;
+                }
+                sb.setCharAt(i, c);
+                String newWord = sb.toString();
+                if (dict.contains(newWord)) {
+                    candidates.add(newWord);
+                }
+            }
+            sb.setCharAt(i, temp);//backtrack
+        }
+        return candidates;
+    }
+
+
+    public static void main(String[] args) {
+        Ladder ladder = new Ladder();
+        String beginWord = "hit";
+        String endWord = "cog";
+        List<String> wordList = new ArrayList<String>() {{
+            add("hot");
+            add("dot");
+            add("dog");
+            add("lot");
+            add("log");
+            add("cog");
+        }};
+        System.out.println(JSON.toJSON(ladder.findLadders(beginWord, endWord, wordList)));
+
+    }
+
 }
