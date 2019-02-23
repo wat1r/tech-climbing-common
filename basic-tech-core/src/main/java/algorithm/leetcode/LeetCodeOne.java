@@ -11,7 +11,7 @@ import java.util.*;
  */
 public class LeetCodeOne {
 
-    private static LeetCodeOne handler = new LeetCodeOne();
+    public static LeetCodeOne handler = new LeetCodeOne();
 
     /**
      * 136. 只出现一次的数字
@@ -1321,7 +1321,8 @@ public class LeetCodeOne {
 
     /**
      * 126. 单词接龙 II Hard
-     *见 class Ladder 粗略看了看
+     * 见 class Ladder 粗略看了看
+     *
      * @param beginWord
      * @param endWord
      * @param wordList
@@ -1332,8 +1333,6 @@ public class LeetCodeOne {
 
         return null;
     }
-
-
 
 
     /**
@@ -1350,6 +1349,7 @@ public class LeetCodeOne {
 
     /**
      * 407. 接雨水 II
+     *
      * @param heightMap
      * @return
      */
@@ -1360,6 +1360,76 @@ public class LeetCodeOne {
 
 
     //==========================面试算法 LeetCode 刷题班-结束============================//
+
+
+
+
+    //==========================面试算法 牛客网-左程云-初阶-开始============================//
+    //见SortUtils的排序
+    //小和问题
+    private static int smallSum(int[] arr) {
+        if (arr == null || arr.length < 2) {
+            return 0;
+        }
+        return mergeSort(arr, 0, arr.length - 1);
+    }
+
+    private static int mergeSort(int[] arr, int l, int r) {
+        if (l == r) {
+            return 0;
+        }
+        int mid = l + (r - l) >> 2;//防止mid溢出
+        return mergeSort(arr, 0, mid) + mergeSort(arr, mid + 1, r) + megre(arr, l, mid, r);
+    }
+
+    private static int megre(int[] arr, int l, int mid, int r) {
+        int[] help = new int[r - l + 1];
+        int p1 = l, p2 = mid + 1, i = 0;
+        int res = 0;
+        while (p1 <= mid && p2 <= r) {
+            res += arr[p1] < arr[p2] ? (r - p2 + 1) * arr[p1] : 0;
+            help[i++] = arr[p1] < arr[p2] ? arr[p1++] : arr[p2++];
+        }
+        while (p1 <= mid) {
+            help[i++] = arr[p1++];
+        }
+        while (p2 <= r) {
+            help[i++] = arr[p2++];
+        }
+        for (i = 0; i < help.length; i++) {
+            arr[l + i] = help[i];
+        }
+        return res;
+    }
+
+
+    /**
+     * 荷兰国旗问题
+     *
+     * @param arr
+     * @param left
+     * @param right
+     * @param target 目标数
+     * @return
+     */
+    public static int[] netherlandsFlag(int[] arr, int left, int right, int target) {
+        int less = left - 1;
+        int more = right + 1;
+        int cur = left;
+        while (cur < more) {
+            if (arr[cur] < target) {
+                SortUtils.swap(arr, ++less, cur++);
+            } else if (arr[cur] > target) {
+                SortUtils.swap(arr, --more, cur);
+            } else {
+                cur++;
+            }
+        }
+        return new int[]{less + 1, more - 1};
+    }
+
+
+    //==========================面试算法 牛客网-左程云-初阶-结束============================//
 
 
     public static void main(String[] args) {
@@ -1442,17 +1512,21 @@ public class LeetCodeOne {
 //        };
 //        handler.numIslands(grid);
 
-        String beginWord = "hit";
-        String endWord = "cog";
-        List<String> wordList = new ArrayList<String>() {{
-            add("hot");
-            add("dot");
-            add("dog");
-            add("lot");
-            add("log");
-            add("cog");
-        }};
-        System.out.println(handler.ladderLength(beginWord, endWord, wordList));
+//        String beginWord = "hit";
+//        String endWord = "cog";
+//        List<String> wordList = new ArrayList<String>() {{
+//            add("hot");
+//            add("dot");
+//            add("dog");
+//            add("lot");
+//            add("log");
+//            add("cog");
+//        }};
+//        System.out.println(handler.ladderLength(beginWord, endWord, wordList));
+
+
+        int[] arr = {2, 1, 2, 1, 1, 0, 0, 0, 0, 1};
+        System.out.println(JSON.toJSON(netherlandsFlag(arr, 0, arr.length - 1, 1)));
 
     }
 
@@ -1616,6 +1690,47 @@ class Ladder {
             add("cog");
         }};
         System.out.println(JSON.toJSON(ladder.findLadders(beginWord, endWord, wordList)));
+
+    }
+}
+
+
+class NetherlandsFlag {
+
+    // for test
+    public static void swap(int[] arr, int i, int j) {
+        int tmp = arr[i];
+        arr[i] = arr[j];
+        arr[j] = tmp;
+    }
+
+    // for test
+    public static int[] generateArray() {
+        int[] arr = new int[10];
+        for (int i = 0; i < arr.length; i++) {
+            arr[i] = (int) (Math.random() * 3);
+        }
+        return arr;
+    }
+
+    // for test
+    public static void printArray(int[] arr) {
+        if (arr == null) {
+            return;
+        }
+        for (int i = 0; i < arr.length; i++) {
+            System.out.print(arr[i] + " ");
+        }
+        System.out.println();
+    }
+
+    public static void main(String[] args) {
+        int[] test = generateArray();
+        printArray(test);
+        int[] res = LeetCodeOne.netherlandsFlag(test, 0, test.length - 1, 1);
+        printArray(test);
+        System.out.println(res[0]);
+        System.out.println(res[1]);
 
     }
 
