@@ -1205,6 +1205,13 @@ public class LeetCodeOne {
     }
 
 
+    //==========================面试算法 LeetCode 刷题班-2. 栈、队列、堆============================//
+
+
+    //见MyStack
+    //225. 用队列实现栈
+
+
     //==========================面试算法 LeetCode 刷题班-8. 搜索============================//
 
     /**
@@ -1362,8 +1369,6 @@ public class LeetCodeOne {
     //==========================面试算法 LeetCode 刷题班-结束============================//
 
 
-
-
     //==========================面试算法 牛客网-左程云-初阶-开始============================//
     //见SortUtils的排序
     //小和问题
@@ -1428,6 +1433,84 @@ public class LeetCodeOne {
         return new int[]{less + 1, more - 1};
     }
 
+
+    /**
+     * 164. 最大间距
+     *
+     * @param nums
+     * @return
+     */
+    public int maximumGap(int[] nums) {
+        if (nums == null || nums.length < 2) {
+            return 0;
+        }
+        int min = Integer.MAX_VALUE;
+        int max = Integer.MIN_VALUE;
+        int len = nums.length;
+        for (int i = 0; i < len; i++) {
+            min = Math.min(min, nums[i]);
+            max = Math.max(max, nums[i]);
+        }
+        if (min == max) {
+            return 0;
+        }
+        boolean[] hasNum = new boolean[len + 1];
+        int[] mins = new int[len + 1];
+        int[] maxs = new int[len + 1];
+        int bid = 0;
+        for (int i = 0; i < len; i++) {
+            bid = bucket(nums[i], len, min, max);
+            mins[bid] = hasNum[bid] ? Math.min(mins[bid], nums[i]) : nums[i];
+            maxs[bid] = hasNum[bid] ? Math.max(maxs[bid], nums[i]) : nums[i];
+            hasNum[bid] = true;
+        }
+        int res = 0;
+        int lastMax = maxs[0];
+        int i = 1;
+        for (; i <= len; i++) {
+            if (hasNum[i]) {
+                res = Math.max(res, mins[i] - lastMax);
+                lastMax = maxs[i];
+            }
+        }
+        return res;
+    }
+
+    private int bucket(long num, long len, long min, long max) {
+        return (int) ((num - min) * len / (max - min));
+    }
+
+
+    //使用数组来实现栈：ArrayStack(class)
+    //使用数组来实现队列：ArrayQueue(class)
+
+    //使用队列结构实现栈结构:TwoStacksQueue 225. 用队列实现栈
+    //使用栈结构实现队列结构:TwoQueuesStack 232. 用栈实现队列
+
+    //155. 最小栈 设计一个有getMin功能的栈（左神Ch1）MinStack
+
+    /**
+     * 234. 回文链表
+     *
+     * @param head
+     * @return 左神Ch2 P48
+     */
+    public boolean isPalindrome(ListNode head) {
+        Stack<ListNode> stack = new Stack<>();
+        ListNode cur = head;
+        while (cur != null) {
+            stack.push(cur);
+            cur = cur.next;
+        }
+
+        while (head != null) {
+            if (head.val != stack.pop().val) {
+                return false;
+            }
+            head = head.next;
+        }
+        return true;
+    }
 
     //==========================面试算法 牛客网-左程云-初阶-结束============================//
 
@@ -1735,3 +1818,280 @@ class NetherlandsFlag {
     }
 
 }
+
+class MyStack {
+
+    /**
+     * Initialize your data structure here.
+     */
+    public MyStack() {
+
+    }
+
+    /**
+     * Push element x onto stack.
+     */
+    public void push(int x) {
+
+    }
+
+    /**
+     * Removes the element on top of the stack and returns that element.
+     */
+    public int pop() {
+        return 0;
+    }
+
+    /**
+     * Get the top element.
+     */
+    public int top() {
+
+        return 0;
+    }
+
+    /**
+     * Returns whether the stack is empty.
+     */
+    public boolean empty() {
+        return false;
+    }
+}
+
+class ArrayStack {
+    private Integer[] arr;
+    private Integer index;
+
+    public ArrayStack(int initSize) {
+        if (initSize < 0) {
+            throw new IllegalArgumentException("The init size is less than 0");
+        }
+        arr = new Integer[initSize];
+        index = 0;
+    }
+
+    public Integer peek() {
+        if (index == 0) {
+            return null;
+        }
+        return arr[index - 1];
+    }
+
+    public void push(int obj) {
+        if (index == arr.length) {
+            throw new ArrayIndexOutOfBoundsException("The queue is full");
+        }
+        arr[index++] = obj;
+    }
+
+    public Integer pop() {
+        if (index == 0) {
+            throw new ArrayIndexOutOfBoundsException("The queue is empty");
+        }
+        return arr[--index];
+    }
+}
+
+/**
+ * start变量:拿取数的时候，end变量：添加数的时候，
+ */
+class ArrayQueue {
+    private Integer[] arr;
+    private Integer size;
+    private Integer start;
+    private Integer end;
+
+    public ArrayQueue(int initSize) {
+        if (initSize < 0) {
+            throw new IllegalArgumentException("The init size is less than 0");
+        }
+        arr = new Integer[initSize];
+        size = 0;
+        start = 0;
+        end = 0;
+    }
+
+    public Integer peek() {
+        if (size == 0) {
+            return null;
+        }
+        return arr[start];
+    }
+
+    public void push(int obj) {
+        if (size == arr.length) {
+            throw new ArrayIndexOutOfBoundsException("The queue is full");
+        }
+        size++;
+        arr[end] = obj;
+        end = (end == arr.length - 1) ? 0 : end + 1;
+    }
+
+    public Integer poll() {
+        if (size == 0) {
+            throw new ArrayIndexOutOfBoundsException("The queue is empty");
+        }
+        size--;
+        int temp = start;
+        start = (start == arr.length - 1) ? 0 : start + 1;
+        return arr[temp];
+    }
+}
+
+
+class TwoQueuesStack {
+
+    private Queue<Integer> data;
+    private Queue<Integer> help;
+
+    public TwoQueuesStack() {
+        data = new LinkedList<>();
+        help = new LinkedList<>();
+    }
+
+
+    public void push(int pushInt) {
+        data.add(pushInt);
+    }
+
+    public int peek() {
+        if (data.isEmpty()) {
+            throw new RuntimeException("Stack is empty!");
+        }
+        while (data.size() != 1) {
+            help.add(data.poll());
+        }
+        int res = data.poll();
+        help.add(res);
+        swap();
+        return res;
+    }
+
+    public int pop() {
+        if (data.isEmpty()) {
+            throw new RuntimeException("Stack is empty!");
+        }
+        while (data.size() > 1) {
+            help.add(data.poll());
+        }
+        int res = data.poll();
+        swap();
+        return res;
+    }
+
+    private void swap() {
+        Queue<Integer> temp = help;
+        help = data;
+        data = temp;
+    }
+
+    public boolean empty() {
+        return data.size() == 0;
+    }
+
+}
+
+
+class TwoStacksQueue {
+    private Stack<Integer> stackPush;
+    private Stack<Integer> stackPop;
+
+    public TwoStacksQueue() {
+        stackPush = new Stack<>();
+        stackPop = new Stack<>();
+    }
+
+    public void push(int pushInt) {
+        stackPush.push(pushInt);
+    }
+
+    public int poll() {
+        if (stackPush.empty() && stackPop.empty()) {
+            throw new RuntimeException("Queue is empty!");
+        } else if (stackPop.empty()) {
+            while (!stackPush.empty()) {
+                stackPop.push(stackPush.pop());
+            }
+        }
+        return stackPop.pop();
+    }
+
+    public int peek() {
+        if (stackPop.empty() && stackPush.empty()) {
+            throw new RuntimeException("Queue is empty!");
+        } else if (stackPop.isEmpty()) {
+            while (!stackPush.isEmpty()) {
+                stackPop.push(stackPush.pop());
+            }
+        }
+        return stackPop.peek();
+    }
+
+    /**
+     * Returns whether the queue is empty.
+     */
+    public boolean empty() {
+        return stackPop.isEmpty() && stackPush.isEmpty();
+    }
+}
+
+
+class MinStack {
+
+    private Stack<Integer> stackData;
+    private Stack<Integer> stackMin;
+
+
+    /**
+     * initialize your data structure here.
+     */
+    public MinStack() {
+        this.stackData = new Stack<>();
+        this.stackMin = new Stack<>();
+    }
+
+    public void push(int newNum) {
+        if (this.stackMin.isEmpty()) {
+            stackMin.push(newNum);
+        } else if (newNum < this.getMin()) {
+            this.stackMin.push(newNum);
+        } else {
+            int newMin = this.stackMin.peek();
+            this.stackMin.push(newMin);
+        }
+        this.stackData.push(newNum);
+    }
+
+    public void pop() {
+        if (this.stackData.isEmpty()) {
+            throw new RuntimeException("The stack is empty");
+        }
+        this.stackMin.pop();
+        this.stackData.pop();
+    }
+
+    public int top() {
+        if (this.stackData.isEmpty()) {
+            throw new RuntimeException("The stack is empty");
+        }
+        return this.stackData.peek();
+    }
+
+    public int getMin() {
+        if (this.stackMin.isEmpty()) {
+            throw new RuntimeException("The stack is empty");
+        }
+        return this.stackMin.peek();
+    }
+}
+
+
+class Node {
+    public int value;
+    public Node next;
+
+    public Node(int data) {
+        this.value = data;
+    }
+}
+
