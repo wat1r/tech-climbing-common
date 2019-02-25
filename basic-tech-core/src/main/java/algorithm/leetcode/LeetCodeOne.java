@@ -1512,6 +1512,127 @@ public class LeetCodeOne {
         return true;
     }
 
+
+    /**
+     * 左神P382 数组的partition调整
+     *
+     * @param arr
+     */
+    public void leftUnique(int[] arr) {
+        if (arr == null || arr.length < 2) {
+            return;
+        }
+
+        int u = 0, i = 0;
+        while (i != arr.length) {
+            if (arr[i++] != arr[u]) {
+                swap(arr, ++u, i - 1);
+            }
+        }
+        System.out.println(JSON.toJSON(arr));
+    }
+
+
+    /**
+     * * 左神P382 数组的partition调整
+     *
+     * @param arr
+     */
+    public void sort(int[] arr) {
+        if (arr == null || arr.length < 2) {
+            return;
+        }
+        int left = -1, index = 0, right = arr.length;
+        while (index < right) {
+            if (arr[index] == 0) {
+                swap(arr, ++left, index++);
+            } else if (arr[index] == 2) {
+                swap(arr, index, --right);
+            } else {
+                index++;
+            }
+        }
+        System.out.println(JSON.toJSON(arr));
+    }
+
+
+    /**
+     * 左神 P52 Ch2
+     *
+     * @param head
+     * @param pivot
+     * @return
+     */
+    public Node listPartition1(Node head, int pivot) {
+        if (head == null) {
+            return null;
+        }
+        Node cur = head;
+        int i = 0;
+        while (cur != null) {
+            i++;
+            cur = cur.next;
+        }
+        Node[] nodeArr = new Node[i];
+        cur = head;
+        for (i = 0; i != nodeArr.length; i++) {
+            nodeArr[i] = cur;
+            cur = cur.next;
+        }
+        addPartition(nodeArr, pivot);
+        for (i = 1; i != nodeArr.length; i++) {
+            nodeArr[i - 1].next = nodeArr[i];
+        }
+        nodeArr[i - 1].next = null;
+        return nodeArr[0];
+    }
+
+    private void addPartition(Node[] nodeArr, int pivot) {
+        int small = -1;
+        int big = nodeArr.length;
+        int index = 0;
+        while (index < big) {
+            if (nodeArr[index].value < pivot) {
+                swap(nodeArr, ++small, index++);
+            } else if (nodeArr[index].value > pivot) {
+                swap(nodeArr, index, --big);
+            } else {
+                index++;
+            }
+        }
+
+    }
+
+    private void swap(Node[] nodeArr, int a, int b) {
+        Node temp = nodeArr[a];
+        nodeArr[a] = nodeArr[b];
+        nodeArr[b] = temp;
+    }
+
+
+    /**
+     * 左神P56 复制含有随机指针节点的链表
+     *
+     * @param head
+     * @return
+     */
+    public RandomNode copyListWithRand1(RandomNode head) {
+        HashMap<RandomNode, RandomNode> map = new HashMap<>();
+        RandomNode cur = head;
+        while (cur != null) {
+            map.put(cur, new RandomNode(cur.value));
+            cur = cur.next;
+        }
+        cur = head;
+        while (cur != null) {
+            map.get(cur).next = map.get(cur.next);
+            map.get(cur).rand = map.get(cur.rand);
+            cur = cur.next;
+        }
+        return map.get(head);
+    }
+
+
     //==========================面试算法 牛客网-左程云-初阶-结束============================//
 
 
@@ -1608,8 +1729,13 @@ public class LeetCodeOne {
 //        System.out.println(handler.ladderLength(beginWord, endWord, wordList));
 
 
-        int[] arr = {2, 1, 2, 1, 1, 0, 0, 0, 0, 1};
-        System.out.println(JSON.toJSON(netherlandsFlag(arr, 0, arr.length - 1, 1)));
+//        int[] arr = {2, 1, 2, 1, 1, 0, 0, 0, 0, 1};
+//        System.out.println(JSON.toJSON(netherlandsFlag(arr, 0, arr.length - 1, 1)));
+
+//        int[] arr = {1, 2, 2, 2, 3, 3, 4, 5, 6, 6, 7, 7, 8, 8, 8, 9};
+//        handler.leftUnique(arr);
+        int[] arr = {0, 1, 2, 1, 0, 2, 2, 0, 1};
+        handler.sort(arr);
 
     }
 
@@ -2094,4 +2220,16 @@ class Node {
         this.value = data;
     }
 }
+
+class RandomNode {
+    public int value;
+    public RandomNode next;
+    public RandomNode rand;
+
+
+    public RandomNode(int data) {
+        this.value = data;
+    }
+}
+
 
