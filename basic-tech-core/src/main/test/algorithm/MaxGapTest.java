@@ -1,6 +1,6 @@
 package algorithm;
 
-import algorithm.leetcode.LeetCodeOne;
+import algorithm.leetcode.one.LeetCodeOne;
 
 import java.util.Arrays;
 

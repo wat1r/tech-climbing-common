@@ -1,8 +1,6 @@
 package algorithm;
 
-import algorithm.leetcode.LeetCodeOne;
 import algorithm.utils.SortUtils;
-import jdk.jfr.events.SocketReadEvent;
 
 import java.util.Arrays;
 

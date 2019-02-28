@@ -1,4 +1,4 @@
-package algorithm.leetcode;
+package algorithm.leetcode.one;
 
 import algorithm.utils.SortUtils;
 import com.alibaba.fastjson.JSON;
