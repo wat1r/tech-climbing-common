@@ -1,5 +1,7 @@
 package algorithm.leetcode.two;
 
+import com.alibaba.fastjson.JSON;
+
 import java.util.*;
 
 /**
@@ -393,9 +395,201 @@ public class LeetCodeClassification {
     }
 
 
+    /**
+     * 714. 买卖股票的最佳时机含手续费 Medium
+     *
+     * @param prices
+     * @param fee
+     * @return dp思路：dp[0]代表手上没有股票 dp[1]代表手上有股票
+     * dp[0]可能就是i之前就没有股票或者在i天卖出了股票。
+     * dp[1]可能就是i之前就有股票或者在i天买进了股票。
+     * 转移方程就是:
+     * dp[0]=max(dp[0],dp[1]+prices[i]-fee);
+     * dp[1]=max(dp[1],dp[0]-prices[i]);
+     */
+    public int maxProfit(int[] prices, int fee) {
+        if (prices == null | prices.length == 0) {
+            return 0;
+        }
+        int[] dp = new int[2];
+        dp[1] = -prices[0];
+        for (int i = 0; i != prices.length; i++) {
+            dp[0] = Math.max(dp[0], dp[1] + prices[i] - fee);
+            dp[1] = Math.max(dp[1], dp[0] - prices[i]);
+        }
+        return Math.max(dp[0], dp[1]);
+    }
 
     /*---------------贪心结束--------------*/
-    /*---------------贪心结束--------------*/
+    /*---------------动态规划开始--------------*/
+
+    /**
+     * 121. 买卖股票的最佳时机 Easy
+     *
+     * @param prices
+     * @return
+     */
+    public int maxProfit(int[] prices) {
+        int minPrice = Integer.MAX_VALUE;
+        int maxProfit = 0;
+        for (int i = 0; i != prices.length; i++) {
+            if (prices[i] < minPrice) {
+                minPrice = prices[i];
+            } else if (maxProfit < prices[i] - minPrice) {
+                maxProfit = prices[i] - minPrice;
+            }
+        }
+        return maxProfit;
+    }
+
+
+    /**
+     * 746. 使用最小花费爬楼梯 Easy
+     *
+     * @param cost
+     * @return dp[i]表示走到第i个阶梯最小花费体力值
+     */
+    public int minCostClimbingStairs(int[] cost) {
+        int[] dp = new int[cost.length];
+        dp[0] = cost[0];
+        dp[1] = Math.min(cost[1], cost[0] + cost[1]);
+        for (int i = 2; i != cost.length; i++) {
+            dp[i] = Math.min(dp[i - 1], dp[i - 2]) + cost[i];
+        }
+        //最后一步是由上一步和上上一步跳过来的，谁耗费体力小返回谁
+        return Math.min(dp[cost.length - 1], dp[cost.length - 2]);
+    }
+
+
+    /**
+     * 338. 比特位计数 Medium
+     *
+     * @param num
+     * @return dp[i] 第i个数的包含1的个数
+     * dp[i >> 1] i右移1位的数比如4（0100）>>1  -->2(0010)并不是物理意义上的前面数字3
+     * 如果i这个数的二进制数带1的小尾巴，就加上1，其实就是奇偶数
+     */
+    public int[] countBits(int num) {
+        if (num < 0) {
+            return null;
+        }
+        int[] dp = new int[num + 1];
+        dp[0] = 0;
+        for (int i = 0; i < dp.length; i++) {
+            int preNum = i >> 1;
+            dp[i] = dp[preNum] + (i % 2);
+        }
+        return dp;
+    }
+
+
+    /**
+     * 983. 最低票价 Medium
+     *
+     * @param days
+     * @param costs
+     * @return
+     */
+    public int mincostTickets(int[] days, int[] costs) {
+
+        return 0;
+    }
+
+
+    /**
+     * 64. 最小路径和 Medium
+     *
+     * @param grid
+     * @return
+     */
+    public int minPathSum(int[][] grid) {
+        if (grid == null || grid.length <= 0) {
+            return 0;
+        }
+        int[][] dp = new int[grid.length][grid[0].length];
+        dp[0][0] = grid[0][0];
+        for (int i = 1; i < grid.length; i++) {
+            dp[i][0] = dp[i - 1][0] + grid[i][0];
+        }
+        for (int j = 1; j < grid[0].length; j++) {
+            dp[0][j] = dp[0][j - 1] + grid[0][j];
+        }
+        for (int i = 1; i < grid.length; i++) {
+            for (int j = 1; j < grid[0].length; j++) {
+                dp[i][j] = Math.min(dp[i - 1][j], dp[i][j - 1]) + grid[i][j];
+            }
+        }
+        return dp[grid.length - 1][grid[0].length - 1];
+    }
+
+
+    /**
+     * @param triangle
+     * @return #### DP
+     * - 跟dfs的原理很像, `OR 原理: min(pathA, pathB) + currNode`
+     * - init dp[n-1][j] = node values
+     * - build from bottom -> top: dp[i][j] = Math.min(dp[i + 1][j], dp[i + 1][j + 1]) + triangle.get(i).get(j);
+     * - 跟传统的coordinate dp有所不同, inner for loop 是需要计算 j <= i, 原因是triangle的性质.
+     * - 空间: dp[n][n]. space: O(n^2)
+     * - 时间:O(n^2). Visit all nodes once: 1 + 2 + 3 + .... n = n^2
+     */
+    public int minimumTotal(List<List<Integer>> triangle) {
+        //从底部到顶部
+        if (triangle == null || triangle.size() < 0) {
+            return 0;
+        }
+        int size = triangle.size();
+        int[][] dp = new int[size][size];
+        //初始化最后一行
+        for (int j = 0; j < size; j++) {
+            dp[size - 1][j] = triangle.get(size - 1).get(j);
+        }
+        //i从倒数第二行开始，j上限是i，i行表示有i个数，等于[i][j]的左下方有右下方的最小数加上其自身
+        for (int i = size - 2; i >= 0; i--) {
+            for (int j = 0; j <= i; j++) {
+                dp[i][j] = Math.min(dp[i + 1][j], dp[i + 1][j + 1]) + triangle.get(i).get(j);
+            }
+        }
+        return dp[0][0];
+    }
+
+
+    /**
+     * 931. 下降路径最小和 Medium
+     *
+     * @param matrix
+     * @return
+     */
+    public int minFallingPathSum(int[][] matrix) {
+        if (matrix == null || matrix.length < 0) {
+            return 0;
+        }
+        int[][] dp = new int[matrix.length][matrix[0].length];
+        //初始化第一行
+        for (int j = 0; j < matrix[0].length; j++) {
+            dp[0][j] = matrix[0][j];
+        }
+        for (int i = 1; i < matrix.length; i++) {
+            for (int j = 0; j < matrix[0].length; j++) {
+                if (j == 0) {
+                    dp[i][j] = Math.min(dp[i - 1][j], dp[i - 1][j + 1]) + matrix[i][j];
+                } else if (j == matrix[0].length - 1) {
+                    dp[i][j] = Math.min(dp[i - 1][j], dp[i - 1][j - 1]) + matrix[i][j];
+                } else {
+                    dp[i][j] = Math.min(Math.min(dp[i - 1][j - 1], dp[i - 1][j]),
+                            dp[i - 1][j + 1]) + matrix[i][j];
+                }
+            }
+        }
+        int res = Integer.MAX_VALUE;
+        for (int j = 0; j < matrix[0].length; j++) {
+            res = Math.min(res, dp[matrix.length - 1][j]);
+        }
+        return res;
+    }
+
+    /*---------------动态规划结束--------------*/
+    /*---------------动态规划结束--------------*/
 
 
     public static void main(String[] args) {
@@ -404,8 +598,21 @@ public class LeetCodeClassification {
 //        System.out.println(handler.findContentChildren(g, s));
 //        String[] A = {"cba", "daf", "ghi"};
 //        handler.minDeletionSize(A);
-        int[] arr = {5, 5, 5, 10, 20};
-        System.out.println(handler.lemonadeChange(arr));
+//        int[] arr = {5, 5, 5, 10, 20};
+//        System.out.println(handler.lemonadeChange(arr));
+//        int[] cost = {1, 100, 1, 1, 1, 100, 1, 1, 100, 1};
+//        System.out.println(handler.minCostClimbingStairs(cost));
+////        System.out.println(JSON.toJSON(handler.countBits(8)));
+//        int[][] grid = {
+//                {1, 3, 1, 2},
+//                {1, 5, 1, 3},
+//                {4, 2, 1, 4}
+//        };
+//
+//        System.out.println(handler.minPathSum(grid));
+        int[][] matrix = {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};
+        System.out.println(handler.minFallingPathSum(matrix));
+
 
     }
 }
