@@ -588,6 +588,148 @@ public class LeetCodeClassification {
         return res;
     }
 
+
+    /**
+     * 62. 不同路径
+     *
+     * @param m
+     * @param n
+     * @return dp[i][j] 表示到达i，j的走法个数，其等于来自上面下来的和左边来的总和
+     * 第一行和第一列的走法只有一种，一直右，一直下，都是1种走法
+     * <p>
+     * Thoughts:
+     * 'how many ways' -> Could do DFS, but try DP
+     * Robot moves: (0, 1) or (1, 0)
+     * gird[x][y]: #paths to reach x,y.
+     * There are only 2 ways for getting to (x, y): from (x-1, y) or (x, y-1)
+     * Then, the sub problem is grid[x-1,y], and grid[x, y-1].
+     * grid[x][y] = Math.min(grid[x-1,y], grid[x, y-1]) + 1;
+     * Boundary: when x = 0, grid[0, 0~y] = 0~y; same for y=0, grid[0~x, 0] = 0~x;
+     * Path: should go from y++ and y=0, because when we advance +1 row, we'd use previous x/y, which should be calculated already.
+     */
+    public int uniquePaths(int m, int n) {
+        int[][] dp = new int[m][n];
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                if (i == 0 || j == 0) {
+                    dp[i][j] = 1;
+                } else {
+                    dp[i][j] = dp[i - 1][j] + dp[i][j - 1];
+                }
+            }
+        }
+        return dp[m - 1][n - 1];
+    }
+
+
+    /**
+     * 63. 不同路径 II
+     *
+     * @param obstacleGrid
+     * @return Thoughts:
+     * Last right-bottom corner is always filled by left + up: dp[i][j] = dp[i - 1][j] + dp[i][j - 1].
+     * Whenever there is 1, mark the position with 0 ways, because it can get pass through.
+     * init: if row has block, all the rest of the row remains 0. If column has a block, the rest of the column remains 0.
+     */
+    public int uniquePathsWithObstacles(int[][] obstacleGrid) {
+        if (obstacleGrid == null || obstacleGrid.length == 0) {
+            return 0;
+        }
+        int m = obstacleGrid.length, n = obstacleGrid[0].length;
+        int[][] dp = new int[m][n];
+        //初始化第一列
+        for (int i = 0; i < m; i++) {
+            if (obstacleGrid[i][0] == 1) {
+                break;
+            }
+            dp[i][0] = 1;
+        }
+        //初始化第一行
+        for (int j = 0; j < n; j++) {
+            if (obstacleGrid[0][j] == 1) {
+                break;
+            }
+            dp[0][j] = 1;
+        }
+        for (int i = 1; i < m; i++) {
+            for (int j = 1; j < n; j++) {
+                if (obstacleGrid[i][j] == 1) {
+                    continue;
+                }
+                dp[i][j] = dp[i - 1][j] + dp[i][j - 1];
+            }
+        }
+        return dp[m - 1][n - 1];
+    }
+
+    /**
+     * 152. 乘积最大子序列
+     *
+     * @param nums
+     * @return Thoughts:
+     * 'Largest', DP.
+     * Consider positivie/Negative numbers.
+     * f[x] = largest continuous product at index x.
+     * NOTE: it's not entire array's largest, need a stand-along variable to hold global max.
+     * if nums[x] < 0, want (min of f[x-1]) * nums[x]
+     * if nums[x] > 0, want (max of f[x-1]) * nums[x]
+     * Consider two different arrays.
+     * f[x] = Math.max( min(f[x-1]) * nums[x] if nums[x]<0, or max(f[x-1])*nums[x] if nums[x]>0)
+     * initial condition:
+     * x = 0 -> nums[0]
+     */
+    public int maxProduct(int[] nums) {
+        if (nums == null || nums.length == 0) {
+            return 0;
+        }
+        int m = nums.length;
+        int[] maxArr = new int[m];
+        int[] minArr = new int[m];
+        maxArr[0] = nums[0];
+        minArr[0] = nums[0];
+        int res = nums[0];
+        for (int i = 1; i < m; i++) {
+            if (nums[i] > 0) {
+                maxArr[i] = Math.max(nums[i], maxArr[i - 1] * nums[i]);
+                minArr[i] = Math.min(nums[i], minArr[i - 1] * nums[i]);
+            } else {
+                maxArr[i] = Math.max(nums[i], minArr[i - 1] * nums[i]);
+                minArr[i] = Math.min(nums[i], maxArr[i - 1] * nums[i]);
+            }
+            res = Math.max(res, maxArr[i]);
+        }
+        return res;
+    }
+
+
+    /**
+     * 174. 地下城游戏
+     *
+     * @param dungeon
+     * @return
+     * dp[i][j]是骑士在[i][j]位置具有在的最小体力值，最小值是1，小于1即挂了
+     */
+    public int calculateMinimumHP(int[][] dungeon) {
+        int row = dungeon.length, col = dungeon[0].length;
+        int[][] dp = new int[row][col];
+        dp[row - 1][col - 1] = Math.max(1, 1 - dungeon[row - 1][col - 1]);
+        //初始化最后一列
+        for (int i = row - 2; i >= 0; i--) {
+            dp[i][col - 1] = Math.max(1, dp[i + 1][col - 1] - dungeon[i][col - 1]);
+        }
+        //初始化最后一行
+        for (int j = col - 2; j >= 0; j--) {
+            dp[row - 1][j] = Math.max(1, dp[row - 1][j + 1] - dungeon[row - 1][j]);
+        }
+        for (int i = row - 2; i >= 0; i--) {
+            for (int j = col - 2; j >= 0; j--) {
+                dp[i][j] = Math.max(1, Math.min(dp[i + 1][j], dp[i][j + 1]) - dungeon[i][j]);
+            }
+        }
+        return dp[0][0];
+    }
+
+
     /*---------------动态规划结束--------------*/
     /*---------------动态规划结束--------------*/
 
@@ -610,10 +752,12 @@ public class LeetCodeClassification {
 //        };
 //
 //        System.out.println(handler.minPathSum(grid));
-        int[][] matrix = {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};
-        System.out.println(handler.minFallingPathSum(matrix));
-
-
+//        int[][] matrix = {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};
+//        System.out.println(handler.minFallingPathSum(matrix));
+//        int[] nums = {2, 3, -2, 4};
+//        System.out.println(handler.maxProduct(nums));
+        int[][] g = {{-2, -3, 3}, {-5, -10, 1}, {10, 30, -5}};
+        System.out.println(handler.calculateMinimumHP(g));
     }
 }
 
