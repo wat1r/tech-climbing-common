@@ -706,8 +706,7 @@ public class LeetCodeClassification {
      * 174. 地下城游戏
      *
      * @param dungeon
-     * @return
-     * dp[i][j]是骑士在[i][j]位置具有在的最小体力值，最小值是1，小于1即挂了
+     * @return dp[i][j]是骑士在[i][j]位置具有在的最小体力值，最小值是1，小于1即挂了
      */
     public int calculateMinimumHP(int[][] dungeon) {
         int row = dungeon.length, col = dungeon[0].length;
@@ -729,6 +728,134 @@ public class LeetCodeClassification {
         return dp[0][0];
     }
 
+
+    /**
+     * 322. 零钱兑换
+     *
+     * @param coins
+     * @param amount
+     * @return #### DP
+     * - 找对方程dp[x], 积累到amount x最少用多少个coin: #coin是value, index是 [0~x].
+     * - 子问题的关系是: 如果用了一个coin, 那么就应该是f[x - coinValue]那个位置的#coins + 1
+     * <p>
+     * ##### initialization
+     * - 处理边界, 一开始0index的时候, 用value0.
+     * - 中间利用Integer.MAX_VALUE来作比较, initialize dp[x]
+     * - 注意, 一旦 Integer.MAX_VALUE + 1 就会变成负数. 这种情况会在coin=0的时候发生.
+     * <p>
+     * ##### Optimization
+     * - 方法1: 直接用Integer.MAX_VALUE
+     * - 方法2: 用-1, 稍微简洁一点, 每次比较dp[i]和 dp[i - coin] + 1, 然后save. 不必要做多次min比较.
+     * <p>
+     * #### Memoization
+     * - dp[i] 依然表示: min # of coints to make amount i
+     * - initialize dp[i] = Integer.MAX_VALUE
+     * - 先选最后一步(遍历coins),  然后dfs做同样的操作
+     * - 记录dp[amount] 如果已经给过value, 不要重复计算, 直接return.
+     * - 但是这道题没必要强行做memoization, 普通DP的状态和方程相对来说很好找到
+     */
+    public int coinChange(int[] coins, int amount) {
+        if (coins == null || coins.length == 0) {
+            return -1;
+        }
+        int[] dp = new int[amount + 1];
+        dp[0] = 0;
+        for (int i = 1; i <= amount; i++) {
+            dp[i] = Integer.MAX_VALUE;
+            for (int coin : coins) {
+                //遍历coins的，每次拿最小的拼装硬币
+                if (i >= coin && dp[i - coin] != -1 && coin >= 0) {
+                    dp[i] = Math.min(dp[i], dp[i - coin] + 1);
+                }
+            }
+            if (dp[i] == Integer.MAX_VALUE) {
+                dp[i] = -1;
+            }
+        }
+        return dp[amount];
+    }
+
+
+    /**
+     * 300. 最长上升子序列
+     *
+     * @param nums
+     * @return
+     */
+    public int lengthOfLIS(int[] nums) {
+        if (nums == null || nums.length == 0) {
+            return 0;
+        }
+        int len = nums.length;
+        int[] dp = new int[len];
+        for (int i = 0; i < len; i++) {
+            dp[i] = 1;
+            for (int j = 0; j < i; j++) {
+                if (nums[i] > nums[j]) {
+                    dp[i] = Math.max(dp[i], dp[j] + 1);
+                }
+            }
+        }
+        int max = Integer.MIN_VALUE;
+        for (int i = 0; i < dp.length; i++) {
+            max = Math.max(max, dp[i]);
+        }
+        return max;
+    }
+
+    /**
+     * 300. 最长上升子序列
+     * @param nums
+     * @return
+     */
+    public int lengthOfLISII(int[] nums) {
+        int[] dp = new int[nums.length + 1];
+        int maxL = 0;
+//dp[i]记录的是在当下每个num 进行插入以后更新的最后一版本
+//记录，例如2341234这组数列，当读取234时，则dp的前三位是234，但当读取
+//到1时，则dp变成134，2被替代，当再读取2、3时，则2替代3,3替代4，然后读取到4时
+//则最大值进行更新，更新后maxL进行更新。
+//这种更新dp的算法，能实时保证dp[i]都是遍历到当前（类似照片）的最小值，这样在做更新的时候
+//高版本（序号靠后）的序列总能覆盖掉低版本的值，如果出现最大值，则最大值比之前的最高值高的，总比当前的最高值高。
+        for (int num : nums) {
+            int lo = 0, hi = maxL;
+            while (lo < hi) {
+                int mid = lo + (hi - lo) / 2;
+                if (dp[mid] < num) lo = mid + 1;
+                else hi = mid;
+            }
+            dp[lo] = num;
+            if (lo == maxL)
+                maxL++;
+
+        }
+        return maxL;
+    }
+
+
+    /**
+     * 123. 买卖股票的最佳时机 III Hard
+     * @param prices
+     * @return
+     */
+    public int maxProfitIII(int[] prices) {
+
+
+        return 0;
+    }
+
+
+
+
+    /**
+     * 309. 最佳买卖股票时机含冷冻期
+     * @param prices
+     * @return
+     */
+    public int maxProfitI(int[] prices) {
+
+        return 0;
+    }
 
     /*---------------动态规划结束--------------*/
     /*---------------动态规划结束--------------*/
@@ -756,8 +883,14 @@ public class LeetCodeClassification {
 //        System.out.println(handler.minFallingPathSum(matrix));
 //        int[] nums = {2, 3, -2, 4};
 //        System.out.println(handler.maxProduct(nums));
-        int[][] g = {{-2, -3, 3}, {-5, -10, 1}, {10, 30, -5}};
-        System.out.println(handler.calculateMinimumHP(g));
+//        int[][] g = {{-2, -3, 3}, {-5, -10, 1}, {10, 30, -5}};
+//        System.out.println(handler.calculateMinimumHP(g));
+
+//        int[] coins = {1, 2, 5};
+//        System.out.println(handler.coinChange(coins, 11));
+        int[] nums = {10, 9, 2, 5, 3, 7, 101, 18};
+        System.out.println(handler.lengthOfLIS(nums));
+
     }
 }
 
