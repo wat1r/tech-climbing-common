@@ -295,6 +295,7 @@ public class LeetCodeExploreI {
 
     /**
      * 1. 两数之和 Easy
+     *
      * @param nums
      * @param target
      * @return
@@ -302,12 +303,12 @@ public class LeetCodeExploreI {
     public int[] twoSum(int[] nums, int target) {
 
 
-
         return null;
     }
 
     /**
      * 36. 有效的数独 Medium
+     *
      * @param board
      * @return
      */
@@ -317,6 +318,195 @@ public class LeetCodeExploreI {
     }
 
 
+    /**
+     * 48. 旋转图像 Medium
+     *
+     * @param matrix
+     */
+    public void rotate(int[][] matrix) {
+        int tR = 0, tC = 0, dR = matrix.length - 1, dC = matrix[0].length - 1;
+        while (tR < dR) {
+            rotateProcess(matrix, tR++, tC++, dR--, dC--);
+        }
+    }
+
+    private void rotateProcess(int[][] matrix, int tR, int tC, int dR, int dC) {
+        int times = dC - tC;
+        int temp = 0;
+        for (int i = 0; i < times; i++) {
+            temp = matrix[tR][tC + i];
+            matrix[tR][tC + i] = matrix[dR - i][tC];
+            matrix[dR - i][tC] = matrix[dR][dC - i];
+            matrix[dR][dC - i] = matrix[tR + i][dC];
+            matrix[tR + i][dC] = temp;
+        }
+
+    }
+
+
+    /**
+     * 7. 整数反转 Easy
+     * MAX:2147483647
+     * MIN:-2147483648
+     *
+     * @param x
+     * @return
+     */
+    public int reverse(int x) {
+        int res = 0;
+        while (x != 0) {
+            int pop = x % 10;
+            x /= 10;
+            if (res > Integer.MAX_VALUE / 10 || (res == Integer.MAX_VALUE / 10 && pop > 7)) {
+                return 0;
+            }
+            if (res < Integer.MIN_VALUE / 10 || (res == Integer.MIN_VALUE / 10 && pop < -8)) {
+                return 0;
+            }
+            res = res * 10 + pop;
+
+        }
+        return res;
+    }
+
+
+    /**
+     * 387. 字符串中的第一个唯一字符 Easy
+     *
+     * @param s
+     * @return
+     */
+    public int firstUniqChar(String s) {
+        int[] times = new int[256];
+        for (char c : s.toCharArray()) {
+            times[c - 'a']++;
+        }
+        for (int i = 0; i < s.length(); i++) {
+            if (times[s.charAt(i) - 'a'] == 1) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+
+    /**
+     * 242. 有效的字母异位词 Easy
+     *
+     * @param s
+     * @param t
+     * @return Thoughts: if only lower case letters, use int[26] for simplicity
+     */
+    public boolean isAnagram(String s, String t) {
+        if (s == null || t == null || s.length() != t.length()) {
+            return false;
+        }
+        int[] compartor = new int[26];
+        for (int i = 0; i < s.length(); i++) {
+            compartor[s.charAt(i) - 'a']++;
+            compartor[t.charAt(i) - 'a']--;
+        }
+        for (int i = 0; i < compartor.length; i++) {
+            if (compartor[i] != 0) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * 28. 实现strStr() Easy
+     *
+     * @param haystack
+     * @param needle
+     * @return #### Two Pointer
+     * - 找到B在A中的起始位置, 然后看一下从这个点开始的substring是否等于B就可以了
+     * - 还挺多坑的, 这些可以帮助优化:
+     * - 1. 当B是“”的时候，也就是能在A的其实位置找到B....index = 0.
+     * - 2. edge condition: 如果 haystack.length() < needle.length() 的话, 必须错, return -1
+     * - 3. 如果在某个index, A后面剩下的长度, 比B的长度短, 也是误解, return -1
+     * <p>
+     * "mississippi"
+     * "issipi"
+     */
+    public int strStr(String haystack, String needle) {
+        if (haystack == null || needle == null || haystack.length() < needle.length()) {
+            return -1;
+        }
+        if (needle.length() == 0) {
+            return 0;
+        }
+        int h = haystack.length();
+        int n = needle.length();
+        for (int i = 0; i < h; i++) {
+            if (h - i < n) {
+                return -1;
+            }
+            if (haystack.charAt(i) != needle.charAt(0)) {
+                continue;
+            }
+            if (haystack.substring(i, i + n).equals(needle)) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    /**
+     * 38. 报数 Easy
+     *
+     * @param n
+     * @return
+     */
+    public String countAndSay(int n) {
+        if (n <= 1) {
+            return n + "";
+        }
+        String str = "11";
+        int ind = 2;
+        while (ind < n) {
+            StringBuffer sb = new StringBuffer();
+            char[] arr = str.toCharArray();
+            int count = 1;
+            int type = Character.getNumericValue(arr[0]);
+            for (int i = 1; i < arr.length; i++) {
+                if (arr[i] == arr[i - 1]) {
+                    count++;
+                } else {
+                    sb.append(count + "" + type);
+                    type = Character.getNumericValue(arr[i]);
+                    count = 1;
+                }
+            }
+            ind++;
+            sb.append(count + "" + type);
+            str = sb.toString();
+        }
+        return str;
+    }
+
+
+    /**
+     * 198. 打家劫舍 Easy
+     *
+     * @param nums
+     * @return
+     * dp[i] 是前i天的最大打劫钱数，应该等于max(昨天的钱dp[i-1],前天打劫的钱dp[i-2]+今天的打劫的钱的和)
+     * 注意dp的index与nums的index的映射关系
+     */
+    public int rob(int[] nums) {
+        if (nums == null || nums.length == 0) {
+            return 0;
+        }
+        int n = nums.length;
+        int[] dp = new int[n + 1];
+        dp[0] = 0;
+        dp[1] = nums[0];
+        for (int i = 2; i <= n; i++) {
+            dp[i] = Math.max(dp[i - 1], dp[i - 2] + nums[i - 1]);
+        }
+        return dp[n];
+    }
 
     public static void main(String[] args) {
 
@@ -331,7 +521,17 @@ public class LeetCodeExploreI {
 //        handler.rotate(nums, 3);
 //        int[] digits = {9, 8, 7, 6, 5, 4, 3, 2, 1, 0};
 //        handler.plusOne(digits);
-        int[] nums = {0, 1, 0, 3, 12};
-        handler.moveZeroes(nums);
+//        int[] nums = {0, 1, 0, 3, 12};
+//        handler.moveZeroes(nums);
+//        handler.reverse(1534236469);
+
+//        System.out.println(handler.firstUniqChar("loveleetcode"));
+//        handler.strStr("mississippi", "issipi");
+//        handler.countAndSay(4);
+        int[] nums = {2, 7, 9, 3, 1};
+        handler.rob(nums);
+
+
     }
+
 }
