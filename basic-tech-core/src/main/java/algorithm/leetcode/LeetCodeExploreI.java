@@ -1,6 +1,7 @@
 package algorithm.leetcode;
 
 import com.alibaba.fastjson.JSON;
+import org.omg.CORBA.INTERNAL;
 
 import java.util.*;
 
@@ -293,18 +294,6 @@ public class LeetCodeExploreI {
         }
     }
 
-    /**
-     * 1. 两数之和 Easy
-     *
-     * @param nums
-     * @param target
-     * @return
-     */
-    public int[] twoSum(int[] nums, int target) {
-
-
-        return null;
-    }
 
     /**
      * 36. 有效的数独 Medium
@@ -490,8 +479,7 @@ public class LeetCodeExploreI {
      * 198. 打家劫舍 Easy
      *
      * @param nums
-     * @return
-     * dp[i] 是前i天的最大打劫钱数，应该等于max(昨天的钱dp[i-1],前天打劫的钱dp[i-2]+今天的打劫的钱的和)
+     * @return dp[i] 是前i天的最大打劫钱数，应该等于max(昨天的钱dp[i-1],前天打劫的钱dp[i-2]+今天的打劫的钱的和)
      * 注意dp的index与nums的index的映射关系
      */
     public int rob(int[] nums) {
@@ -507,6 +495,328 @@ public class LeetCodeExploreI {
         }
         return dp[n];
     }
+
+
+    /**
+     * 237. 删除链表中的节点 Easy
+     *
+     * @param node 题目给的是删除节点，那说明这个节点可以舍弃了，我们把下一个节点的值拷贝给当前要删除的节点，再删除下一个节点。
+     *             大致过程如下（删除3）：
+     *             1->2->3->4->5
+     *             1->2->4->4->5
+     *             1->2->4->5
+     */
+    public void deleteNode(ListNode node) {
+        if (node == null) {
+            return;
+        }
+        node.val = node.next.val;
+        node.next = node.next.next;
+    }
+
+    /**
+     * 19. 删除链表的倒数第N个节点  Easy
+     *
+     * @param head
+     * @param n
+     * @return 上述算法可以优化为只使用一次遍历。我们可以使用两个指针而不是一个指针。第一个指针从列表的开头向前移动 n+1n+1 步，而第二个指针将从列表的开头出发。现在，这两个指针被 nn 个结点分开。我们通过同时移动两个指针向前来保持这个恒定的间隔，直到第一个指针到达最后一个结点。此时第二个指针将指向从最后一个结点数起的第 nn 个结点。
+     * 我们重新链接第二个指针所引用的结点的 next 指针指向该结点的下下个结点。
+     * 官网的图很好
+     */
+    public ListNode removeNthFromEnd(ListNode head, int n) {
+        ListNode dummy = new ListNode(0);
+        dummy.next = head;
+        ListNode first = dummy;
+        ListNode second = dummy;
+        for (int i = 1; i <= n + 1; i++) {
+            first = first.next;
+        }
+        while (first != null) {
+            first = first.next;
+            second = second.next;
+        }
+        second.next = second.next.next;
+        return dummy.next;
+    }
+
+    /**
+     * 206. 反转链表
+     *
+     * @param head
+     * @return
+     */
+    public ListNode reverseList(ListNode head) {
+        ListNode current = head;
+        ListNode next = null, prev = null;
+        while (current != null) {
+            next = current.next;
+            current.next = prev;
+            prev = current;
+            current = next;
+        }
+        return prev;
+    }
+
+
+    /**
+     * 21. 合并两个有序链表 Easy
+     *
+     * @param l1
+     * @param l2
+     * @return Thinking process:
+     * 1. Merge sorted list, compare before add to node.next
+     * 2. when any of l1 or l2 is null, break out.
+     * 3. add the non-null list at the end of node.
+     * 4. return dummy.next.
+     */
+    public ListNode mergeTwoLists(ListNode l1, ListNode l2) {
+        if (l1 == null || l2 == null) {
+            return l1 == null ? l2 : l1;
+        }
+        ListNode head = new ListNode(0);
+        ListNode node = head;
+        while (l1 != null && l2 != null) {
+            if (l1.val < l2.val) {
+                node.next = l1;
+                l1 = l1.next;
+            } else {
+                node.next = l2;
+                l2 = l2.next;
+            }
+            node = node.next;
+        }
+        if (l1 != null) {
+            node.next = l1;
+        } else {
+            node.next = l2;
+        }
+        return head.next;
+    }
+
+
+    /**
+     * 98. 验证二叉搜索树
+     * Medium
+     *
+     * @param root
+     * @return 如题, 验证是否是BST.
+     * <p>
+     * #### DFS
+     * - 查看每个parent-child关系: leftchild < root < rightChild;
+     * - BST 有两个极端: left-most-leaf is the smallest element, and right-most-leaf is largest
+     * - imagine we know the two extreme border: Integer.MIN_VALUE, Integer.MAX_VALUE; pass node around and compare node vs. node.parent.
+     * - 方法: 把root.val 传下来作为 max 或者 min, 然后检查children
+     */
+    public boolean isValidBST(TreeNode root) {
+        return dfs(root, Integer.MIN_VALUE, Integer.MAX_VALUE);
+    }
+
+    private boolean dfs(TreeNode node, long minValue, long maxValue) {
+        if (node == null) {
+            return true;
+        }
+        return node.val > minValue && node.val < maxValue &&
+                dfs(node.left, minValue, node.val) && dfs(node.right, node.val, maxValue);
+    }
+
+
+    /**
+     * 101. 对称二叉树 Easy
+     *
+     * @param root
+     * @return 如果同时满足下面的条件，两个树互为镜像：
+     * <p>
+     * 它们的两个根结点具有相同的值。
+     * 每个树的右子树都与另一个树的左子树镜像对称。
+     */
+    public boolean isSymmetric(TreeNode root) {
+
+        return isMirror(root, root);
+    }
+
+    private boolean isMirror(TreeNode node1, TreeNode node2) {
+        if (node1 == null && node2 == null) {
+            return true;
+        }
+        if (node1 == null || node2 == null) {
+            return false;
+        }
+        return node1.val == node2.val && isMirror(node1.left, node2.right) && isMirror(node1.right, node2.left);
+    }
+
+
+    /**
+     * 108. 将有序数组转换为二叉搜索树
+     * Easy
+     *
+     * @param nums
+     * @return #### DFS
+     * - Binary Search Tree特点: 左边的node都比右边的node小.
+     * - height balance, subtree height 相差<1, 必须左右sub tree均分. 做DFS(num, start, end)
+     * - 在每一个level, 找到中间点, 然后分割2半, 继续dfs
+     * - Divide and Conquer
+     * - time/space: O(n), visit all nodes, no redundant visits.
+     */
+    public TreeNode sortedArrayToBST(int[] nums) {
+        if (nums == null || nums.length == 0) {
+            return null;
+        }
+        return dfs108(nums, 0, nums.length - 1);
+    }
+
+    private TreeNode dfs108(int[] nums, int start, int end) {
+        if (start == end) {
+            return new TreeNode(nums[start]);
+        }
+        if (start > end || end >= nums.length) {
+            return null;
+        }
+        int mid = start + (end - start) / 2;
+        TreeNode node = new TreeNode(nums[mid]);
+        node.left = dfs108(nums, start, mid - 1);
+        node.right = dfs108(nums, mid + 1, end);
+        return node;
+    }
+
+
+    /**
+     * 1. 两数之和 Easy
+     *
+     * @param nums
+     * @param target
+     * @return #### Sort array, two pointer
+     * - 前后++, --搜索. Sort 用时O(nlogn).
+     * - 1. 第一步 two pointer 找 value.
+     * - 2. 注意，要利用额外的空间保留original array， 用来时候找index. (此处不能用HashMap，因为以value 为key，但value可能重复)
+     * - O(n) space, O(nlogn) time.
+     */
+    public int[] twoSum(int[] nums, int target) {
+        if (nums == null || nums.length <= 1) {
+            return null;
+        }
+        //1. 备份原数组，下面要对原数组进行Sort
+        int[] backup = new int[nums.length];
+        for (int i = 0; i < nums.length; i++) {
+            backup[i] = nums[i];
+        }
+        //2. 对原数组Sort
+        Arrays.sort(nums);
+        //3. 找到等于target的两个num值，因为已经排序好了，头尾两个指针做逻辑
+        int num1 = -1, num2 = -1;
+        int start = 0, end = nums.length - 1;
+        while (start < end) {
+            int sum = nums[start] + nums[end];
+            if (sum == target) {
+                num1 = nums[start];
+                num2 = nums[end];
+                break;
+            } else if (sum > target) {
+                end--;
+            } else {
+                start++;
+            }
+        }
+        //4. 找到和等于target的两个数，来找他们的索引，借助backup数组
+        int[] res = new int[2];
+        res[0] = -1;
+        res[1] = -1;
+        for (int i = 0; i < backup.length; i++) {
+            if (backup[i] == num1 || backup[i] == num2) {
+                if (res[0] == -1) {
+                    res[0] = i;
+                } else {
+                    //5 .因为是排序的，num2比num1大，当进到else的逻辑，if的逻辑肯定进了，可以break掉结束
+                    res[1] = i;
+                    break;
+                }
+            }
+        }
+        return res;
+    }
+
+
+    /**
+     * 167. 两数之和 II - 输入有序数组 Easy
+     *
+     * @param numbers
+     * @param target
+     * @return
+     */
+    public int[] twoSumII(int[] numbers, int target) {
+        if (numbers == null || numbers.length <= 1) {
+            return null;
+        }
+        int[] res = new int[2];
+        int start = 0, end = numbers.length - 1;
+        while (start != end) {
+            //两个数的和可能会超过Integer.MAX_VLAUE
+            long sum = (long) numbers[start] + numbers[end];
+            if (sum == target) {
+                res[0] = start + 1;
+                res[1] = end + 1;
+                //找到一组即退出
+                break;
+            } else if (sum > target) {
+                end--;
+            } else {
+                start++;
+            }
+        }
+        return res;
+    }
+
+    /**
+     * 18. 四数之和 Medium
+     *
+     * @param nums
+     * @param target
+     * @return
+     */
+    public List<List<Integer>> fourSum(int[] nums, int target) {
+        List<List<Integer>> resList = new ArrayList<>();
+        if (nums == null || nums.length <= 3) {
+            return resList;
+        }
+        int n = nums.length;
+        Arrays.sort(nums);
+        //存储结构，HashSet<List> 可以帮助去重
+        Map<Integer, HashSet<List>> ctrlMap = new HashMap<>();
+        Set<String> ctrlSet = new HashSet<>();
+        for (int i = 0; i < n; i++) {
+            //拿后一半部分
+            for (int k = i + 1; k < n; k++) {
+                int sum = nums[i] + nums[k];
+                if (ctrlMap.containsKey(target - sum)) {
+                    for (List<Integer> prev : ctrlMap.get(target - sum)) {
+                        List<Integer> list = Arrays.asList(prev.get(0), prev.get(1), nums[i], nums[k]);
+                        //数字混在一起容易引起误解，如12 3 和 1 23 都可以组成123
+                        String key = reshapeKey(list);
+                        if(!ctrlSet.contains(key)){
+                            resList.add(list);
+                            ctrlSet.add(key);
+                        }
+                    }
+                }
+            }
+            //拿part1的部分放在拿part2的后面，不然[-3,-1,0,2,4,5] 0 -->[[-3,-1,-1,5],[-3,-1,0,4]]
+            for (int j = 0; j < i; j++) {
+                int sum = nums[j] + nums[i];
+                ctrlMap.putIfAbsent(sum, new HashSet<>());
+                ctrlMap.get(sum).add(Arrays.asList(nums[j], nums[i]));
+            }
+
+        }
+        return resList;
+    }
+
+    private String reshapeKey(List<Integer> list) {
+        StringBuffer sb = new StringBuffer();
+        for (Integer num : list) {
+            sb.append(num + "#");
+        }
+        return sb.toString();
+    }
+
 
     public static void main(String[] args) {
 
@@ -534,4 +844,24 @@ public class LeetCodeExploreI {
 
     }
 
+}
+
+
+class ListNode {
+    int val;
+    ListNode next;
+
+    ListNode(int x) {
+        val = x;
+    }
+}
+
+class TreeNode {
+    int val;
+    TreeNode left;
+    TreeNode right;
+
+    TreeNode(int x) {
+        val = x;
+    }
 }
