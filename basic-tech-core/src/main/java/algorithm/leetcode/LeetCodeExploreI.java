@@ -2,6 +2,7 @@ package algorithm.leetcode;
 
 import com.alibaba.fastjson.JSON;
 import org.omg.CORBA.INTERNAL;
+import org.omg.CORBA.MARSHAL;
 
 import java.util.*;
 
@@ -791,7 +792,7 @@ public class LeetCodeExploreI {
                         List<Integer> list = Arrays.asList(prev.get(0), prev.get(1), nums[i], nums[k]);
                         //数字混在一起容易引起误解，如12 3 和 1 23 都可以组成123
                         String key = reshapeKey(list);
-                        if(!ctrlSet.contains(key)){
+                        if (!ctrlSet.contains(key)) {
                             resList.add(list);
                             ctrlSet.add(key);
                         }
@@ -817,6 +818,419 @@ public class LeetCodeExploreI {
         return sb.toString();
     }
 
+    /**
+     * 80. 删除排序数组中的重复项 II Medium
+     *
+     * @param nums
+     * @return
+     */
+    public int removeDuplicatesII(int[] nums) {
+        if (nums == null || nums.length == 0) {
+            return 0;
+        }
+        int index = 1;
+        for (int i = 2; i < nums.length; i++) {
+            //i 可以理解为快指针，index是慢指针，i从一开始就比index大1
+            //第一个条件是i对应的值与index（慢指针最后一个停留的值）不相等，进逻辑
+            //第二个条件是i对应的值与index（慢指针最后一个停留的值）相等，但是和index前一个值不相等，即满足同一个元素只有最多两个
+            if (nums[i] != nums[index] || (nums[i] == nums[index] && nums[i] != nums[index - 1])) {
+                index++;
+                nums[index] = nums[i];
+            }
+        }
+        return index + 1;
+    }
+
+
+    /**
+     * 287. 寻找重复数  Medium
+     *
+     * @param nums
+     * @return 二分查找法
+     */
+    public int findDuplicate(int[] nums) {
+        if (nums == null || nums.length == 0) {
+            return 0;
+        }
+        int left = 0, right = nums.length - 1;
+        while (left < right) {
+            int mid = left + (right - left) / 2;
+            int count = 0;
+            //记录下nums中<=mid的count值，这个mid既是索引页数nums中的value
+            for (int num : nums) {
+                if (num <= mid) {
+                    count++;
+                }
+            }
+            //当count<=mid说明，比mid小的数量要还不到nums中间位置了，说明[1,mid]的数不能依次填满
+            if (count <= mid) {
+                left = mid + 1;
+            } else {
+                right = mid;
+            }
+        }
+
+        return right;
+    }
+
+    /**
+     * 73. 矩阵置零 Medium
+     *
+     * @param matrix Space: O(m*n)
+     */
+    public void setZeroes1st(int[][] matrix) {
+        if (matrix == null || matrix.length <= 0) {
+            return;
+        }
+        //注意height和width与行列row col下标的对齐
+        int height = matrix.length;
+        int width = matrix[0].length;
+        boolean[][] zero = new boolean[height][width];
+        //拿到位置为0值的flag
+        for (int i = 0; i < height; i++) {
+            for (int j = 0; j < width; j++) {
+                if (matrix[i][j] == 0) {
+                    zero[i][j] = true;
+                }
+            }
+        }
+        for (int i = 0; i < height; i++) {
+            for (int j = 0; j < width; j++) {
+                if (zero[i][j]) {
+                    //这一列都设置为0，行索引增加，列索引不变
+                    for (int k = 0; k < height; k++) {
+                        matrix[k][j] = 0;
+                    }
+                    //这一行都设置为0，列索引增加，行索引不变
+                    for (int k = 0; k < width; k++) {
+                        matrix[i][k] = 0;
+                    }
+
+                }
+            }
+        }
+    }
+
+    /**
+     * 73. 矩阵置零 Medium
+     *
+     * @param matrix Space: O(m+n)
+     */
+    public void setZeroes2nd(int[][] matrix) {
+        if (matrix == null || matrix.length <= 0) {
+            return;
+        }
+        int m = matrix.length;
+        int n = matrix[0].length;
+        boolean[] row = new boolean[m];
+        boolean[] col = new boolean[n];
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                if (matrix[i][j] == 0) {
+                    row[i] = true;
+                    col[j] = true;
+                }
+            }
+        }
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                if (row[i] && col[j]) {
+                    for (int k = 0; k < m; k++) {
+                        matrix[k][j] = 0;
+                    }
+                    for (int k = 0; k < n; k++) {
+                        matrix[i][k] = 0;
+                    }
+                }
+            }
+        }
+    }
+
+
+    public void setZeroes(int[][] matrix) {
+        if (matrix == null || matrix.length == 0) {
+            return;
+        }
+        int m = matrix.length;
+        int n = matrix[0].length;
+        boolean firstRow = false;
+        boolean firstCol = false;
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                if (matrix[i][j] == 0) {
+                    if (i == 0) {
+                        firstRow = true;
+                    }
+                    if (j == 0) {
+                        firstCol = true;
+                    }
+                    matrix[i][0] = 0;
+                    matrix[0][j] = 0;
+                }
+            }
+        }
+
+        for (int i = 1; i < m; i++) {
+            for (int j = 1; j < n; j++) {
+                if (matrix[i][0] == 0 || matrix[0][j] == 0) {
+                    matrix[i][j] = 0;
+                }
+            }
+        }
+
+        if (firstRow) {
+            for (int j = 0; j < n; j++) {
+                matrix[0][j] = 0;
+            }
+        }
+
+        if (firstCol) {
+            for (int i = 0; i < m; i++) {
+                matrix[i][0] = 0;
+            }
+        }
+    }
+
+    /**
+     * 516. 最长回文子序列 Medium
+     * 注意！subsequence并不是substring, 是可以skip letter / non-continuous character sequence
+     *
+     * @param s
+     * @return
+     */
+    public int longestPalindromeSubseq(String s) {
+        //注意：子序列可以不连续的，可以跳过某些单词，子串是必须连续的
+        //dp[i][j]:以chas[i] 开头chas[j] 结尾的[i-j]中的最大子回文子序列的数量
+        if (s == null || s.length() == 0) {
+            return 0;
+        }
+        char[] chas = s.toCharArray();
+        int n = chas.length;
+        int[][] dp = new int[n][n];
+        //拼接对角线上的 因为是一个字符，dp都为1
+        for (int i = 0; i < n; i++) {
+            dp[i][i] = 1;
+        }
+        //拼接长度为2的，要是这两个字符相等 dp为2 否则为1
+        for (int i = 0; i < n - 1; i++) {
+            dp[i][i + 1] = chas[i] == chas[i + 1] ? 2 : 1;
+        }
+        //拼接长度为3的：
+        //1.等于左边的和下边的dp值的最大值，（砍头去尾）
+        //2. 如果[i] == [j] 对应的值相等，则取左下方对角的值加上2（首尾相等的情况）
+        //3. 最终的下半部分的dp是初始化的0，对角线往右上角的值一次动态规划出来
+        for (int len = 3; len <= n; len++) {
+            for (int i = 0; i <= n - len; i++) {
+                int j = len + i - 1;
+                dp[i][j] = Math.max(dp[i + 1][j], dp[i][j - 1]);
+                if (chas[i] == chas[j]) {
+                    dp[i][j] = Math.max(dp[i][j], dp[i + 1][j - 1] + 2);
+                }
+            }
+        }
+        return dp[0][n - 1];
+    }
+
+
+    /**
+     * 647. 回文子串 Medium
+     *
+     * @param s
+     * @return 未消化
+     */
+    public int countSubstrings(String s) {
+        if (s == null || s.length() == 0) return 0;
+        int n = s.length(), count = 0;
+        boolean[][] isPalin = buildPalin(s);
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) count += isPalin[i][j] ? 1 : 0;
+        }
+
+        return count;
+    }
+
+    private boolean[][] buildPalin(String s) {
+        int n = s.length();
+        boolean[][] isPalin = new boolean[n][n];
+        // init:
+        for (int i = 0; i < n; i++) isPalin[i][i] = true;
+        // Calc:
+        for (int j = 0; j < n; j++) {
+            for (int i = 0; i <= j; i++) { // index [i, j]
+                isPalin[i][j] = s.charAt(i) == s.charAt(j) && (j - i <= 1 || isPalin[i + 1][j - 1]);
+            }
+        }
+        return isPalin;
+    }
+
+
+    /**
+     * 55. 跳跃游戏 Medium
+     *
+     * @param nums
+     * @return #### DP
+     * - DP[i]: 在i点记录，i点之前的步数是否可以走到i点？ True of false.
+     * - 其实j in [0~i)中间只需要一个能到达i 就好了
+     * - Function: DP[i] = DP[j] && (A[j] >= i - j), for all j in [0 ~ i)
+     * - Return: DP[dp.length - 1];
+     * - Time: O(n^2)
+     */
+    public boolean canJump(int[] nums) {
+        //dp[i] 在i点记录，i点之前的步数是否可以走到i点，true或false
+        if (nums == null || nums.length == 0) {
+            return false;
+        }
+        int len = nums.length;
+        boolean[] dp = new boolean[len];
+        dp[0] = true;//初始化
+        for (int i = 0; i < len; i++) {
+            for (int j = 0; j < i; j++) {
+                //从j到i，需要两个条件：j点可以到达（dp[j]=true）,nums[j]的值要>=j到i的距离
+                if (dp[j] && (nums[j] >= i - j)) {
+                    dp[i] = true;
+                    break;
+                }
+            }
+        }
+        return dp[len - 1];
+    }
+
+
+    /**
+     * 2. 两数相加 Meidum
+     *
+     * @param l1
+     * @param l2
+     * @return
+     */
+    public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
+
+        return null;
+    }
+
+
+    /**
+     * 328. 奇偶链表 Medium
+     *
+     * @param head
+     * @return
+     */
+    public ListNode oddEvenList(ListNode head) {
+        if (head == null || head.next == null) {
+            return head;
+        }
+        ListNode odd = head;
+        ListNode even = head.next;
+        ListNode evenHead = even;
+        while (even != null && even.next != null) {
+            odd.next = even.next;
+            odd = odd.next;
+            even.next = odd.next;
+            even = even.next;
+        }
+        odd.next = evenHead;
+        return head;
+    }
+
+
+    /**
+     * 17. 电话号码的字母组合 Medium
+     *
+     * @param digits
+     * @return DFS
+     * <p>
+     * 当string的长度与目标的digits的长度相等时，添加string到list中
+     * 当digits用完了即返回最终结果
+     */
+    Map<Character, List<String>> map = null;
+
+    public List<String> letterCombinations(String digits) {
+        List<String> resList = new ArrayList<String>();
+        if (digits == null || digits.length() == 0) {
+            return resList;
+        }
+        map = new HashMap<Character, List<String>>() {{
+            put('2', Arrays.asList("a", "b", "c"));
+            put('3', Arrays.asList("d", "e", "f"));
+            put('4', Arrays.asList("g", "h", "i"));
+            put('5', Arrays.asList("j", "k", "l"));
+            put('6', Arrays.asList("m", "n", "o"));
+            put('7', Arrays.asList("p", "q", "r", "s"));
+            put('8', Arrays.asList("t", "u", "v"));
+            put('9', Arrays.asList("w", "x", "y", "z"));
+        }};
+        List<String> list = new ArrayList<>();
+        dfs(resList, list, digits.toCharArray(), 0);
+        return resList;
+    }
+
+    private void dfs(List<String> resList, List<String> list, char[] digits, int level) {
+        if (list.size() == digits.length) {
+            StringBuffer sb = new StringBuffer();
+            for (String str : list) {
+                sb.append(str);
+            }
+            resList.add(sb.toString());
+            return;
+        }
+        List<String> letters = map.get(digits[level]);
+        for (String letter : letters) {
+            list.add(letter);
+            dfs(resList, list, digits, level + 1);
+            list.remove(list.size() - 1);
+        }
+    }
+
+
+    /**
+     * 22. 括号生成 Medium
+     *
+     * @param n
+     * @return
+     * DFS
+     */
+    private String LEFT = "(";
+    private String RIGHT = ")";
+
+    public List<String> generateParenthesis(int n) {
+        List<String> resList = new ArrayList<>();
+        if (n == 0) {
+            return resList;
+        }
+        dfs(resList, new StringBuffer(), n, n);
+
+        return resList;
+    }
+
+    private void dfs(List<String> resList, StringBuffer sb, int numL, int numR) {
+        if (numL == 0 && numR == 0) {
+            resList.add(sb.toString());
+            return;
+        }
+        if (numL > 0) {
+            dfs(resList, sb.append(LEFT), numL - 1, numR);
+            sb.deleteCharAt(sb.length() - 1);
+        }
+
+        if (numR > 0 && numL < numR) {
+            dfs(resList, sb.append(RIGHT), numL, numR - 1);
+            sb.deleteCharAt(sb.length() - 1);
+        }
+    }
+
+
+    /**
+     * 78. 子集 Medium
+     * @param nums
+     * @return
+     */
+    public List<List<Integer>> subsets(int[] nums) {
+
+
+
+        return null;
+    }
+
 
     public static void main(String[] args) {
 
@@ -838,9 +1252,21 @@ public class LeetCodeExploreI {
 //        System.out.println(handler.firstUniqChar("loveleetcode"));
 //        handler.strStr("mississippi", "issipi");
 //        handler.countAndSay(4);
-        int[] nums = {2, 7, 9, 3, 1};
-        handler.rob(nums);
+//        int[] nums = {2, 7, 9, 3, 1};
+//        handler.rob(nums);
+//        int[] nums = {0, 0, 1, 1, 1, 1, 2, 3, 3};
+//        handler.removeDuplicatesII(nums);
+//        int[] nums = {1, 3, 4, 2, 2};
+//        handler.findDuplicate(nums);
+//        int[][] matrix = {{0, 1, 2, 0}, {3, 4, 5, 2}, {1, 3, 1, 5}};
+//        handler.setZeroes(matrix);
+//        handler.longestPalindromeSubseq("abdcbe");
+//        handler.countSubstrings("aaa");
+//        int[] nums = {2, 3, 1, 1, 4};
+//        handler.canJump(nums);
+//        System.out.println(handler.letterCombinations("234"));
 
+        handler.generateParenthesis(3);
 
     }
 

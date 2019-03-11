@@ -229,7 +229,8 @@ public class LeetCodeOne {
     }
 
 
-    /**1
+    /**
+     * 1
      * 15. 三数之和
      *
      * @param nums
@@ -317,6 +318,12 @@ public class LeetCodeOne {
      *
      * @param s
      * @return 给定一个字符串 s，找到 s 中最长的回文子串。你可以假设 s 的最大长度为 1000。
+     * #### DP: isPalin[][]
+     * - 穷举double for loop. O(n^2)
+     * - boolean isPalin[i][j], 每次确认有palindrome就记录下来true / false
+     * - 穷举的for loop计算顺序: end point j, and stat point i = [0, j]
+     * - 在计算 isPalin[i][j]的时候, isPalin[i+1][j-1]应该已经计算过了.
+     * - double for loop: O(n^2). slower, because it guarantees O(n^2) due to the for loop
      */
     public String longestPalindrome(String s) {
         if (s == null || s.length() == 0) {
