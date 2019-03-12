@@ -1186,8 +1186,7 @@ public class LeetCodeExploreI {
      * 22. 括号生成 Medium
      *
      * @param n
-     * @return
-     * DFS
+     * @return DFS
      */
     private String LEFT = "(";
     private String RIGHT = ")";
@@ -1221,16 +1220,110 @@ public class LeetCodeExploreI {
 
     /**
      * 78. 子集 Medium
+     *
      * @param nums
      * @return
      */
     public List<List<Integer>> subsets(int[] nums) {
 
 
-
         return null;
     }
 
+
+    /**
+     * 112. 路径总和 Easy
+     *
+     * @param root
+     * @param sum
+     * @return 递归
+     */
+    public boolean hasPathSum1st(TreeNode root, int sum) {
+        if (root == null) {
+            return false;
+        }
+        //当root为叶子节点时（左节点与右节点都是null，且传入的sum值刚好等于这个叶子节点的值，即返回true）
+        if (root.left == null && root.right == null && sum == root.val) {
+            return true;
+        }
+        //分别探索root节点的左节点+右节点
+        return hasPathSum1st(root.left, sum - root.val) || hasPathSum1st(root.right, sum - root.val);
+    }
+
+
+    /**
+     * 112. 路径总和 Easy
+     *
+     * @param root
+     * @param sum
+     * @return DFS
+     */
+    public boolean hasPathSum2nd(TreeNode root, int sum) {
+        if (root == null) {
+            return false;
+        }
+        return dfs(root, sum);
+    }
+
+
+    private boolean dfs(TreeNode root, int sum) {
+        //当root为叶子节点时（左节点与右节点都是null，且传入的sum值刚好等于这个叶子节点的值，即返回true）
+        if (root.left == null && root.right == null && sum == root.val) {
+            return true;
+        }
+        boolean flag = false;
+        if (root.left != null) {
+            flag = flag || dfs(root.left, sum - root.val);
+        }
+        if (root.right != null) {
+            flag = flag || dfs(root.right, sum - root.val);
+        }
+        return flag;
+    }
+
+
+    /**
+     * 113. 路径总和 II Medium
+     *
+     * @param root
+     * @param sum
+     * @return 叶子节点是指没有子节点的节点。
+     * <p>
+     * #### DFS, Backtracking
+     * - 用remaining sum 来检测是否满足 input path sum 条件
+     * - 满足的时候add to result list
+     * - 两种backtracking:
+     * - 1. backtrack 当下node, 加进list, 然后dfs. dfs结束后删掉之前加进去的元素. 非常clean.
+     * - 2. backtrack 下一个dfs level增加的value. dfs return 之后, 删掉list里面的末尾元素: 但是删掉的dfs余下的value.
+     * - 第一种backtrack更加好掌握.
+     */
+    public List<List<Integer>> pathSum(TreeNode root, int sum) {
+        List<List<Integer>> resList = new ArrayList<>();
+        if (root == null) {
+            return resList;
+        }
+        dfs(resList, new ArrayList<>(), root, sum);
+        return resList;
+    }
+
+    private void dfs(List<List<Integer>> resList, List<Integer> list, TreeNode node, int sum) {
+        if (node == null) {
+            return;
+        }
+        list.add(node.val);
+        //判断是否是叶子节点
+        if (node.left == null && node.right == null && node.val == sum) {
+            resList.add(new ArrayList<>(list));
+            list.remove(list.size() - 1);
+            return;
+        }
+        //对左右节点探索
+        dfs(resList, list, node.left, sum - node.val);
+        dfs(resList, list, node.right, sum - node.val);
+        //开始回溯
+        list.remove(list.size() - 1);
+
+    }
 
     public static void main(String[] args) {
 
