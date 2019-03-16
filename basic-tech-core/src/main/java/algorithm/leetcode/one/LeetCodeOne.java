@@ -1643,6 +1643,120 @@ public class LeetCodeOne {
     //==========================面试算法 牛客网-左程云-初阶-结束============================//
 
 
+    /**
+     * 84. 柱状图中最大的矩形 Hard
+     *
+     * @param heights
+     * @return 单调栈Monotonous Stack
+     * 维持一个单调栈，这个单调栈的从栈底到栈顶从小-->大
+     * <p>
+     * 重点是根据找Histogram里面rectangle的性质, 维持一个单调递增的Stack
+     * - 在loop over indexes的时候:
+     * - 如果高度>= previous peek(), 那么对于那个peek, 就意味着, 往下走, 一直走高嘛, 之前的peek总可以继续抄底
+     * - 什么时候不能抄底了呢? 就是有一个下降趋势的时候
+     * - 这时候并不是calculate所有前面的peek, 而是考虑 大于 current height的之前所有的peek.
+     * - 把这些peek到 current height 前一格的rectangle全部找出来: stack.pop()
+     * - 这个stack.pop()的过程里面, 其实没有算上 current height, 因为需要留到下一轮, 把current index加进stack 再说
+     * - 为什么用stack? 因为需要知道连续递增的peek, stack.peek() O(1), 好用
+     * 而其实不用stack, 也可以用其他方式记录所有height, 只不过要 O(n)去找peek不方便
+     */
+    public int largestRectangleArea(int[] heights) {
+        if (heights == null || heights.length == 0) {
+            return 0;
+        }
+        int max = Integer.MIN_VALUE;
+        Stack<Integer> stack = new Stack<>();
+        int n = heights.length;
+        for (int i = 0; i <= n; i++) {
+            //判断i是否达到右边界，影响后面的到达右边界的stack弹出，计算逻辑
+            int curHeight = i == n ? -1 : heights[i];
+            //维持一个单调栈，从栈底到栈顶是从小到大的顺序，如果要进栈的元素比栈顶的值小，将栈顶的值弹出，计算逻辑
+            while (!stack.isEmpty() && curHeight <= heights[stack.peek()]) {
+                int stackHeight = heights[stack.pop()];
+                // i - stack.peek() - 1 是计算width，这个code需要扣一下
+                int width = stack.isEmpty() ? i : i - stack.peek() - 1;
+                max = Math.max(max, stackHeight * width);
+            }
+            stack.push(i);
+        }
+        return max;
+    }
+
+
+    /**
+     * 42. 接雨水 Hard
+     *
+     * @param height
+     * @return 维护一个单调栈，从栈底到栈顶是从大到小的顺序
+     */
+    public int trap(int[] height) {
+        if (height == null || height.length == 0) {
+            return 0;
+        }
+        Stack<Integer> stack = new Stack<>();
+        int result = 0;
+        stack.push(0);
+        for (int i = 1; i < height.length; i++) {
+            //如果当前值大于栈顶值，需要弹出栈顶的值，并在弹出的时候执行计算雨水的逻辑
+            if (height[i] >= height[stack.peek()]) {
+                int bottom = height[stack.pop()];
+                //当前栈有元素，且当前值，大于bottom后面的值
+                while (!stack.isEmpty() && height[i] >= height[stack.peek()]) {
+                    int leftEdge = stack.pop();
+                    result += (height[leftEdge] - bottom) * (i - leftEdge - 1);
+                    bottom = height[leftEdge];//将bottom移动到左边的边界处
+                }
+                //上面的while循环跑完后，判断栈顶的值比当前值大的话，进下面的逻辑
+                if (!stack.isEmpty() && height[i] < height[stack.peek()]) {
+                    result += (height[i] - bottom) * (i - stack.peek() - 1);
+                }
+            }
+            stack.push(i);
+        }
+        return result;
+    }
+
+
+    /**
+     * 239. 滑动窗口最大值 Hard
+     *
+     * @param nums
+     * @param k
+     * @return
+     */
+    public int[] maxSlidingWindow(int[] nums, int k) {
+        if (nums == null || nums.length == 0 || nums.length < k) {
+            return new int[]{};
+        }
+        //双端队列存储nums中的index
+        LinkedList<Integer> deque = new LinkedList<>();
+        int n = nums.length;
+        int index = 0;
+        //结果数组
+        int[] resArr = new int[n - k + 1];
+        for (int i = 0; i < n; i++) {
+            //当deque不为空，且deque的尾部索引对应的值小于等于外面来的值，将尾部的索引弹出
+            while (!deque.isEmpty() && nums[deque.peekLast()] <= nums[i]) {
+                deque.pollLast();
+            }
+            //在deque尾部添加索引
+            deque.addLast(i);
+            //判断deque的头部索引是否过期 k是滑动窗口的size,当deque的头部索引等于i-k时，表明索引过期弹出
+            //当然存在一种情况是deque的尾部进来的新索引将老的索引挤出去的场景
+            if (deque.peekFirst() == i - k) {
+                deque.pollFirst();
+            }
+            //当i 至少为（k-1）的时候，表示最大滑动窗口开始形成，开始收集resArr
+            if (i >= k - 1) {
+                resArr[index++] = nums[deque.peekFirst()];
+            }
+        }
+        return resArr;
+    }
+
+
+
+
     public static void main(String[] args) {
 //        int[] nums = {4, 1, 2, 1, 2};
 //        System.out.println(handler.singleNumber(nums));
@@ -1741,8 +1855,16 @@ public class LeetCodeOne {
 
 //        int[] arr = {1, 2, 2, 2, 3, 3, 4, 5, 6, 6, 7, 7, 8, 8, 8, 9};
 //        handler.leftUnique(arr);
-        int[] arr = {0, 1, 2, 1, 0, 2, 2, 0, 1};
-        handler.sort(arr);
+//        int[] arr = {0, 1, 2, 1, 0, 2, 2, 0, 1};
+//        handler.sort(arr);
+//        int[] heights = {2, 1, 5, 6, 2, 3};
+//        handler.largestRectangleArea(heights);
+
+//        int[] heights = {0, 1, 0, 2, 1, 0, 1, 3, 2, 1, 2, 1};
+//        handler.trap(heights);
+        int[] nums = {1, 3, -1, -3, 5, 3, 6, 7};
+        int k = 3;
+        System.out.println(JSON.toJSON(handler.maxSlidingWindow(nums, k)));
 
     }
 

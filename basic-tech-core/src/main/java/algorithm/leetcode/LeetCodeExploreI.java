@@ -1322,8 +1322,35 @@ public class LeetCodeExploreI {
         dfs(resList, list, node.right, sum - node.val);
         //开始回溯
         list.remove(list.size() - 1);
-
     }
+
+
+    /**
+     * 209. 长度最小的子数组 Medium
+     *
+     * @param s
+     * @param nums
+     * @return two pointers
+     * 整个过程是左右指针都从0 往末尾推，右指针跑的快些
+     */
+    public int minSubArrayLen(int s, int[] nums) {
+        if (nums == null || nums.length == 0) {
+            return 0;
+        }
+        int left = 0, right = 0, sum = 0;
+        int res = Integer.MAX_VALUE;
+        while (right < nums.length) {
+            while (sum < s && right < nums.length) {
+                sum += nums[right++];
+            }
+            while (sum >= s && left >= 0) {
+                res = Math.min(res, right - left);
+                sum -= nums[left++];
+            }
+        }
+        return res == Integer.MAX_VALUE ? 0 : res;
+    }
+
 
     public static void main(String[] args) {
 
@@ -1359,8 +1386,11 @@ public class LeetCodeExploreI {
 //        handler.canJump(nums);
 //        System.out.println(handler.letterCombinations("234"));
 
-        handler.generateParenthesis(3);
+//        handler.generateParenthesis(3);
+        int s = 7;
+        int[] nums = {2, 3, 1, 2, 4, 3};
 
+        handler.minSubArrayLen(s, nums);
     }
 
 }

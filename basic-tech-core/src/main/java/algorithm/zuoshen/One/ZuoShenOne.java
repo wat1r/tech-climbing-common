@@ -1,5 +1,7 @@
 package algorithm.zuoshen.One;
 
+import java.util.LinkedList;
+
 /**
  * Created by FrankCooper
  * Date 2019/3/13 0:09
@@ -37,6 +39,53 @@ public class ZuoShenOne {
         return res;
     }
 
+
+    /**
+     * 左神P31，最大值减去最小值小于或等于num的子数组的数量
+     *
+     * @param arr
+     * @param num
+     * @return
+     */
+    public int getNum(int[] arr, int num) {
+        if (arr == null || arr.length == 0) {
+            return 0;
+        }
+        LinkedList<Integer> qmax = new LinkedList<>();
+        LinkedList<Integer> qmin = new LinkedList<>();
+        int L = 0, R = 0;
+        int res = 0;
+        while (L < arr.length) {
+            while (R < arr.length) {
+                //qmin更新进最小值的R
+                while (!qmin.isEmpty() && qmin.peekLast() >= arr[R]) {
+                    qmin.pollLast();
+                }
+                qmin.addLast(R);
+                //qmax更新进最大值的R
+                while (!qmax.isEmpty() && qmax.peekLast() <= arr[R]) {
+                    qmax.pollLast();
+                }
+                qmax.addLast(R);
+                //如果当前的qmax中的值减去qmin中的值大于num，其所有的子数组都不会满足条件，break掉
+                if (arr[qmax.peekFirst()] - arr[qmin.peekFirst()] > num) {
+                    break;
+                }
+                R++;
+            }
+            //检查qmin的下标是否过期
+            if (qmin.peekFirst() == L) {
+                qmin.pollFirst();
+            }
+            //检查qmax的下标是否过期
+            if (qmax.peekFirst() == L) {
+                qmax.pollFirst();
+            }
+            res += R - L;
+            L++;
+        }
+        return res;
+    }
 
     public static void main(String[] args) {
 

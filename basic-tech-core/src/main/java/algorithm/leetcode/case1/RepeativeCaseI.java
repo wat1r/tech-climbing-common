@@ -200,6 +200,58 @@ public class RepeativeCaseI {
     }
 
 
+    /**
+     * 94. 二叉树的中序遍历 Medium
+     *
+     * @param head
+     * @return
+     */
+    public List<Integer> inorderTraversal(TreeNode head) {
+        List<Integer> resList = new ArrayList<>();
+        if (head != null) {
+            Stack<TreeNode> stack = new Stack<>();
+            while (!stack.isEmpty() || head != null) {
+                if (head != null) {
+                    stack.push(head);
+                    head = head.left;
+                } else {
+                    head = stack.pop();
+                    resList.add(head.val);
+                    head = head.right;
+                }
+            }
+        }
+        return resList;
+    }
+
+
+    /**
+     * 144. 二叉树的前序遍历 Meidum
+     *
+     * @param root
+     * @return 非递归方式前序遍历
+     */
+    public List<Integer> preorderTraversal(TreeNode root) {
+        List<Integer> resList = new ArrayList<>();
+        if (root != null) {
+            Stack<TreeNode> stack = new Stack<>();
+            stack.add(root);
+            while (!stack.isEmpty()) {
+                root = stack.pop();
+                resList.add(root.val);
+                if (root.right != null) {
+                    stack.push(root.right);
+                }
+                if (root.left != null) {
+                    stack.push(root.left);
+                }
+            }
+
+        }
+        return resList;
+    }
+
+
     public static void main(String[] args) {
         LeetCodeOne leetCodeOne = new LeetCodeOne();
         LeetCodeClassification leetCodeClassification = new LeetCodeClassification();
@@ -218,3 +270,14 @@ public class RepeativeCaseI {
         leetCodeClassification.coinChange(coins, amount);
     }
 }
+
+class TreeNode {
+    int val;
+    TreeNode left;
+    TreeNode right;
+
+    TreeNode(int x) {
+        val = x;
+    }
+}
+
