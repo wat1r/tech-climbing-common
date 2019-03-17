@@ -252,6 +252,34 @@ public class RepeativeCaseI {
     }
 
 
+    /**
+     * @param numbers
+     * @param target
+     * @return
+     */
+    public int[] twoSumII(int[] numbers, int target) {
+        if (numbers == null || numbers.length <= 1) {
+            return null;
+        }
+        int[] resArr = new int[2];
+        int l = 0, r = numbers.length - 1;
+        int sum = 0;
+        while (l < r) {
+            sum = numbers[l] + numbers[r];
+            if (sum == target) {
+                resArr[0] = l + 1;
+                resArr[1] = r + 1;
+                return resArr;
+            } else if (sum > target) {
+                r--;
+            } else {
+                l++;
+            }
+        }
+        return resArr;
+    }
+
+
     public static void main(String[] args) {
         LeetCodeOne leetCodeOne = new LeetCodeOne();
         LeetCodeClassification leetCodeClassification = new LeetCodeClassification();
@@ -265,9 +293,12 @@ public class RepeativeCaseI {
 //        handler.lengthOfLIS(nums);
 //        int[] coins = {1, 2, 5};
 //        int amount = 11;
-        int[] coins = {2, 5};
-        int amount = 3;
-        leetCodeClassification.coinChange(coins, amount);
+//        int[] coins = {2, 5};
+//        int amount = 3;
+//        leetCodeClassification.coinChange(coins, amount);
+        int[] numbers = {2, 7, 11, 15};
+        int target = 9;
+        handler.twoSumII(numbers, target);
     }
 }
 

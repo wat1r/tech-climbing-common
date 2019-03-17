@@ -1,5 +1,6 @@
 package algorithm.zuoshen.One;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 
 /**
@@ -87,11 +88,42 @@ public class ZuoShenOne {
         return res;
     }
 
+
+    /**
+     * P355 未排序数组中累加和为给定值的最长子数组
+     *
+     * @param arr
+     * @param k
+     * @return
+     */
+    public int maxLength(int[] arr, int k) {
+        if (arr == null || arr.length == 0) {
+            return 0;
+        }
+        //k-->对应的的sum值，value-->index
+        HashMap<Integer, Integer> map = new HashMap<>();
+        map.put(0, -1);
+        int res = 0;
+        int sum = 0;
+        for (int i = 0; i < arr.length; i++) {
+            sum += arr[i];
+            if (map.containsKey(sum - k)) {
+                res = Math.max(res, i - map.get(sum - k));
+            }
+            if (!map.containsKey(sum)) {
+                map.put(sum, i);
+            }
+        }
+        return res;
+    }
+
     public static void main(String[] args) {
 
-        int[] arr = {5, 10, 25};
-        handler.coins1(arr, 15);
-
+//        int[] arr = {5, 10, 25};
+//        handler.coins1(arr, 15);
+        int[] arr = {1, 2, 3, 3};
+        int k = 6;
+        handler.maxLength(arr, k);
 
     }
 }
