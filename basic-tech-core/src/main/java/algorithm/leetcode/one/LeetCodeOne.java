@@ -230,7 +230,6 @@ public class LeetCodeOne {
 
 
     /**
-     * 1
      * 15. 三数之和
      *
      * @param nums
@@ -1775,14 +1774,14 @@ public class LeetCodeOne {
 
 //        int[] nums = {-1, 2, 1, -4};
 //        handler.threeSumClosest(nums, 1);
-//        int[] nums = {-1, 0, 1, 2, -1, -4};
-//        System.out.println(JSON.toJSON(handler.threeSum(nums)));
+        int[] nums = {-1, 0, 1, 2, -1, -4};
+        System.out.println(JSON.toJSON(handler.threeSum(nums)));
 
 //        int[] nums = {-2, 1, -3, 4, -1, 2, 1, -5, 4};
 //        System.out.println(handler.maxSubArray(nums));
 
-//        String str = "ababa";
-//        System.out.println(handler.longestPalindrome(str));
+        String str = "ababa";
+        System.out.println(handler.longestPalindrome(str));
 
 //        handler.reverseString("hello".toCharArray());
 
@@ -1862,9 +1861,9 @@ public class LeetCodeOne {
 
 //        int[] heights = {0, 1, 0, 2, 1, 0, 1, 3, 2, 1, 2, 1};
 //        handler.trap(heights);
-        int[] nums = {1, 3, -1, -3, 5, 3, 6, 7};
-        int k = 3;
-        System.out.println(JSON.toJSON(handler.maxSlidingWindow(nums, k)));
+//        int[] nums = {1, 3, -1, -3, 5, 3, 6, 7};
+//        int k = 3;
+//        System.out.println(JSON.toJSON(handler.maxSlidingWindow(nums, k)));
 
     }
 

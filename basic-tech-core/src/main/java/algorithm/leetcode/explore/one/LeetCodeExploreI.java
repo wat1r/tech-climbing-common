@@ -1,6 +1,7 @@
 package algorithm.leetcode.explore.one;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Created by FrankCooper
@@ -1568,6 +1569,93 @@ public class LeetCodeExploreI {
         return num == 1;
     }
 
+
+    /**
+     * 202. 快乐数 Easy
+     *
+     * @param n
+     * @return
+     */
+    public boolean isHappy(int n) {
+        HashSet<Long> set = new HashSet<>();
+        long sum = n;
+        while (sum != 1) {
+            sum = getSum(sum);
+            if (set.contains(sum)) {
+                return false;
+            } else {
+                set.add(sum);
+            }
+        }
+        return true;
+    }
+
+    private long getSum(long sum) {
+        long res = 0;
+        while (sum != 0) {
+            res += Math.pow(sum % 10, 2);
+            sum /= 10;
+        }
+        return res;
+    }
+
+    /**
+     * 205. 同构字符串 Easy
+     *
+     * @param s
+     * @param t
+     * @return 1. 当map有key，value且chas ==chat时，符合题意，chas!=chat时，不符合题意
+     * 2.当map不含有key，缺含有了chat时不符合题意
+     */
+    public boolean isIsomorphic(String s, String t) {
+        if (s == null || t == null || s.length() != t.length()) {
+            return false;
+        }
+        HashMap<Character, Character> map = new HashMap<>();
+        for (int i = 0; i != s.length(); i++) {
+            char chas = s.charAt(i);
+            char chat = t.charAt(i);
+            if (map.containsKey(chas)) {
+                if (map.get(chas) != chat) {
+                    return false;
+                }
+            } else {
+                if (map.containsValue(chat)) {
+                    return false;
+                }
+                map.put(chas, chat);
+            }
+        }
+        return true;
+    }
+
+    /**
+     * 451. 根据字符出现频率排序 Meidum
+     *
+     * @param s
+     * @return
+     */
+    public String frequencySort(String s) {
+        if (s == null || s.length() == 0) {
+            return "";
+        }
+        final Map<Character, Integer> map = new HashMap<>();
+        for (int i = 0; i < s.length(); i++) {
+            char chas = s.charAt(i);
+            map.put(chas, map.getOrDefault(chas, 0) + 1);
+        }
+        ArrayList<Map.Entry<Character, Integer>> list = new ArrayList<>(map.entrySet());
+        Collections.sort(list, (o1, o2) -> (o2.getValue() - o1.getValue()));
+        StringBuffer sb = new StringBuffer();
+        for (Map.Entry<Character, Integer> entry : list) {
+            for (int i = 0; i < entry.getValue(); i++) {
+                sb.append(entry.getKey());
+            }
+        }
+        return sb.toString();
+    }
+
+
     public static void main(String[] args) {
 
 //        int[] nums = {3, 2, 3};
@@ -1617,8 +1705,9 @@ public class LeetCodeExploreI {
 //        int[] nums = {3, 2, 2, 3};
 //        int val = 3;
 //        handler.removeElement(nums, val);
-    handler.isUgly(60);
+//        handler.isUgly(60);
 
+        handler.isHappy(19);
     }
 
 }
