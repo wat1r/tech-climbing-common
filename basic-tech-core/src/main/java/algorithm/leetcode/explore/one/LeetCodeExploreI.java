@@ -1003,6 +1003,7 @@ public class LeetCodeExploreI {
         }
         char[] chas = s.toCharArray();
         int n = chas.length;
+        ;
         int[][] dp = new int[n][n];
         //拼接对角线上的 因为是一个字符，dp都为1
         for (int i = 0; i < n; i++) {
@@ -1033,28 +1034,33 @@ public class LeetCodeExploreI {
      * 647. 回文子串 Medium
      *
      * @param s
-     * @return 未消化
+     * @return 还有一种解法odd/even split check
+     * https://leetcode.com/problems/palindromic-substrings/discuss/105689/Java-solution-8-lines-extendPalindrome
      */
     public int countSubstrings(String s) {
-        if (s == null || s.length() == 0) return 0;
-        int n = s.length(), count = 0;
-        boolean[][] isPalin = buildPalin(s);
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < n; j++) count += isPalin[i][j] ? 1 : 0;
+        if (s == null || s.length() == 0) {
+            return 0;
         }
-
-        return count;
+        int n = s.length(), res = 0;
+        boolean[][] isPalin = buildPalin(s);
+        for (int j = 0; j < n; j++) {
+            for (int i = 0; i <= j; i++) {
+                res += isPalin[i][j] ? 1 : 0;
+            }
+        }
+        return res;
     }
 
     private boolean[][] buildPalin(String s) {
         int n = s.length();
         boolean[][] isPalin = new boolean[n][n];
-        // init:
-        for (int i = 0; i < n; i++) isPalin[i][i] = true;
-        // Calc:
         for (int j = 0; j < n; j++) {
-            for (int i = 0; i <= j; i++) { // index [i, j]
-                isPalin[i][j] = s.charAt(i) == s.charAt(j) && (j - i <= 1 || isPalin[i + 1][j - 1]);
+            for (int i = 0; i <= j; i++) {
+                if (i == j) {
+                    isPalin[i][j] = true;
+                } else {
+                    isPalin[i][j] = s.charAt(i) == s.charAt(j) && (j - i <= 1 || isPalin[i + 1][j - 1]);
+                }
             }
         }
         return isPalin;
@@ -1655,6 +1661,54 @@ public class LeetCodeExploreI {
         return sb.toString();
     }
 
+    /**
+     * @param s
+     * @return
+     */
+//    public List<List<String>> partition(String s) {
+//
+//        return null;
+//    }
+    List<List<String>> resList = new ArrayList<>();
+
+    public List<List<String>> partition(String s) {
+
+        if (s == null || s.length() == 0) {
+            return resList;
+        }
+        dfs(s, new ArrayList<String>(), 0);
+        return resList;
+    }
+
+    private void dfs(String s, List<String> list, int l) {
+        //当l==s的len时，表示已经到底了
+        if (l == s.length()) {
+            resList.add(new ArrayList<>(list));
+            return;
+        }
+        for (int r = l; r < s.length(); r++) {
+            //判断s 的l 到r 上是否是回文
+            if (isPalindrome(s, l, r)) {
+                list.add(s.substring(l, r + 1));
+                //递归，r+1，再往右多取一个字符
+                dfs(s, list, r + 1);
+                list.remove(list.size() - 1);
+            }
+        }
+    }
+
+
+    /**
+     * 判断是否是回文，指针碰撞
+     */
+    private boolean isPalindrome(String str, int l, int r) {
+        while (l < r && str.charAt(l) == str.charAt(r)) {
+            l++;
+            r--;
+        }
+        return l >= r;
+    }
+
 
     public static void main(String[] args) {
 
@@ -1707,7 +1761,13 @@ public class LeetCodeExploreI {
 //        handler.removeElement(nums, val);
 //        handler.isUgly(60);
 
-        handler.isHappy(19);
+//        handler.isHappy(19);
+//        handler.buildPalin("abcba");
+//        handler.countSubstrings("abcbdbcf");
+//        System.out.println(handler.partition("aab"));
+        String str = "abcdefcba";
+        handler.isPalindrome(str, 0, str.length() - 1);
+
     }
 
 }
