@@ -141,6 +141,59 @@ public class ZuoShenOne {
     }
 
 
+    /**
+     * 回文，生成DP
+     *
+     * @param chas
+     * @return
+     */
+    private int[][] getDp(char[] chas) {
+        int n = chas.length;
+        int[][] dp = new int[n][n];
+        for (int j = 1; j < n; j++) {
+            dp[j - 1][j] = chas[j - 1] == chas[j] ? 0 : 1;
+            for (int i = j - 2; i > -1; i--) {
+                if (chas[i] == chas[j]) {
+                    dp[i][j] = dp[i + 1][j - 1];
+                } else {
+                    dp[i][j] = Math.min(dp[i + 1][j], dp[i][j - 1]) + 1;
+                }
+            }
+        }
+        return dp;
+    }
+
+    /**
+     * 214. 最短回文串 Hard
+     * @param s
+     * @return
+     */
+    public String shortestPalindrome(String s) {
+        if (s == null || s.length() == 0) {
+            return s;
+        }
+        char[] chas = s.toCharArray();
+        int[][] dp = getDp(chas);
+        int n = chas.length;
+        char[] resChar = new char[n + dp[0][n - 1]];
+        int l = 0, r = n - 1;
+        int resL = 0, resR = resChar.length - 1;
+        while (l <= r) {
+            if (chas[l] == chas[r]) {
+                resChar[resL++] = chas[l++];
+                resChar[resR--] = chas[r--];
+            } else if (dp[l][r - 1] <= dp[l + 1][r]) {
+                resChar[resL++] = chas[r];
+                resChar[resR--] = chas[r--];
+            } else {
+                resChar[resL++] = chas[l];
+                resChar[resR--] = chas[l++];
+            }
+        }
+        return String.valueOf(resChar);
+    }
+
+
     public static void main(String[] args) {
 
 //        int[] arr = {5, 10, 25};
@@ -148,8 +201,10 @@ public class ZuoShenOne {
 //        int[] arr = {1, 2, 3, 3};
 //        int k = 6;
 //        handler.maxLength(arr, k);
-        int[][] matrix = {{1, 3, 5, 9}, {8, 1, 3, 4}, {5, 0, 6, 1}, {8, 8, 4, 0}};
+//        int[][] matrix = {{1, 3, 5, 9}, {8, 1, 3, 4}, {5, 0, 6, 1}, {8, 8, 4, 0}};
+//        handler.getDp("ABCDABA".toCharArray());
 
-
+//        handler.shortestPalindrome("ABCDABA");
+        handler.shortestPalindrome("abb");
     }
 }
