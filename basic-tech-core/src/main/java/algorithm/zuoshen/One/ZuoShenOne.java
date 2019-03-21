@@ -165,8 +165,9 @@ public class ZuoShenOne {
 
     /**
      * 214. 最短回文串 Hard
+     *
      * @param s
-     * @return
+     * @return 注意题目要求在前面添加
      */
     public String shortestPalindrome(String s) {
         if (s == null || s.length() == 0) {
@@ -194,6 +195,46 @@ public class ZuoShenOne {
     }
 
 
+    /**
+     * 72. 编辑距离 Hard P217
+     *
+     * @param word1
+     * @param word2
+     * @return
+     */
+    public int minDistance(String word1, String word2) {
+        if (word1 == null || word2 == null) {
+            return 0;
+        }
+        char[] chas1 = word1.toCharArray();
+        char[] chas2 = word2.toCharArray();
+        int row = chas1.length + 1;
+        int col = chas2.length + 1;
+        int[][] dp = new int[row][col];
+        //init first col
+        for (int i = 0; i < row; i++) {
+            dp[i][0] = i;
+        }
+        //init first row
+        for (int j = 0; j < col; j++) {
+            dp[0][j] = j;
+        }
+        //general case
+        for (int i = 1; i < row; i++) {
+            for (int j = 1; j < col; j++) {
+                if (chas1[i - 1] == chas2[j - 1]) {
+                    dp[i][j] = dp[i - 1][j - 1];
+                } else {
+                    dp[i][j] = dp[i - 1][j - 1] + 1;
+                }
+                dp[i][j] = Math.min(dp[i][j], dp[i - 1][j] + 1);
+                dp[i][j] = Math.min(dp[i][j], dp[i][j - 1] + 1);
+            }
+        }
+        return dp[row - 1][col - 1];
+    }
+
+
     public static void main(String[] args) {
 
 //        int[] arr = {5, 10, 25};
@@ -205,6 +246,8 @@ public class ZuoShenOne {
 //        handler.getDp("ABCDABA".toCharArray());
 
 //        handler.shortestPalindrome("ABCDABA");
-        handler.shortestPalindrome("abb");
+//        handler.shortestPalindrome("abb");
+        String word1 = "horse", word2 = "ros";
+        System.out.println(  handler.minDistance(word1, word2));
     }
 }
