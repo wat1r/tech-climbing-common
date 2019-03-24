@@ -1,7 +1,9 @@
 package algorithm.zuoshen.One;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Created by FrankCooper
@@ -235,6 +237,58 @@ public class ZuoShenOne {
     }
 
 
+    public static ReturnType process(Node head) {
+        //basecase
+        if (head == null) {
+            return new ReturnType(0, 0);
+        }
+        ReturnType leftReturnType = process(head.left);
+        ReturnType rightReturnType = process(head.right);
+
+        int includeHeadDistance = leftReturnType.maxDistance + 1 + rightReturnType.maxDistance;
+        int p1 = leftReturnType.maxDistance;
+        int p2 = rightReturnType.maxDistance;
+
+        int resultDistance = Math.max(Math.max(p1, p2), includeHeadDistance);
+        int hitself = Math.max(leftReturnType.h, rightReturnType.h) + 1;//h 是决策中需要的信息，树的深度
+        return new ReturnType(resultDistance, hitself);
+    }
+
+    /**
+     * P169 二叉树节点间的最大距离问题
+     *
+     * @param head
+     * @return
+     */
+    public static int getMaxDistance(Node head) {
+        return process(head).maxDistance;
+    }
+
+
+    /**
+     * 最大活跃度
+     *
+     * @param head
+     * @return
+     */
+    public static int getMaxHuo(HuoNode head) {
+        return Math.max(huoProcess(head).laiHuo, huoProcess(head).buLaiHuo);
+    }
+
+
+    public static HuoReturnData huoProcess(HuoNode head) {
+        int laiHuo = head.huo;
+        int bulaiHuo = 0;
+        for (int i = 0; i < head.nexts.size(); i++) {
+            HuoNode next = head.nexts.get(i);
+            HuoReturnData nextData = huoProcess(next);
+            laiHuo += nextData.buLaiHuo;
+            bulaiHuo += Math.max(nextData.laiHuo, nextData.buLaiHuo);
+        }
+        return new HuoReturnData(laiHuo, bulaiHuo);
+    }
+
+
     public static void main(String[] args) {
 
 //        int[] arr = {5, 10, 25};
@@ -248,6 +302,47 @@ public class ZuoShenOne {
 //        handler.shortestPalindrome("ABCDABA");
 //        handler.shortestPalindrome("abb");
         String word1 = "horse", word2 = "ros";
-        System.out.println(  handler.minDistance(word1, word2));
+        System.out.println(handler.minDistance(word1, word2));
+    }
+}
+
+class ReturnType {
+    public int maxDistance;
+    public int h;
+
+
+    public ReturnType(int maxDistance, int h) {
+        this.maxDistance = maxDistance;
+        this.h = h;
+    }
+}
+
+class Node {
+    int val;
+    Node left;
+    Node right;
+
+    Node(int x) {
+        val = x;
+    }
+}
+
+class HuoNode {
+    public int huo;
+    public List<HuoNode> nexts;
+
+    public HuoNode(int huo) {
+        this.huo = huo;
+        this.nexts = new ArrayList<>();
+    }
+}
+
+class HuoReturnData {
+    public int laiHuo;
+    public int buLaiHuo;
+
+    public HuoReturnData(int laiHuo, int buLaiHuo) {
+        this.laiHuo = laiHuo;
+        this.buLaiHuo = buLaiHuo;
     }
 }

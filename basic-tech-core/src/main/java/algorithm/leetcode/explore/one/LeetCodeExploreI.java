@@ -1,5 +1,8 @@
 package algorithm.leetcode.explore.one;
 
+import basic.callback.Li;
+import com.alibaba.fastjson.JSON;
+
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -544,12 +547,15 @@ public class LeetCodeExploreI {
      * @return
      */
     public ListNode reverseList(ListNode head) {
-        ListNode current = head;
-        ListNode next = null, prev = null;
+        ListNode current = head, next, prev = null;
         while (current != null) {
+            // 记录后继结点
             next = current.next;
+            // 后继指针逆向
             current.next = prev;
+            // 记录当前结点
             prev = current;
+            // 下一结点成为当前结点
             current = next;
         }
         return prev;
@@ -1737,20 +1743,6 @@ public class LeetCodeExploreI {
 
 
     /**
-     * 140. 单词拆分 II
-     *
-     * @param s
-     * @param wordDict
-     * @return
-     */
-    public List<String> wordBreakII(String s, List<String> wordDict) {
-
-
-        return null;
-    }
-
-
-    /**
      * 221. 最大正方形 Medium
      *
      * @param matrix
@@ -1788,6 +1780,140 @@ public class LeetCodeExploreI {
             }
         }
         return max * max;
+    }
+
+
+    /**
+     * 115. 不同的子序列 Hard
+     *
+     * @param s
+     * @param t
+     * @return
+     */
+    public int numDistinct(String s, String t) {
+        if (s == null || t == null) {
+            return 0;
+        }
+        int m = s.length() + 1;
+        int n = t.length() + 1;
+        int[][] dp = new int[m][n];
+        dp[0][0] = 1;
+        //init first col
+        for (int i = 1; i < m; i++) {
+            dp[i][0] = 1;
+        }
+        //init first row
+        for (int j = 1; j < n; j++) {
+            dp[0][j] = 0;
+        }
+        for (int i = 1; i < m; i++) {
+            for (int j = 1; j < n; j++) {
+                dp[i][j] = dp[i - 1][j];
+                if (s.charAt(i - 1) == t.charAt(j - 1)) {
+                    dp[i][j] += dp[i - 1][j - 1];
+                }
+            }
+        }
+        return dp[m - 1][n - 1];
+    }
+
+
+    /**
+     * 92. 反转链表 II Medium
+     *
+     * @param head
+     * @param m
+     * @param n
+     * @return 头插法
+     */
+    public ListNode reverseBetween(ListNode head, int m, int n) {
+        ListNode dummy = new ListNode(0);
+        dummy.next = head;
+        ListNode pre = dummy;
+        ListNode cur = dummy.next;
+        for (int i = 1; i < m; i++) {
+            pre = pre.next;
+            cur = cur.next;
+        }
+        for (int i = 0; i < n - m; i++) {
+            ListNode temp = cur.next;
+            cur.next = temp.next;
+            temp.next = pre.next;
+            pre.next = temp;
+        }
+        return dummy.next;
+    }
+
+
+    /**
+     * 24. 两两交换链表中的节点 Medium
+     *
+     * @param head
+     * @return
+     */
+    public ListNode swapPairs(ListNode head) {
+
+        ListNode dummy = new ListNode(0);
+        dummy.next = head;
+        ListNode pre = dummy;
+        while (pre.next != null && pre.next.next != null) {
+            ListNode node1 = pre.next;
+            ListNode node2 = node1.next;
+            ListNode next = node2.next;
+            node2.next = node1;
+            node1.next = next;
+            pre.next = node2;
+            pre = node1;//将pre节点转移到新的node1上面来
+        }
+        return dummy.next;
+    }
+
+    /**
+     * 447. 回旋镖的数量 Easy
+     * @param points
+     * @return
+     */
+    public int numberOfBoomerangs(int[][] points) {
+
+        return 0;
+    }
+
+    /**
+     * 424. 替换后的最长重复字符 Medium
+     *
+     * @param s
+     * @param k
+     * @return
+     */
+    public int characterReplacement(String s, int k) {
+
+        return 0;
+    }
+
+
+    /**
+     * 140. 单词拆分 II
+     *
+     * @param s
+     * @param wordDict
+     * @return
+     */
+    public List<String> wordBreakII(String s, List<String> wordDict) {
+
+
+        return null;
+    }
+
+    /**
+     * 150. 逆波兰表达式求值 Medium
+     *
+     * @param tokens
+     * @return
+     */
+    public int evalRPN(String[] tokens) {
+
+
+        return 0;
     }
 
     public static void main(String[] args) {
@@ -1852,9 +1978,29 @@ public class LeetCodeExploreI {
 //        List<String> wordDict = Arrays.asList("apple", "pen");
 //        handler.wordBreak(s, wordDict);
 //        char[][] matrix ={{'1','0','1','0','0'},{'1','0','1','1','1'},{'1','1','1','1','1'},{'1','0','0','1','0'}};
-        char[][] matrix = {{'0', '0', '0', '1'}, {'1', '1', '0', '1'}, {'1', '1', '1', '1'}, {'0', '1', '1', '1'}, {'0', '1', '1', '1'}};
+//        char[][] matrix = {{'0', '0', '0', '1'}, {'1', '1', '0', '1'}, {'1', '1', '1', '1'}, {'0', '1', '1', '1'}, {'0', '1', '1', '1'}};
 //        char[][] matrix = {{'1'}};
-        handler.maximalSquare(matrix);
+//        handler.maximalSquare(matrix);
+//        String s = "babgbag", t = "bag";
+//        System.out.println(handler.numDistinct(s, t));
+
+//        System.out.println(handler.characterReplacement("AABABBA", 1));
+        ListNode node1 = new ListNode(1);
+        ListNode node2 = new ListNode(2);
+        ListNode node3 = new ListNode(3);
+        ListNode node4 = new ListNode(4);
+        ListNode node5 = new ListNode(5);
+        node1.next = node2;
+        node2.next = node3;
+        node3.next = node4;
+        node4.next = node5;
+        node5.next = null;
+//        ListNode resHead = handler.removeNthFromEnd(node1, 2);
+//        System.out.println(JSON.toJSON(resHead.val));
+//        handler.reverseList(node1);
+        ListNode resultHead = handler.reverseBetween(node1, 2, 4);
+        System.out.println(JSON.toJSON(resultHead.val));
+
 
     }
 
