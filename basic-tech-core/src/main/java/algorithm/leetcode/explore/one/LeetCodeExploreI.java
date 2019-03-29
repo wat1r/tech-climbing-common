@@ -1868,8 +1868,42 @@ public class LeetCodeExploreI {
         return dummy.next;
     }
 
+
+    /**
+     * 160. 相交链表 Easy
+     *
+     * @param headA
+     * @param headB
+     * @return
+     */
+    public ListNode getIntersectionNode(ListNode headA, ListNode headB) {
+        ListNode l1 = headA;
+        ListNode l2 = headB;
+        while (l1 != l2) {
+            l1 = (l1 == null) ? headB : l1.next;
+            l2 = (l2 == null) ? headA : l2.next;
+        }
+        return l1;
+    }
+
+
+    /**
+     * 83. 删除排序链表中的重复元素 Easy
+     *
+     * @param head
+     * @return
+     */
+    public ListNode deleteDuplicates(ListNode head) {
+        if (head == null || head.next == null) {
+            return head;
+        }
+        head.next = deleteDuplicates(head.next);
+        return head.val == head.next.val ? head.next : head;
+    }
+
     /**
      * 447. 回旋镖的数量 Easy
+     *
      * @param points
      * @return
      */
@@ -1985,21 +2019,46 @@ public class LeetCodeExploreI {
 //        System.out.println(handler.numDistinct(s, t));
 
 //        System.out.println(handler.characterReplacement("AABABBA", 1));
-        ListNode node1 = new ListNode(1);
-        ListNode node2 = new ListNode(2);
-        ListNode node3 = new ListNode(3);
-        ListNode node4 = new ListNode(4);
-        ListNode node5 = new ListNode(5);
-        node1.next = node2;
-        node2.next = node3;
-        node3.next = node4;
-        node4.next = node5;
-        node5.next = null;
-//        ListNode resHead = handler.removeNthFromEnd(node1, 2);
-//        System.out.println(JSON.toJSON(resHead.val));
-//        handler.reverseList(node1);
-        ListNode resultHead = handler.reverseBetween(node1, 2, 4);
-        System.out.println(JSON.toJSON(resultHead.val));
+//        ListNode node1 = new ListNode(1);
+//        ListNode node2 = new ListNode(2);
+//        ListNode node3 = new ListNode(3);
+//        ListNode node4 = new ListNode(4);
+//        ListNode node5 = new ListNode(5);
+//        node1.next = node2;
+//        node2.next = node3;
+//        node3.next = node4;
+//        node4.next = node5;
+//        node5.next = null;
+////        ListNode resHead = handler.removeNthFromEnd(node1, 2);
+////        System.out.println(JSON.toJSON(resHead.val));
+////        handler.reverseList(node1);
+//        ListNode resultHead = handler.reverseBetween(node1, 2, 4);
+//        System.out.println(JSON.toJSON(resultHead.val));
+
+
+        ListNode anode1 = new ListNode(4);
+        ListNode anode2 = new ListNode(1);
+
+        ListNode bnode1 = new ListNode(5);
+        ListNode bnode2 = new ListNode(0);
+        ListNode bnode3 = new ListNode(1);
+
+        ListNode cnode1 = new ListNode(8);
+        ListNode cnode2 = new ListNode(4);
+        ListNode cnode3 = new ListNode(5);
+
+        anode1.next = anode2;
+        anode2.next = cnode1;
+
+        bnode1.next = bnode2;
+        bnode2.next = bnode3;
+        bnode3.next = cnode1;
+
+        cnode1.next = cnode2;
+        cnode2.next = cnode3;
+        cnode3.next = null;
+
+        handler.getIntersectionNode(anode1, bnode1);
 
 
     }
