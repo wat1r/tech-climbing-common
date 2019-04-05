@@ -1901,6 +1901,54 @@ public class LeetCodeExploreI {
         return head.val == head.next.val ? head.next : head;
     }
 
+
+    /**
+     * 234. 回文链表 Easy 采用空间复杂度O（1）的解法
+     *
+     * @param head
+     * @return
+     */
+    public boolean isPalindromeIII(ListNode head) {
+        if (head == null || head.next == null) {
+            return true;
+        }
+        //1.1此处到洗余下处是做一个slow 和fast指针，当遍历结束的时候，slow指向中部位置，fast指向尾部位置
+        ListNode slow = head;
+        ListNode fast = head;
+        while (fast.next != null && fast.next.next != null) {
+            slow = slow.next;
+            fast = fast.next.next;
+        }
+        //2.1获取当前slow的下一个节点为mid节点，slow的next节点指向null，断开左右两部分
+        ListNode mid = slow.next;
+        slow.next = null;
+        //2.2右半部分的pre节点是mide，传入后翻转右半部分节点
+        ListNode right = reverseList(mid);
+        //3.1令left节点为左半部分的头节点，right为右半部分的头结点，比较值
+        ListNode left = head;
+        while (left != null && right != null) {
+            if (left.val != right.val) {
+                return false;
+            }
+            left = left.next;
+            right = right.next;
+        }
+        return true;
+    }
+
+    /**
+     * 725. 分隔链表 Medium
+     * @param root
+     * @param k
+     * @return
+     */
+    public ListNode[] splitListToParts(ListNode root, int k) {
+
+
+        return null;
+    }
+
+
     /**
      * 447. 回旋镖的数量 Easy
      *
@@ -2058,8 +2106,18 @@ public class LeetCodeExploreI {
         cnode2.next = cnode3;
         cnode3.next = null;
 
-        handler.getIntersectionNode(anode1, bnode1);
+//        handler.getIntersectionNode(anode1, bnode1);
 
+
+        ListNode n1 = new ListNode(1);
+        ListNode n2 = new ListNode(2);
+        ListNode n3 = new ListNode(2);
+        ListNode n4 = new ListNode(1);
+        n1.next = n2;
+        n2.next = n3;
+        n3.next = n4;
+        n4.next = null;
+        handler.isPalindromeIII(n1);
 
     }
 

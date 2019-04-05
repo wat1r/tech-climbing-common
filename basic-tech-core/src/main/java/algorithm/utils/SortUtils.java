@@ -2,7 +2,10 @@ package algorithm.utils;
 
 import com.alibaba.fastjson.JSON;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Created by FrankCooper
@@ -79,6 +82,7 @@ public class SortUtils {
     private static int[] partition(int[] arr, int left, int right) {
         int less = left - 1;
         int more = right;//一开始时将right括进去右边的区域
+        //一开始就是right值当做num进行比较，左边的汪右扩，右边的往左缩，less 和 left的++，more -- right不变
         while (left < more) {
             if (arr[left] < arr[right]) {
                 swap(arr, ++less, left++);
@@ -88,7 +92,7 @@ public class SortUtils {
                 left++;
             }
         }
-        swap(arr, more, right);//定制
+        swap(arr, more, right);//定制,最后的一个（right）与大于x的第一个进行交换
         return new int[]{less + 1, more};
     }
 
@@ -207,7 +211,7 @@ public class SortUtils {
         }
         //交换堆顶元素与最后一个
         int size = arr.length;
-        swap(arr, 0, --size);
+        swap(arr, 0, --size);//n-1位置和0位置交换
         while (size > 0) {
             heapify(arr, 0, size);
             swap(arr, 0, --size);
@@ -221,7 +225,8 @@ public class SortUtils {
      * @param index
      */
     private static void heapInsert(int[] arr, int index) {
-        while (arr[index] > arr[(index - 1) / 2]) {//当前节点的左节点2*i+1,右节点2*i+2,父节点是（i-1）/2
+        //当前节点的左节点2*i+1,右节点2*i+2,父节点是（i-1）/2
+        while (arr[index] > arr[(index - 1) / 2]) {
             swap(arr, index, (index - 1) / 2);
             index = (index - 1) / 2;
         }
@@ -230,6 +235,7 @@ public class SortUtils {
 
     /**
      * 将当前节点依次向下沉
+     * o~size-1已经形成了堆
      *
      * @param arr
      * @param index
@@ -238,7 +244,7 @@ public class SortUtils {
     private static void heapify(int[] arr, int index, int size) {
         int left = index * 2 + 1;
         while (left < size) {
-            //看当前节点index的左右两个孩子节点大小，取出最大的，
+            //看当前节点index的左右两个孩子节点大小，取出最大的下标
             int largest = left + 1 < size && arr[left + 1] > arr[left] ? left + 1 : left;
             //取出最大的与当前的比较，记录下大的
             largest = arr[largest] > arr[index] ? largest : index;
@@ -249,7 +255,6 @@ public class SortUtils {
             swap(arr, largest, index);
             index = largest;
             left = index * 2 + 1;
-
         }
 
     }
@@ -342,15 +347,168 @@ public class SortUtils {
 
     //------------------对数器-结束-----------------//
 
+
+    /**
+     * 希尔排序
+     *
+     * @param nums
+     */
+    public static void shellSort(int[] nums) {
+        int n = nums.length;
+        //gap不断减半，直到为1
+        for (int gap = n / 2; gap > 0; gap /= 2) {
+            for (int i = 0; i < gap; i++) {
+                groupSort(nums, n, i, gap);
+            }
+        }
+
+    }
+
+    /**
+     * 对希尔排序中的单个组进行排序
+     * <p>
+     * 参数说明：
+     * a -- 待排序的数组
+     * n -- 数组总的长度
+     * i -- 组的起始位置
+     * gap -- 组的步长
+     * <p> int[] numbers = {80, 30, 60, 40, 20, 10, 50, 70};
+     * 组是"从i开始，将相隔gap长度的数都取出"所组成的！
+     */
+    public static void groupSort(int[] a, int n, int i, int gap) {
+
+        for (int j = i + gap; j < n; j += gap) {
+            // 如果a[j] < a[j-gap]，则寻找a[j]位置，并将后面数据的位置都后移。
+            if (a[j] < a[j - gap]) {
+                int tmp = a[j];//记下来j位置的数值
+                int k = j - gap;//j之前gap位置的数组
+                while (k >= 0 && a[k] > tmp) {//如果k一直大于0，且k对应的值比当前a[j]位置的值大，进逻辑
+                    a[k + gap] = a[k];//k+gap的值与k的值互换
+                    k -= gap;//k继续缩减
+                }
+                a[k + gap] = tmp;
+            }
+        }
+    }
+
+
+    private static void heapSortII(int[] nums) {
+        if (nums == null || nums.length < 2) {
+            return;
+        }
+    }
+
+
+    /**
+     * 基数排序
+     *
+     * @param nums
+     */
+    private static void radixSort(int[] nums) {
+        //找到nums中的最大数
+        int max = getMax(nums);
+        //找到max的位数
+        int times = 0;
+        while (max > 0) {
+            max /= 10;
+            times++;
+        }
+        //创建10个list（每一位有从0到9，一共10个数，每个list数组用来存放每次迭代中，0-9 每个数组中需要装入的数）
+        List<ArrayList> list = new ArrayList<>();
+        for (int i = 0; i != 10; i++) {
+            //在二维数组中把这10个数组加进去，相当于二维数组的行，从0-9的行
+            list.add(new ArrayList());
+        }
+
+        //进行times次分配和收集
+        for (int i = 0; i < times; i++) {
+            for (int j = 0; j < nums.length; j++) {
+                int x = nums[j] % (int) Math.pow(10, i + 1) / (int) Math.pow(10, i);
+                // list.get(x) 是在返回第0的这个行的list上面的数，然后再 add(arr[j]) 是把当前的这个数添加到末尾去
+                list.get(x).add(nums[j]);
+            }
+            int count = 0;
+            for (int j = 0; j < 10; j++) {
+                while (list.get(j).size() > 0) {
+                    // 把list这个二维list中的第j行返回并赋值给tempList
+                    //  把tempList这个数组中的第0个位置的元素，赋值给arr[count]
+                    //   把tempList这个数组中的第0个位置的元素删除掉，则后面的元素会自动移上来
+                    List<Integer> tempList = list.get(j);
+                    nums[count] = tempList.get(0);
+                    tempList.remove(0);
+                    count++;
+                }
+            }
+        }
+
+        System.out.println(JSON.toJSON(nums));
+
+    }
+
+    private static int getMax(int[] nums) {
+        int max = Integer.MIN_VALUE;
+        for (Integer i : nums) {
+            max = Math.max(max, i);
+        }
+        return max;
+    }
+
+
+    /**
+     * 桶排序
+     *
+     * @param nums
+     */
+    private static void bucketSort(int[] nums) {
+        int len = nums.length;
+        int max = Integer.MIN_VALUE;
+        int min = Integer.MAX_VALUE;
+        for (int i = 0; i < len; i++) {
+            max = Math.max(max, nums[i]);
+            min = Math.min(min, nums[i]);
+        }
+        int bucketNum = (max - min) / len + 1;
+        List<List<Integer>> bucketArr = new ArrayList<>();
+        for (int i = 0; i < bucketNum; i++) {
+            bucketArr.add(new ArrayList<>());
+        }
+        for (int i = 0; i < len; i++) {
+            int bid = (nums[i] - min) / len;
+            bucketArr.get(bid).add(nums[i]);
+        }
+        for (int i = 0; i < bucketArr.size(); i++) {
+            Collections.sort(bucketArr.get(i));
+        }
+        int index = 0;
+        for (int i = 0; i < bucketNum; i++) {
+            List<Integer> childList = bucketArr.get(i);
+            for (Integer item : childList) {
+                nums[index++] = item;
+            }
+        }
+        System.out.println(JSON.toJSON(nums));
+
+    }
+
+
     public static void main(String[] args) {
 
-        int[] numbers = {20, 40, 50, 10, 60,};
+//        int[] numbers = {20, 40, 50, 10, 60,};
 //        SortUtils.quickSort(numbers, 0, numbers.length - 1);
 //        SortUtils.bubbleSort(numbers);
 //        SortUtils.selectSort(numbers);
 //        SortUtils.insertSort(numbers);
 
-        SortUtils.testOne();
+//        SortUtils.testOne();
+//        int[] numbers = {80, 30, 60, 40, 20, 10, 50, 70};
+//        SortUtils.shellSort(numbers);
+
+        int[] nums = {542, 3521, 13459, 852, 742, 46, 2, 1, 633, 32};
+//        radixSort(nums);
+//        myRadixSort(nums);
+        bucketSort(nums);
+
+
     }
 
 

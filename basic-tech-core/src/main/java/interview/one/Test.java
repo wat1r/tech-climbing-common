@@ -1,5 +1,7 @@
 package interview.one;
 
+import java.util.ArrayList;
+
 /**
  * Created by FrankCooper
  * Date 2019/3/27 22:54
@@ -7,6 +9,21 @@ package interview.one;
  */
 public class Test {
     public static void main(String[] args) {
+
+        testOne();
+
+
+    }
+
+
+    private static void testOne(){
+        Class c1 = new ArrayList<String>().getClass();
+        Class c2 = new ArrayList<Integer>().getClass();
+        System.out.println(c1 == c2); // true
+    }
+
+
+    private static void threadTest() {
         // 仓库对象
         Storage storage = new Storage();
 
