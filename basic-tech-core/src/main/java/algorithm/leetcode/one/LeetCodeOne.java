@@ -1291,6 +1291,7 @@ public class LeetCodeOne {
             count++;
             for (int i = 0; i < size; i++) {
                 String word = queue.poll();
+                //当做一个黑盒，当前的word可以生成哪些提供的words中的word，找出来
                 List<String> candidates = transform(words, word);
                 for (String candidate : candidates) {
                     if (endWord.equals(candidate)) {
@@ -1836,17 +1837,17 @@ public class LeetCodeOne {
 //        };
 //        handler.numIslands(grid);
 
-//        String beginWord = "hit";
-//        String endWord = "cog";
-//        List<String> wordList = new ArrayList<String>() {{
-//            add("hot");
-//            add("dot");
-//            add("dog");
-//            add("lot");
-//            add("log");
-//            add("cog");
-//        }};
-//        System.out.println(handler.ladderLength(beginWord, endWord, wordList));
+        String beginWord = "hit";
+        String endWord = "cog";
+        List<String> wordList = new ArrayList<String>() {{
+            add("hot");
+            add("dot");
+            add("dog");
+            add("lot");
+            add("log");
+            add("cog");
+        }};
+        System.out.println(handler.ladderLength(beginWord, endWord, wordList));
 
 
 //        int[] arr = {2, 1, 2, 1, 1, 0, 0, 0, 0, 1};

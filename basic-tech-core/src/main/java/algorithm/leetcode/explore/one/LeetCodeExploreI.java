@@ -1936,8 +1936,151 @@ public class LeetCodeExploreI {
         return true;
     }
 
+
+    /**
+     * 56. 合并区间 Medium
+     *
+     * @param intervals
+     * @return
+     */
+    public List<Interval> merge(List<Interval> intervals) {
+        if (intervals == null || intervals.size() <= 1) {
+            return intervals;
+        }
+        intervals.sort(Comparator.comparing(interval -> interval.start));
+        int i = 0;
+        while (i < intervals.size() - 1) {
+            Interval cur = intervals.get(i);
+            Interval next = intervals.get(i + 1);
+            if (cur.end >= next.start) {
+                cur.end = (cur.end >= next.end) ? cur.end : next.end;
+                intervals.remove(i + 1);
+                continue;
+            }
+            i++;
+        }
+        return intervals;
+    }
+
+
+    /**
+     * 179. 最大数 Medium
+     *
+     * @param nums
+     * @return - String.compareTo() 是按照 lexicographically, 字典顺序排列的
+     * - 利用compareTo, 来倒序排列 string, 刚好就得到我们要的结果.
+     */
+    public String largestNumber(int[] nums) {
+        if (nums == null || nums.length == 0) {
+            return "";
+        }
+        String[] strArr = new String[nums.length];
+        for (int i = 0; i < strArr.length; i++) {
+            strArr[i] = String.valueOf(nums[i]);
+        }
+        Arrays.sort(strArr, new Comparator<String>() {
+            @Override
+            public int compare(String o1, String o2) {
+                return (o2 + o1).compareTo((o1 + o2));
+            }
+        });
+        StringBuffer sb = new StringBuffer();
+        for (int i = 0; i < strArr.length; i++) {
+            sb.append(strArr[i]);
+        }
+        String result = sb.toString();
+        if (result.charAt(0) == '0') {
+            result = "0";
+        }
+        return result;
+    }
+
+
+    /**
+     * 148. 排序链表 Medium
+     *
+     * @param head
+     * @return
+     */
+    public ListNode sortList(ListNode head) {
+        if (head == null || head.next == null) {
+            return head;
+        }
+        ListNode middle = findMiddleListNode(head);
+        ListNode right = sortList(middle.next);
+        middle.next = null;
+        ListNode left = sortList(head);
+        return mergeLeftAndRight(left, right);
+    }
+
+    private ListNode mergeLeftAndRight(ListNode l1, ListNode l2) {
+        ListNode dummy = new ListNode(0);
+        ListNode node = dummy;
+        while (l1 != null && l2 != null) {
+            if (l1.val < l2.val) {
+                node.next = l1;
+                l1 = l1.next;
+            } else {
+                node.next = l2;
+                l2 = l2.next;
+            }
+            node = node.next;
+        }
+        if (l1 != null) {
+            node.next = l1;
+        } else if (l2 != null) {
+            node.next = l2;
+        }
+        return dummy.next;
+    }
+
+    /**
+     * 快慢指针找到中间节点middle
+     *
+     * @param head
+     * @return
+     */
+    private ListNode findMiddleListNode(ListNode head) {
+        ListNode slow = head, fast = head.next;
+        while (fast != null && fast.next != null) {
+            slow = slow.next;
+            fast = fast.next.next;
+        }
+        return slow;
+    }
+
+
+    /**
+     * 147. 对链表进行插入排序 Medium
+     * @param head
+     * @return
+     */
+    public ListNode insertionSortList(ListNode head) {
+        if (head == null || head.next == null) {
+            return head;
+        }
+        ListNode dummy = new ListNode(-1);
+        ListNode cur = head;
+        while (cur != null) {
+            ListNode next = cur.next;
+            ListNode pre = dummy;//每次while循环，都将pre置为dummy节点
+            //这一步是为了找到当前的cur的节点要插在哪个节点后面
+            while (pre.next != null && pre.next.val < cur.val) {
+                pre = pre.next;
+            }
+            //当前节点的下一个节点的值为pre节点的后一个节点
+            cur.next = pre.next;
+            //pre节点的后一个节点指向cur节点
+            pre.next = cur;
+            //移动cur的节点到next节点，再次while循环
+            cur = next;
+        }
+        return dummy.next;
+    }
+
     /**
      * 725. 分隔链表 Medium
+     *
      * @param root
      * @param k
      * @return
@@ -2117,10 +2260,43 @@ public class LeetCodeExploreI {
         n2.next = n3;
         n3.next = n4;
         n4.next = null;
-        handler.isPalindromeIII(n1);
+//        handler.isPalindromeIII(n1);
 
+//[1,3],[2,6],[8,10],[15,18]
+        List<Interval> intervals = new ArrayList<Interval>() {
+            {
+//                add(new Interval(1, 3));
+//                add(new Interval(2, 6));
+//                add(new Interval(8, 10));
+//                add(new Interval(15, 18));
+
+                //
+                add(new Interval(1, 4));
+                add(new Interval(4, 5));
+            }
+        };
+
+//        print(handler.merge(intervals));
+
+//        int[] nums = {3, 30, 34, 5, 9};
+//        print(handler.largestNumber(nums));
+
+
+        ListNode l1 = new ListNode(40);
+        ListNode l2 = new ListNode(20);
+        ListNode l3 = new ListNode(10);
+        ListNode l4 = new ListNode(30);
+        l1.next = l2;
+        l2.next = l3;
+        l3.next = l4;
+        l4.next = null;
+        handler.insertionSortList(l1);
     }
 
+
+    private static void print(Object obj) {
+        System.out.println(JSON.toJSONString(obj));
+    }
 }
 
 
@@ -2140,6 +2316,29 @@ class TreeNode {
 
     TreeNode(int x) {
         val = x;
+    }
+}
+
+class Interval {
+    int start;
+    int end;
+
+    Interval() {
+        start = 0;
+        end = 0;
+    }
+
+    Interval(int s, int e) {
+        start = s;
+        end = e;
+    }
+
+    @Override
+    public String toString() {
+        return "Interval{" +
+                "start=" + start +
+                ", end=" + end +
+                '}';
     }
 }
 

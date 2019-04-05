@@ -1,7 +1,5 @@
 package algorithm.leetcode.two;
 
-import com.alibaba.fastjson.JSON;
-
 import java.util.*;
 
 /**
@@ -805,6 +803,7 @@ public class LeetCodeClassification {
 
     /**
      * 300. 最长上升子序列
+     *
      * @param nums
      * @return
      */
@@ -832,9 +831,110 @@ public class LeetCodeClassification {
         return maxL;
     }
 
+    /**
+     * 279. 完全平方数 Medium BFS与DP均可
+     *
+     * @param n
+     * @return
+     */
+    public int numSquares(int n) {
+        List<Integer> squares = generateSquares(n);
+        Queue<Integer> queue = new LinkedList<>();
+        boolean[] marked = new boolean[n + 1];
+        queue.offer(n);
+        marked[n] = true;
+        int level = 0;
+        while (!queue.isEmpty()) {
+            int size = queue.size();
+            level++;
+            while (size-- > 0) {
+                int cur = queue.poll();
+                for (int square : squares) {
+                    int remain = cur - square;
+                    if (remain < 0) {
+                        break;
+                    }
+                    if (remain == 0) {
+                        return level;
+                    }
+                    if (marked[remain]) {
+                        continue;
+                    }
+                    marked[remain] = true;
+                    queue.add(remain);
+                }
+            }
+        }
+        return -1;
+    }
+
+
+    private List<Integer> generateSquares(int n) {
+        List<Integer> squares = new ArrayList<>();
+        int base = (int) Math.sqrt(n);
+        for (int i = 1; i <= base; i++) {
+            squares.add((int) Math.pow(i, 2));
+        }
+        return squares;
+    }
+
+
+    /**
+     * 127. 单词接龙 Medium
+     *
+     * @param beginWord
+     * @param endWord
+     * @param wordList
+     * @return
+     */
+    public int ladderLength(String beginWord, String endWord, List<String> wordList) {
+        if (wordList == null || !wordList.contains(endWord)) {
+            return 0;
+        }
+        Queue<String> queue = new LinkedList<>();
+        HashSet<String> words = new HashSet<>(wordList);
+        queue.offer(beginWord);
+        int count = 1;
+        while (!queue.isEmpty()) {
+            int size = queue.size();
+            count++;
+            while (size-- > 0) {
+                String curWord = queue.poll();
+                List<String> candidates = transform(words, curWord);
+                for (String candidate : candidates) {
+                    if (candidate.equals(endWord)) {
+                        return count;
+                    }
+                    queue.offer(candidate);
+                }
+            }
+        }
+        return 0;
+    }
+
+    private List<String> transform(Set<String> words, String word) {
+        List<String> candidates = new ArrayList<>();
+        StringBuffer sb = new StringBuffer(word);
+        for (int i = 0; i < sb.length(); i++) {
+            char cur = sb.charAt(i);
+            for (char c = 'a'; c <= 'z'; c++) {
+                if (c == cur) {
+                    continue;
+                }
+                sb.setCharAt(i, c);
+                String tempWord = sb.toString();
+                if (words.remove(tempWord)) {
+                    candidates.add(tempWord);
+                }
+            }
+            sb.setCharAt(i, cur);
+        }
+        return candidates;
+    }
 
     /**
      * 123. 买卖股票的最佳时机 III Hard
+     *
      * @param prices
      * @return
      */
@@ -845,10 +945,9 @@ public class LeetCodeClassification {
     }
 
 
-
-
     /**
      * 309. 最佳买卖股票时机含冷冻期
+     *
      * @param prices
      * @return
      */
@@ -888,8 +987,24 @@ public class LeetCodeClassification {
 
 //        int[] coins = {1, 2, 5};
 //        System.out.println(handler.coinChange(coins, 11));
-        int[] nums = {10, 9, 2, 5, 3, 7, 101, 18};
-        System.out.println(handler.lengthOfLIS(nums));
+//        int[] nums = {10, 9, 2, 5, 3, 7, 101, 18};
+//        System.out.println(handler.lengthOfLIS(nums));
+
+//        handler.generateSquares(13);
+//        handler.numSquares(12);
+
+        String beginWord = "hit";
+        String endWord = "cog";
+        List<String> wordList = new ArrayList<String>() {{
+            add("hot");
+            add("dot");
+            add("dog");
+            add("lot");
+            add("log");
+            add("cog");
+        }};
+
+        handler.transform(new HashSet<>(wordList), beginWord);
 
     }
 }
