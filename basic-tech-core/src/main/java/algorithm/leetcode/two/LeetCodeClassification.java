@@ -1530,6 +1530,60 @@ public class LeetCodeClassification {
 
 
     /**
+     * 230. 二叉搜索树中第K小的元素 Medium 解法1
+     */
+    int count = 0;
+    int value = 0;
+
+    public int kthSmallest(TreeNode root, int k) {
+        kthSmallestInOrder(root, k);
+        return value;
+    }
+
+    private void kthSmallestInOrder(TreeNode node, int k) {
+        if (node == null) {
+            return;
+        }
+        kthSmallestInOrder(node.left, k);
+        count++;
+        if (k == count) {
+            value = node.val;
+            return;
+        }
+        kthSmallestInOrder(node.right, k);
+    }
+
+    /**
+     * 230. 二叉搜索树中第K小的元素 Medium DFS
+     *
+     * @param root
+     * @param k
+     * @return
+     */
+    private List<Integer> values = new ArrayList<>();
+
+    public int kthSmallest2nd(TreeNode root, int k) {
+        kthSmallest2ndDFS(root);
+        for (int i = 0; i < values.size(); i++) {
+            if (i == k - 1) {
+                return values.get(i);
+            }
+        }
+        return -1;
+    }
+
+    private void kthSmallest2ndDFS(TreeNode node) {
+        if (node == null) {
+            return;
+        }
+        kthSmallest2ndDFS(node.left);
+        values.add(node.val);
+        kthSmallest2ndDFS(node.right);
+
+    }
+
+
+    /**
      * 309. 最佳买卖股票时机含冷冻期
      *
      * @param prices
