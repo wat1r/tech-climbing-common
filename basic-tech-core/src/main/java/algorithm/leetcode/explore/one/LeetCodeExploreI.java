@@ -2052,6 +2052,7 @@ public class LeetCodeExploreI {
 
     /**
      * 147. 对链表进行插入排序 Medium
+     *
      * @param head
      * @return
      */
@@ -2077,6 +2078,263 @@ public class LeetCodeExploreI {
         }
         return dummy.next;
     }
+
+
+    /**
+     * 46. 全排列 Medium
+     *
+     * @param nums
+     * @return
+     */
+    public List<List<Integer>> permute(int[] nums) {
+        List<List<Integer>> result = new ArrayList<>();
+        if (nums == null || nums.length == 0) {
+            return result;
+        }
+        List<Integer> numList = new ArrayList<>();
+        for (int num : nums) {
+            numList.add(num);
+        }
+        permuteDFS(result, new ArrayList<Integer>(), numList);
+        return result;
+    }
+
+    private void permuteDFS(List<List<Integer>> result, ArrayList<Integer> levelList, List<Integer> remainList) {
+        if (remainList.size() == 0) {
+            result.add(new ArrayList<>(levelList));
+            return;
+        }
+        for (int i = 0; i < remainList.size(); i++) {
+            int cur = remainList.get(i);
+            levelList.add(cur);
+            remainList.remove(i);
+            permuteDFS(result, levelList, remainList);
+            levelList.remove(levelList.size() - 1);
+            remainList.add(i, cur);//此处很精妙，remainList与levelList维持着此消彼长的关系
+        }
+    }
+
+
+    /**
+     * 435. 无重叠区间 Medium
+     *
+     * @param intervals
+     * @return
+     */
+    public int eraseOverlapIntervals(Interval[] intervals) {
+        if (intervals == null || intervals.length == 0) {
+            return 0;
+        }
+        Arrays.sort(intervals, Comparator.comparingInt(o -> o.end));
+        int count = 1;
+        int initialEnd = intervals[0].end;
+        int len = intervals.length;
+        for (int i = 1; i < len; i++) {
+            if (intervals[i].start < initialEnd) {
+                continue;
+            }
+            initialEnd = intervals[i].end;
+            count++;
+        }
+        return len - count;
+
+    }
+
+    /**
+     * 452. 用最少数量的箭引爆气球 Meidum
+     *
+     * @param points
+     * @return
+     */
+    public int findMinArrowShots(int[][] points) {
+        if (points == null || points.length == 0) {
+            return 0;
+        }
+        Arrays.sort(points, Comparator.comparingInt(o -> o[1]));
+        int count = 1;
+        int initailEnd = points[0][1];
+        for (int i = 1; i < points.length; i++) {
+            if (points[i][0] <= initailEnd) {
+                continue;
+            }
+            initailEnd = points[i][1];
+            count++;
+        }
+        return count;
+    }
+
+
+    /**
+     * 69. x 的平方根 Easy
+     *
+     * @param x
+     * @return
+     */
+    public int mySqrt(int x) {
+        int l = 1, h = x;
+        while (l <= h) {
+            int m = l + (h - l) / 2;
+            int sqrt = x / m;
+            if (sqrt == m) {
+                return m;
+            } else if (m > sqrt) {
+                h = m - 1;
+            } else {
+                l = m + 1;
+            }
+        }
+        return h;
+
+    }
+
+
+    /**
+     * 744. 寻找比目标字母大的最小字母 Easy
+     *
+     * @param letters
+     * @param target
+     * @return
+     */
+    public char nextGreatestLetter(char[] letters, char target) {
+        if (letters == null || letters.length == 0) {
+            return target;
+        }
+        int len = letters.length;
+        int l = 0, r = len - 1;
+        while (l <= r) {
+            int mid = l + (r - l) / 2;
+            if (letters[mid] <= target) {
+                l = mid + 1;
+            } else {
+                r = mid - 1;
+            }
+        }
+        return l < len ? letters[l] : letters[0];
+    }
+
+
+    /**
+     * 540. 有序数组中的单一元素 Medium
+     *
+     * @param nums
+     * @return
+     */
+    public int singleNonDuplicate(int[] nums) {
+        int l = 0, h = nums.length - 1;
+        while (l < h) {
+            int m = l + (h - l) / 2;
+            if (m % 2 == 1) {
+                m--;   // 保证 l/h/m 都在偶数位，使得查找区间大小一直都是奇数
+            }
+            if (nums[m] == nums[m + 1]) {
+                l = m + 2;
+            } else {
+                h = m;
+            }
+        }
+        return nums[l];
+    }
+
+
+    /**
+     * @param n
+     * @return
+     */
+    public int firstBadVersion(int n) {
+        int l = 1, r = n;
+        while (l < r) {
+            int mid = l + (r - l) / 2;
+            if (isBadVersion(mid)) {
+                r = mid;
+            } else {
+                l = mid;
+            }
+        }
+        return l;
+    }
+
+
+    /**
+     * 153. 寻找旋转排序数组中的最小值 Medium
+     *
+     * @param nums
+     * @return
+     */
+    public int findMin(int[] nums) {
+        if (nums == null || nums.length == 0) {
+            return 0;
+        }
+        int l = 0, r = nums.length - 1;
+        while (l < r) {
+            int mid = l + (r - l) / 2;
+            if (nums[mid] <= nums[r]) {
+                r = mid;
+            } else {
+                l = mid + 1;
+            }
+        }
+        return nums[l];
+    }
+
+
+    /**
+     * 34. 在排序数组中查找元素的第一个和最后一个位置 Medium
+     *
+     * @param nums
+     * @param target
+     * @return
+     */
+    public int[] searchRange(int[] nums, int target) {
+        int first = binarySearch(nums, target);
+        int last = binarySearch(nums, target + 1) - 1;
+        if (first == nums.length || nums[first] != target) {
+            return new int[]{-1, -1};
+        } else {
+            return new int[]{first, Math.max(first, last)};
+        }
+    }
+
+    private int binarySearch(int[] nums, int target) {
+        int l = 0, h = nums.length; // 注意 h 的初始值
+        while (l < h) {
+            int m = l + (h - l) / 2;
+            if (nums[m] >= target) {
+                h = m;
+            } else {
+                l = m + 1;
+            }
+        }
+        return l;
+    }
+
+
+    boolean isBadVersion(int version) {
+        return false;
+    }
+
+
+    /**
+     * 572. 另一个树的子树 Easy
+     *
+     * @param s
+     * @param t
+     * @return
+     */
+    public boolean isSubtree(TreeNode s, TreeNode t) {
+        if (s == null || t == null) {
+            return s == null && t == null;
+        }
+        return isSameTree(s, t) || isSubtree(s.left, t) || isSubtree(s.right, t);
+    }
+
+
+    public boolean isSameTree(TreeNode s, TreeNode t) {
+        if (s == null || t == null) {
+            return s == null && t == null;
+        }
+        return s.val == t.val && isSameTree(s.left, t.left) && isSameTree(s.right, t.right);
+    }
+
 
     /**
      * 725. 分隔链表 Medium
@@ -2227,39 +2485,39 @@ public class LeetCodeExploreI {
 //        System.out.println(JSON.toJSON(resultHead.val));
 
 
-        ListNode anode1 = new ListNode(4);
-        ListNode anode2 = new ListNode(1);
-
-        ListNode bnode1 = new ListNode(5);
-        ListNode bnode2 = new ListNode(0);
-        ListNode bnode3 = new ListNode(1);
-
-        ListNode cnode1 = new ListNode(8);
-        ListNode cnode2 = new ListNode(4);
-        ListNode cnode3 = new ListNode(5);
-
-        anode1.next = anode2;
-        anode2.next = cnode1;
-
-        bnode1.next = bnode2;
-        bnode2.next = bnode3;
-        bnode3.next = cnode1;
-
-        cnode1.next = cnode2;
-        cnode2.next = cnode3;
-        cnode3.next = null;
+//        ListNode anode1 = new ListNode(4);
+//        ListNode anode2 = new ListNode(1);
+//
+//        ListNode bnode1 = new ListNode(5);
+//        ListNode bnode2 = new ListNode(0);
+//        ListNode bnode3 = new ListNode(1);
+//
+//        ListNode cnode1 = new ListNode(8);
+//        ListNode cnode2 = new ListNode(4);
+//        ListNode cnode3 = new ListNode(5);
+//
+//        anode1.next = anode2;
+//        anode2.next = cnode1;
+//
+//        bnode1.next = bnode2;
+//        bnode2.next = bnode3;
+//        bnode3.next = cnode1;
+//
+//        cnode1.next = cnode2;
+//        cnode2.next = cnode3;
+//        cnode3.next = null;
 
 //        handler.getIntersectionNode(anode1, bnode1);
 
 
-        ListNode n1 = new ListNode(1);
-        ListNode n2 = new ListNode(2);
-        ListNode n3 = new ListNode(2);
-        ListNode n4 = new ListNode(1);
-        n1.next = n2;
-        n2.next = n3;
-        n3.next = n4;
-        n4.next = null;
+//        ListNode n1 = new ListNode(1);
+//        ListNode n2 = new ListNode(2);
+//        ListNode n3 = new ListNode(2);
+//        ListNode n4 = new ListNode(1);
+//        n1.next = n2;
+//        n2.next = n3;
+//        n3.next = n4;
+//        n4.next = null;
 //        handler.isPalindromeIII(n1);
 
 //[1,3],[2,6],[8,10],[15,18]
@@ -2282,15 +2540,21 @@ public class LeetCodeExploreI {
 //        print(handler.largestNumber(nums));
 
 
-        ListNode l1 = new ListNode(40);
-        ListNode l2 = new ListNode(20);
-        ListNode l3 = new ListNode(10);
-        ListNode l4 = new ListNode(30);
-        l1.next = l2;
-        l2.next = l3;
-        l3.next = l4;
-        l4.next = null;
-        handler.insertionSortList(l1);
+//        ListNode l1 = new ListNode(40);
+//        ListNode l2 = new ListNode(20);
+//        ListNode l3 = new ListNode(10);
+//        ListNode l4 = new ListNode(30);
+//        l1.next = l2;
+//        l2.next = l3;
+//        l3.next = l4;
+//        l4.next = null;
+//        handler.insertionSortList(l1);
+//        int[] nums = {1, 2, 3};
+//        handler.permute(nums);
+//        handler.mySqrt(8);
+        char[] chars = {'e', 'e', 'e', 'e', 'e', 'e', 'n', 'n', 'n', 'n'};
+        handler.nextGreatestLetter(chars, 'e');
+
     }
 
 

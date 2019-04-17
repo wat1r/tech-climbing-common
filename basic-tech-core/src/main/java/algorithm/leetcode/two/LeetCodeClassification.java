@@ -932,6 +932,460 @@ public class LeetCodeClassification {
         return candidates;
     }
 
+
+    int[][] directions = {{0, 1}, {0, -1}, {1, 0}, {-1, 0}};
+    int m, n;
+
+    public int numIslands(char[][] grid) {
+        if (grid == null || grid.length == 0) {
+            return 0;
+        }
+        m = grid.length;
+        n = grid[0].length;
+        int count = 0;
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                if (grid[i][j] != '0') {
+                    dfs(grid, i, j);
+                    count++;
+                }
+            }
+        }
+        return count;
+    }
+
+    private void dfs(char[][] grid, int i, int j) {
+        if (i < 0 || i >= m || j < 0 || j >= n || grid[i][j] == '0') {
+            return;
+        }
+        grid[i][j] = '0';
+        for (int[] direction : directions) {
+            dfs(grid, i + direction[0], j + direction[1]);
+        }
+    }
+
+
+    /**
+     * 130. 被围绕的区域 Medium
+     *
+     * @param board
+     */
+
+    private int[] dx = {1, -1, 0, 0};
+    private int[] dy = {0, 0, 1, -1};
+    int row, col;
+
+    public void solve(char[][] board) {
+        if (board == null || board.length == 0) {
+            return;
+        }
+
+        row = board.length;
+        col = board[0].length;
+        for (int i = 0; i < row; i++) {
+            for (int j = 0; j < col; j++) {
+                if (i == 0 || i == row - 1 || j == 0 || j == col - 1) {
+                    dfs130(board, i, j);
+                }
+            }
+        }
+
+        for (int i = 0; i < row; i++) {
+            for (int j = 0; j < col; j++) {
+                if (board[i][j] == 'O') {
+                    board[i][j] = 'X';
+                }
+                if (board[i][j] == 'M') {
+                    board[i][j] = 'O';
+                }
+            }
+        }
+    }
+
+    private void dfs130(char[][] board, int x, int y) {
+        if (x < 0 || x >= row || y < 0 || y >= col || board[x][y] != 'O') {
+            return;
+        }
+        board[x][y] = 'M';
+        for (int i = 0; i < dx.length; i++) {
+            dfs130(board, x + dx[i], y + dy[i]);
+        }
+
+    }
+
+
+    /**
+     * 695. 岛屿的最大面积
+     *
+     * @param grid
+     * @return
+     */
+    public int maxAreaOfIsland(int[][] grid) {
+        if (grid == null || grid.length == 0 || grid[0].length == 0) {
+            return 0;
+        }
+        row = grid.length;
+        col = grid[0].length;
+        int maxArea = 0;
+        for (int i = 0; i < row; i++) {
+            for (int j = 0; j < col; j++) {
+                maxArea = Math.max(maxArea, dfs695(grid, i, j));
+            }
+        }
+        return maxArea;
+    }
+
+    /**
+     * 计算面积，即个数,注意area的起始值是1
+     *
+     * @param grid
+     * @param x
+     * @param y
+     * @return
+     */
+    private int dfs695(int[][] grid, int x, int y) {
+        if (x < 0 || x >= row || y < 0 || y >= col || grid[x][y] == 0) {
+            return 0;
+        }
+        int area = 1;
+        grid[x][y] = 0;
+        for (int i = 0; i < dx.length; i++) {
+            area += dfs695(grid, x + dx[i], y + dy[i]);
+        }
+        return area;
+    }
+
+
+    /**
+     * 547. 朋友圈 Medium
+     *
+     * @param M
+     * @return
+     */
+    public int findCircleNum(int[][] M) {
+        int count = 0;
+        int n = M.length;
+        //使用一个visited数组, 依次判断每个节点, 如果其未访问, 朋友圈数加1并对该节点进行dfs搜索标记所有访问到的节点
+        boolean[] visited = new boolean[n];
+        for (int i = 0; i < n; i++) {
+            if (!visited[i]) {
+                dfs547(M, i, visited);
+                count++;
+            }
+        }
+        return count;
+    }
+
+    private void dfs547(int[][] M, int i, boolean[] hasVisited) {
+        hasVisited[i] = true;
+        for (int j = 0; j < M[0].length; j++) {
+            if (M[i][j] == 1 && !hasVisited[j]) {
+                dfs547(M, j, hasVisited);
+            }
+        }
+    }
+
+    /**
+     * 77. 组合 Medium
+     *
+     * @param n
+     * @param k
+     * @return
+     */
+    public List<List<Integer>> combine(int n, int k) {
+        List<List<Integer>> result = new ArrayList<>();
+        if (n <= 0 || k <= 0) {
+            return result;
+        }
+        dfs(result, new ArrayList<Integer>(), 1, n, k);
+        return result;
+    }
+
+    /**
+     * @param result 收集结果的result
+     * @param list   每一轮for loop的list
+     * @param index  下一个数 ，比如当前从2 开始，当做完2 后，加上做3
+     * @param n      最大值n
+     * @param k      k个数
+     */
+    private void dfs(List<List<Integer>> result, ArrayList<Integer> list, int index, int n, int k) {
+        for (int i = index; i <= n; i++) {
+            list.add(i);
+            if (list.size() == k) {
+                result.add(new ArrayList<>(list));
+                list.remove(list.size() - 1);
+                continue;
+            }
+            dfs(result, list, i + 1, n, k);
+            list.remove(list.size() - 1);
+        }
+    }
+
+    /**
+     * 46. 全排列 Medium
+     *
+     * @param nums
+     * @return
+     */
+    public List<List<Integer>> permute(int[] nums) {
+        List<List<Integer>> result = new ArrayList<>();
+        if (nums == null || nums.length == 0) {
+            return result;
+        }
+        permuteDFS(result, new ArrayList<Integer>(), nums);
+        return result;
+    }
+
+    private void permuteDFS(List<List<Integer>> result, ArrayList<Integer> levelList, int[] nums) {
+        if (levelList.size() == nums.length) {
+            result.add(new ArrayList<>(levelList));
+            return;
+        }
+        for (int i = 0; i < nums.length; i++) {
+            if (levelList.contains(nums[i])) {
+                continue;
+            }
+            levelList.add(nums[i]);
+            permuteDFS(result, levelList, nums);
+            levelList.remove(levelList.size() - 1);
+        }
+    }
+
+
+    /**
+     * 39. 组合总和 Medium
+     *
+     * @param candidates
+     * @param target
+     * @return
+     */
+    public List<List<Integer>> combinationSum(int[] candidates, int target) {
+        List<List<Integer>> result = new ArrayList<>();
+        if (candidates == null || candidates.length == 0) {
+            return result;
+        }
+        combinationSumDFS(result, new ArrayList<Integer>(), 0, candidates, target);
+        return result;
+    }
+
+    private void combinationSumDFS(List<List<Integer>> result, ArrayList<Integer> levelList, int index, int[] candidates, int target) {
+        //当前的遍历只会在当前后面进行，如{2, 3, 6, 7} 2 扫完 [2,2,3],当扫到3时，不会出现[3,2,2]的重复情况，从 3 3 开始扫
+        for (int i = index; i < candidates.length; i++) {
+            int cur = candidates[i];
+            levelList.add(cur);
+            int remain = target - cur;//目标值减去当前值会后剩下的值
+            if (remain == 0) {
+                result.add(new ArrayList<>(levelList));
+            } else if (remain > 0) {
+                combinationSumDFS(result, levelList, i, candidates, remain);
+            }
+            levelList.remove(levelList.size() - 1);
+        }
+    }
+
+
+    /**
+     * 40. 组合总和 II Medium
+     *
+     * @param candidates
+     * @param target
+     * @return
+     */
+    public List<List<Integer>> combinationSum2(int[] candidates, int target) {
+        List<List<Integer>> result = new ArrayList<>();
+        if (candidates == null || candidates.length == 0) {
+            return result;
+        }
+        Arrays.sort(candidates);
+        combinationSum2DFS(result, new ArrayList<Integer>(), 0, candidates, target);
+        return result;
+    }
+
+    private void combinationSum2DFS(List<List<Integer>> result, ArrayList<Integer> levelList, int index, int[] candidates, int target) {
+        for (int i = index; i < candidates.length; i++) {
+            if (i > index && candidates[i] == candidates[i - 1]) {
+                continue;
+            }
+            int cur = candidates[i];
+            levelList.add(cur);
+            int remain = target - cur;
+            if (remain == 0) {
+                result.add(new ArrayList<>(levelList));
+            } else if (remain > 0) {
+                combinationSum2DFS(result, levelList, i + 1, candidates, remain);
+            }
+            levelList.remove(levelList.size() - 1);
+        }
+
+    }
+
+
+    /**
+     * 47. 全排列 II Medium
+     *
+     * @param nums
+     * @return
+     */
+    boolean[] visited;
+
+    public List<List<Integer>> permuteUnique(int[] nums) {
+        List<List<Integer>> result = new ArrayList<>();
+        if (nums == null || nums.length == 0) {
+            return result;
+        }
+        Arrays.sort(nums);
+        visited = new boolean[nums.length];
+        permuteUniqueDFS(result, new ArrayList<Integer>(), nums);
+        return result;
+    }
+
+    private void permuteUniqueDFS(List<List<Integer>> result, ArrayList<Integer> levelList, int[] nums) {
+        if (levelList.size() == nums.length) {
+            result.add(new ArrayList<>(levelList));
+            return;
+        }
+        for (int i = 0; i < nums.length; i++) {
+            if (visited[i] || (i - 1 >= 0 && visited[i - 1] && nums[i] == nums[i - 1])) {
+                continue;
+            }
+            visited[i] = true;
+            levelList.add(nums[i]);
+            permuteUniqueDFS(result, levelList, nums);
+            visited[i] = false;
+            levelList.remove(levelList.size() - 1);
+        }
+    }
+
+
+    /**
+     * 78. 子集 Medium
+     * 采用的dfs的loop ，还有位操作的解法
+     *
+     * @param nums
+     * @return
+     */
+    public List<List<Integer>> subsets(int[] nums) {
+        List<List<Integer>> result = new ArrayList<>();
+        if (nums == null || nums.length == 0) {
+            return result;
+        }
+        List<Integer> levelList = new ArrayList<>();
+        result.add(new ArrayList<>(levelList));
+        subsetsDFS(result, levelList, 0, nums);
+        return result;
+    }
+
+    private void subsetsDFS(List<List<Integer>> result, List<Integer> levelList, int index, int[] nums) {
+        for (int i = index; i < nums.length; i++) {
+            // [1] -> [1,2]
+            levelList.add(nums[i]);
+            result.add(new ArrayList<>(levelList));
+            // 寻找所有以 [1,2] 开头的集合，并扔到 results
+            subsetsDFS(result, levelList, i + 1, nums);
+            // [1,2] -> [1]  回溯
+            levelList.remove(levelList.size() - 1);
+        }
+    }
+
+    /**
+     * 90. 子集 II Medium
+     *
+     * @param nums
+     * @return
+     */
+    public List<List<Integer>> subsetsWithDup(int[] nums) {
+        List<List<Integer>> result = new ArrayList<>();
+        if (nums == null || nums.length == 0) {
+            return result;
+        }
+        Arrays.sort(nums);
+        List<Integer> levelList = new ArrayList<>();
+        result.add(new ArrayList<>(levelList));
+        subsetsWithDupDFS(result, levelList, 0, nums);
+        return result;
+
+
+    }
+
+    private void subsetsWithDupDFS(List<List<Integer>> result, List<Integer> levelList, int depth, int[] nums) {
+        for (int i = depth; i < nums.length; i++) {
+            if (i > depth && nums[i - 1] == nums[i]) {
+                continue;
+            }
+            levelList.add(nums[i]);
+            result.add(new ArrayList<>(levelList));
+            subsetsWithDupDFS(result, levelList, i + 1, nums);
+            levelList.remove(levelList.size() - 1);
+        }
+
+    }
+
+
+    /**
+     * 93. 复原IP地址 Medium
+     *
+     * @param s
+     * @return
+     */
+    public List<String> restoreIpAddresses(String s) {
+
+
+        return null;
+    }
+
+
+    private boolean isValidIP(String str) {
+        if (str.charAt(0) == '0') {
+            return str.equals("0");
+        }
+        int num = Integer.valueOf(str);
+        return num <= 255 && num >= 0;
+    }
+
+
+    /**
+     * 468. 验证IP地址 Medium
+     *
+     * @param IP
+     * @return
+     */
+    public String validIPAddress(String IP) {
+
+
+        return null;
+    }
+
+
+    /**
+     * 216. 组合总和 III
+     *
+     * @param k
+     * @param n
+     * @return
+     */
+    public List<List<Integer>> combinationSum3(int k, int n) {
+        List<List<Integer>> result = new ArrayList<>();
+        if (k <= 0 || n <= 0) {
+            return result;
+        }
+        combinationSum3DFS(result, new ArrayList<Integer>(), 1, k, n);
+        return result;
+    }
+
+    private void combinationSum3DFS(List<List<Integer>> result, ArrayList<Integer> levelList, int index, int k, int n) {
+
+        for (int i = index; i <= 9; i++) {
+            levelList.add(i);
+            if (n == i && levelList.size() == k) {
+                result.add(new ArrayList<>(levelList));
+            } else if (n > i) {
+                combinationSum3DFS(result, levelList, i + 1, k, n - i);
+            }
+            levelList.remove(levelList.size() - 1);
+        }
+    }
+
+
     /**
      * 123. 买卖股票的最佳时机 III Hard
      *
@@ -942,6 +1396,136 @@ public class LeetCodeClassification {
 
 
         return 0;
+    }
+
+
+    /**
+     * 239. 滑动窗口最大值 Hard
+     *
+     * @param nums
+     * @param k
+     * @return
+     */
+    public int[] maxSlidingWindow(int[] nums, int k) {
+        if (nums == null || nums.length == 0) {
+            return new int[]{};
+        }
+        int n = nums.length;
+        int[] resultArr = new int[n - k + 1];
+        LinkedList<Integer> deque = new LinkedList<>();
+        int index = 0;
+        for (int i = 0; i < n; i++) {
+            while (!deque.isEmpty() && nums[deque.peekLast()] <= nums[i]) {
+                deque.pollLast();
+            }
+            deque.addLast(i);
+            if ((i - k) == deque.peekFirst()) {
+                deque.pollFirst();
+            }
+            if (i >= k - 1) {
+                resultArr[index++] = nums[deque.peekFirst()];
+            }
+
+        }
+        return resultArr;
+    }
+
+
+    /**
+     * 204. 计数质数 Easy
+     *
+     * @param n
+     * @return
+     */
+    public int countPrimes(int n) {
+        if (n <= 0) {
+            return 0;
+        }
+        boolean[] isPrimes = new boolean[n];
+        for (int i = 2; i < n; i++) {
+            isPrimes[i] = true;
+        }
+        for (int i = 2; i * i < n; i++) {
+            if (!isPrimes[i]) {
+                continue;
+            }
+            for (int j = i * i; j < n; j += i) {
+                isPrimes[j] = false;
+            }
+        }
+        int result = 0;
+        for (int i = 2; i < n; i++) {
+            result += isPrimes[i] ? 1 : 0;
+        }
+        return result;
+    }
+
+
+    /**
+     * 找到n以内质数
+     *
+     * @param n
+     * @return
+     */
+    public List<Integer> findPrime2(int n) {
+        List<Integer> primes = new ArrayList<Integer>();
+        primes.add(2);
+        for (int i = 3; i <= n; i++) {
+            int tmp = (int) Math.sqrt(i) + 1;
+            for (int j = 2; j <= tmp; j++) {
+                if (i % j == 0) {
+                    break;
+                }
+                if (j == tmp) {
+                    primes.add(i);
+                }
+            }
+        }
+        return primes;
+    }
+
+
+    public void printPrime(int target) {
+        int i = 1;
+        while (i <= target) {
+            i += 2;
+            if (target % i == 0) {
+                System.out.println("发现: " + target + " / " + i + " = " + (target / i));
+            }
+        }
+    }
+
+
+    /**
+     * 264. 丑数 II Medium
+     *
+     * @param n
+     * @return
+     */
+    public int nthUglyNumber(int n) {
+        if (n <= 0) {
+            return 0;
+        }
+        int[] dp = new int[n];
+        dp[0] = 1;
+        int a = 0, b = 0, c = 0;
+        int aFactor = 2, bFactor = 3, cFactor = 5;
+        for (int i = 1; i < n; i++) {
+            int min = Math.min(Math.min(aFactor, bFactor), cFactor);
+            //每一轮的dp值时三个factor的最小值，因为每一轮的factor都在刷新
+            //如2 ：4 6 8 10 3: 6 9 12 5: 10 15 20
+            dp[i] = min;
+            if (aFactor == min) {
+                aFactor = dp[++a] * 2;
+            }
+            if (bFactor == min) {
+                bFactor = dp[++b] * 3;
+            }
+            if (cFactor == min) {
+                cFactor = dp[++c] * 5;
+            }
+        }
+        return dp[n - 1];
     }
 
 
@@ -1004,7 +1588,32 @@ public class LeetCodeClassification {
             add("cog");
         }};
 
-        handler.transform(new HashSet<>(wordList), beginWord);
+//        handler.transform(new HashSet<>(wordList), beginWord);
+
+
+//        char[][] board = {{'X', 'X', 'X', 'X'}, {'X', 'O', 'O', 'X'}, {'X', 'X', 'O', 'X'}, {'X', 'O', 'X', 'X'}};
+//        handler.solve(board);
+//        int[][] grid = {{1, 1, 0, 0, 0}, {1, 1, 0, 0, 0}, {0, 0, 0, 1, 1}, {0, 0, 0, 1, 1}};
+//        handler.maxAreaOfIsland(grid);
+//        int[][] M = {{1,0,0,1},{0,1,1,0},{0,1,1,1},{1,0,1,1}};
+//        handler.findCircleNum(M);
+
+//        int n = 4, k = 2;
+//        handler.combine(n, k);
+
+
+//        handler.combinationSum(new int[]{2, 3, 6, 7}, 7);
+
+//        int[] nums = {1, 2, 3};
+//        handler.subsets(nums);
+
+//        handler.subsetsWithDup(new int[]{1, 2, 2});
+//        handler.combinationSum3(3, 9);
+//        handler.countPrimes(100);
+//        handler.findPrime2(100);
+//        handler.printPrime(707829217);
+
+        handler.nthUglyNumber(10);
 
     }
 }

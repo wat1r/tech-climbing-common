@@ -280,7 +280,6 @@ public class RepeativeCaseI {
     }
 
     /**
-     *
      * @param head
      * @param n
      * @return
@@ -293,15 +292,74 @@ public class RepeativeCaseI {
         for (int i = 1; i <= n + 1; i++) {
             first = first.next;
         }
-        while (first!=null){
-            first =first.next;
-            second =second.next;
+        while (first != null) {
+            first = first.next;
+            second = second.next;
         }
         second.next = second.next.next;
         return dummy.next;
     }
 
 
+    public ListNode reverseList(ListNode head) {
+        ListNode cur = head, pre = null, next;
+        while (cur != null) {
+            next = cur.next;
+            cur.next = pre;
+            pre = cur;
+            cur = next;
+        }
+        return pre;
+    }
+
+
+    public ListNode mergeTwoLists(ListNode l1, ListNode l2) {
+        if (l1 == null || l2 == null) {
+            return l1 == null ? l2 : l1;
+        }
+        ListNode head = new ListNode(0);
+        ListNode node = head;
+        while (l1 != null && l2 != null) {
+            if (l1.val < l2.val) {
+                node.next = l1;
+                l1 = l1.next;
+            } else {
+                node.next = l2;
+                l2 = l2.next;
+            }
+            node = node.next;
+        }
+        if (l1 != null) {
+            node.next = l1;
+        }
+        if (l2 != null) {
+            node.next = l2;
+        }
+        return head.next;
+    }
+
+
+    /**
+     * 141. 环形链表 Easy
+     *
+     * @param head
+     * @return
+     */
+    public boolean hasCycle(ListNode head) {
+        if (head == null || head.next == null) {
+            return false;
+        }
+        ListNode slow = head;
+        ListNode fast = head.next;
+        while (fast.next != null && fast.next.next != null) {
+            if (slow == fast) {
+                return true;
+            }
+            slow= slow.next;
+            fast =fast.next.next;
+        }
+        return slow == fast;
+    }
 
 
     public static void main(String[] args) {

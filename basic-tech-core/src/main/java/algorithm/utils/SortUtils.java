@@ -96,6 +96,22 @@ public class SortUtils {
         return new int[]{less + 1, more};
     }
 
+    public static int[] netherlandsPartition(int[] arr, int left, int right, int num) {
+        int less = left - 1;
+        int more = right + 1;
+        int cur = left;
+        while (cur < more) {
+            if (arr[cur] < num) {
+                swap(arr, ++less, cur++);
+            } else if (arr[cur] > num) {
+                swap(arr, --more, cur);
+            } else {
+                cur++;
+            }
+        }
+        return new int[]{less + 1, more - 1};
+    }
+
 
     /**
      * 冒泡排序：将最大的数字沉到最底

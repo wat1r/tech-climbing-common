@@ -936,6 +936,8 @@ public class LeetCodeOne {
     }
 
 
+
+
     //---------------------------排列类-结束----------------------------//
 
 
@@ -1757,6 +1759,7 @@ public class LeetCodeOne {
 
 
 
+
     public static void main(String[] args) {
 //        int[] nums = {4, 1, 2, 1, 2};
 //        System.out.println(handler.singleNumber(nums));
@@ -2015,6 +2018,8 @@ class Ladder {
     }
 
 
+
+
     public static void main(String[] args) {
         Ladder ladder = new Ladder();
         String beginWord = "hit";
@@ -2028,6 +2033,7 @@ class Ladder {
             add("cog");
         }};
         System.out.println(JSON.toJSON(ladder.findLadders(beginWord, endWord, wordList)));
+
 
     }
 }
