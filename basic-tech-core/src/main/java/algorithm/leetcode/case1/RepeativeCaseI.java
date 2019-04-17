@@ -355,10 +355,40 @@ public class RepeativeCaseI {
             if (slow == fast) {
                 return true;
             }
-            slow= slow.next;
-            fast =fast.next.next;
+            slow = slow.next;
+            fast = fast.next.next;
         }
         return slow == fast;
+    }
+
+
+    /**
+     * @param root
+     * @return
+     */
+    public List<List<Integer>> levelOrder(TreeNode root) {
+        List<List<Integer>> resList = new ArrayList<>();
+        if (root == null) {
+            return resList;
+        }
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.offer(root);
+        while (!queue.isEmpty()) {
+            int size = queue.size();
+            List<Integer> levelList = new ArrayList<>();
+            for (int i = 0; i < size; i++) {
+                TreeNode curNode = queue.poll();
+                levelList.add(curNode.val);
+                if (curNode.left != null) {
+                    queue.offer(curNode.left);
+                }
+                if (curNode.right != null) {
+                    queue.offer(curNode.right);
+                }
+            }
+            resList.add(levelList);
+        }
+        return resList;
     }
 
 

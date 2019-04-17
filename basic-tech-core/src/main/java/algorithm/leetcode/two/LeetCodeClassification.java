@@ -190,9 +190,32 @@ public class LeetCodeClassification {
      * @param inorder
      * @return
      */
-    public TreeNode buildTree(int[] preorder, int[] inorder) {
+    private Map<Integer, Integer> hashmap = new HashMap<>();
 
-        return null;
+    public TreeNode buildTree(int[] preorder, int[] inorder) {
+        if (preorder == null || inorder == null || preorder.length != inorder.length) {
+            return null;
+        }
+        for (int i = 0; i < inorder.length; i++) {
+            hashmap.put(inorder[i], i);
+        }
+        return buildTreeDFS(preorder, 0, preorder.length-1, inorder, 0, inorder.length-1);
+    }
+
+
+    private TreeNode buildTreeDFS(int[] preorder, int preStart, int preEnd, int[] inorder, int inStart, int inEnd) {
+        if (preStart > preEnd) {
+            return null;
+        }
+        TreeNode root = new TreeNode(preorder[preStart]);
+        //root结点的中序数组的下标
+        int mid = hashmap.get(preorder[preStart]);
+        if (mid < 0) {
+            return null;
+        }
+        root.left = buildTreeDFS(preorder, preStart + 1, preStart + (mid - inStart), inorder, inStart, mid - 1);
+        root.right = buildTreeDFS(preorder, preStart + (mid - inStart) + 1, preEnd, inorder, mid + 1, inEnd);
+        return root;
     }
 
 
