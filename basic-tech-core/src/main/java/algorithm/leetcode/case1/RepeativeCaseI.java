@@ -392,6 +392,23 @@ public class RepeativeCaseI {
     }
 
 
+    /**
+     * 137. 只出现一次的数字 II Medium
+     *
+     * @param nums
+     * @return
+     */
+    public int singleNumber(int[] nums) {
+        int a = 0, b = 0;
+        for (int num : nums) {
+            b = (b ^ num) & ~a;
+            a = (a ^ num) & ~b;
+            System.out.println(String.format("num:%s####b:%s####a:%s", num, Integer.toBinaryString(b), Integer.toBinaryString(a)));
+        }
+        return b;
+    }
+
+
     public static void main(String[] args) {
         LeetCodeOne leetCodeOne = new LeetCodeOne();
         LeetCodeClassification leetCodeClassification = new LeetCodeClassification();
@@ -408,9 +425,11 @@ public class RepeativeCaseI {
 //        int[] coins = {2, 5};
 //        int amount = 3;
 //        leetCodeClassification.coinChange(coins, amount);
-        int[] numbers = {2, 7, 11, 15};
-        int target = 9;
-        handler.twoSumII(numbers, target);
+//        int[] numbers = {2, 7, 11, 15};
+//        int target = 9;
+//        handler.twoSumII(numbers, target);
+//        Collections.sort();
+//        handler.singleNumber(new int[]{2, 2, 3, 2});
     }
 }
 

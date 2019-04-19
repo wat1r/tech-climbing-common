@@ -199,7 +199,7 @@ public class LeetCodeClassification {
         for (int i = 0; i < inorder.length; i++) {
             hashmap.put(inorder[i], i);
         }
-        return buildTreeDFS(preorder, 0, preorder.length-1, inorder, 0, inorder.length-1);
+        return buildTreeDFS(preorder, 0, preorder.length - 1, inorder, 0, inorder.length - 1);
     }
 
 
@@ -1607,6 +1607,110 @@ public class LeetCodeClassification {
 
 
     /**
+     * 347. 前K个高频元素 Medium
+     *
+     * @param nums
+     * @param k
+     * @return
+     */
+    public List<Integer> topKFrequent(int[] nums, int k) {
+        List<Integer> resList = new ArrayList<>();
+        if (nums == null || nums.length == 0) {
+            return resList;
+        }
+        Map<Integer, Integer> map = new HashMap<>();
+        for (int num : nums) {
+            map.put(num, map.getOrDefault(num, 0) + 1);
+        }
+
+        List<Integer>[] bucket = new List[nums.length + 1];
+        for (Map.Entry<Integer, Integer> entry : map.entrySet()) {
+            int count = entry.getValue();
+            if (bucket[count] == null) {
+                bucket[count] = new ArrayList<>();
+            }
+            bucket[count].add(entry.getKey());
+        }
+        for (int i = bucket.length - 1; i >= 0 && resList.size() < k; i--) {
+            if (bucket[i] != null) {
+                resList.addAll(bucket[i]);
+            }
+        }
+        return resList;
+    }
+
+
+    /**
+     * 60. 第k个排列
+     *
+     * @param n
+     * @param k
+     * @return
+     */
+    public String getPermutation(int n, int k) {
+        StringBuffer sb = new StringBuffer();
+        int[] factorials = new int[n + 1];
+        factorials[0] = 1;
+        List<Integer> candidates = new ArrayList<>();
+        for (int i = 1; i <= n; i++) {
+            candidates.add(i);
+            factorials[i] = i * factorials[i - 1];
+        }
+        k = k - 1;
+        for (int i = n - 1; i >= 0; i--) {
+            int index = k / factorials[i];
+            sb.append(candidates.remove(index));
+            k -= factorials[i] * index;
+        }
+
+        return sb.toString();
+    }
+
+
+    /**
+     * 692. 前K个高频单词 Medium Bucket
+     *
+     * @param words
+     * @param k
+     * @return
+     */
+    public List<String> topKFrequent(String[] words, int k) {
+        List<String> resList = new ArrayList<>();
+        if (words == null || words.length == 0) {
+            return resList;
+        }
+        Map<String, Integer> map = new HashMap<>();
+        for (String word : words) {
+            map.put(word, map.getOrDefault(word, 0) + 1);
+        }
+        List<String>[] bucket = new List[words.length + 1];
+        for (Map.Entry<String, Integer> entry : map.entrySet()) {
+            int count = entry.getValue();
+            if (bucket[count] == null) {
+                bucket[count] = new ArrayList<>();
+            }
+            bucket[count].add(entry.getKey());
+        }
+        for (List<String> list : bucket) {
+            if (list != null) {
+                Collections.sort(list);
+            }
+        }
+        flag:
+        for (int i = bucket.length - 1; i >= 0 && resList.size() < k; i--) {
+            if (bucket[i] != null) {
+                for (String item : bucket[i]) {
+                    if (resList.size() == k) {
+                        break flag;
+                    }
+                    resList.add(item);
+                }
+            }
+        }
+        return resList;
+    }
+
+    /**
      * 309. 最佳买卖股票时机含冷冻期
      *
      * @param prices
@@ -1690,8 +1794,10 @@ public class LeetCodeClassification {
 //        handler.findPrime2(100);
 //        handler.printPrime(707829217);
 
-        handler.nthUglyNumber(10);
-
+//        handler.nthUglyNumber(10);
+//        handler.topKFrequent(new int[]{1, 1, 1, 2, 2, 3}, 2);
+//        handler.getPermutation(4, 15);
+        handler.topKFrequent(new String[]{"i", "love", "leetcode", "i", "love", "coding"}, 2);
     }
 }
 
