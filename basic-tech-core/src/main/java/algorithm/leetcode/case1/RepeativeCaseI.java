@@ -408,6 +408,61 @@ public class RepeativeCaseI {
         return b;
     }
 
+    /**
+     * 104. 二叉树的最大深度 Easy
+     *
+     * @param root
+     * @return
+     */
+    public int maxDepth(TreeNode root) {
+        return root == null ? 0 : Math.max(maxDepth(root.left), maxDepth(root.right)) + 1;
+    }
+
+
+    /**
+     * 24. 两两交换链表中的节点 Medium
+     *
+     * @param head
+     * @return
+     */
+    public ListNode swapPairs(ListNode head) {
+        //终止条件：链表只剩一个节点或者没节点了，没得交换了。返回的是已经处理好的链表
+        if (head == null || head.next == null) {
+            return head;
+        }
+        //一共三个节点:head, node, swapPairs(node.next)
+        //下面的任务便是交换这3个节点中的前两个节点
+        ListNode node = head.next;
+        head.next = swapPairs(node.next);
+        node.next = head;
+        //根据第二步：返回给上一级的是当前已经完成交换后，即处理好了的链表部分
+        return node;
+    }
+
+
+    /**
+     * @param root
+     * @return
+     */
+    public boolean isBalanced(TreeNode root) {
+        return isBinaryTree(root).isB;
+    }
+
+    private ReturnNode isBinaryTree(TreeNode root) {
+        if (root == null) {
+            return new ReturnNode(0, true);
+        }
+        ReturnNode left = isBinaryTree(root.left);
+        ReturnNode right = isBinaryTree(root.right);
+        if (left.isB == false || right.isB == false) {
+            return new ReturnNode(0, false);
+        }
+        if (Math.abs(left.depth - right.depth) > 1) {
+            return new ReturnNode(0, false);
+        }
+        return new ReturnNode(Math.max(left.depth, right.depth) + 1, true);
+    }
+
 
     public static void main(String[] args) {
         LeetCodeOne leetCodeOne = new LeetCodeOne();
@@ -431,6 +486,18 @@ public class RepeativeCaseI {
 //        Collections.sort();
 //        handler.singleNumber(new int[]{2, 2, 3, 2});
     }
+
+    private class ReturnNode {
+        boolean isB;
+        int depth;
+
+        public ReturnNode(int depth, boolean isB) {
+            this.isB = isB;
+            this.depth = depth;
+        }
+    }
+
+
 }
 
 class TreeNode {

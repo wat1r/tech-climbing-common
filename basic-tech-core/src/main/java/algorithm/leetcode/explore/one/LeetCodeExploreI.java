@@ -2337,6 +2337,94 @@ public class LeetCodeExploreI {
 
 
     /**
+     * 25. k个一组翻转链表 Hard
+     *
+     * @param head
+     * @param k
+     * @return
+     */
+    //TODO
+    public ListNode reverseKGroup(ListNode head, int k) {
+        ListNode dummy = new ListNode(-1);
+        dummy.next = head;
+        ListNode pre = dummy;
+        ListNode cur = dummy.next;
+        int index = 1;
+        while (index != k) {
+            index++;
+        }
+        return null;
+    }
+
+    /**
+     * 739. 每日温度 Medium
+     *
+     * @param T
+     * @return
+     */
+    public int[] dailyTemperatures(int[] T) {
+        int n = T.length;
+        int[] resArr = new int[n];
+        Stack<Integer> indexStack = new Stack<>();
+        for (int i = 0; i < n; i++) {
+            while (!indexStack.isEmpty() && T[indexStack.peek()] < T[i]) {
+                int curIndex = indexStack.pop();
+                resArr[curIndex] = i - curIndex;
+            }
+            indexStack.push(i);
+        }
+        return resArr;
+    }
+
+    /**
+     * 496. 下一个更大元素 I
+     *
+     * @param nums1
+     * @param nums2
+     * @return
+     */
+    public int[] nextGreaterElement(int[] nums1, int[] nums2) {
+        int[] resArr = new int[nums1.length];
+        Stack<Integer> stack = new Stack<>();
+        HashMap<Integer, Integer> map = new HashMap<>();
+        for (int num : nums2) {
+            while (!stack.isEmpty() && stack.peek() < num) {
+                map.put(stack.pop(), num);
+            }
+            stack.push(num);
+        }
+        for (int i = 0; i < nums1.length; i++) {
+            resArr[i] = map.getOrDefault(nums1[i], -1);
+        }
+        return resArr;
+    }
+
+
+    /**
+     * 503. 下一个更大元素 II Medium
+     *
+     * @param nums
+     * @return
+     */
+    public int[] nextGreaterElements(int[] nums) {
+        int n = nums.length;
+        int[] resArr = new int[n];
+        Arrays.fill(resArr, -1);
+        Stack<Integer> stack = new Stack<>();
+        for (int i = 0; i < 2 * n; i++) {
+            int curNum = nums[i % n];
+            while (!stack.isEmpty() && nums[stack.peek()] < curNum) {
+                resArr[stack.pop()] = curNum;
+            }
+            if (i < n) {
+                stack.push(i);
+            }
+        }
+        return resArr;
+    }
+
+
+    /**
      * 725. 分隔链表 Medium
      *
      * @param root
@@ -2552,8 +2640,12 @@ public class LeetCodeExploreI {
 //        int[] nums = {1, 2, 3};
 //        handler.permute(nums);
 //        handler.mySqrt(8);
-        char[] chars = {'e', 'e', 'e', 'e', 'e', 'e', 'n', 'n', 'n', 'n'};
-        handler.nextGreatestLetter(chars, 'e');
+//        char[] chars = {'e', 'e', 'e', 'e', 'e', 'e', 'n', 'n', 'n', 'n'};
+//        handler.nextGreatestLetter(chars, 'e');
+//        handler.dailyTemperatures(new int[]{73, 74, 75, 71, 69, 72, 76, 73});
+//        handler.nextGreaterElement(new int[]{4, 1, 2}, new int[]{1, 3, 4, 2});
+        handler.nextGreaterElements(new int[]{1, 2, 1});
+
 
     }
 
