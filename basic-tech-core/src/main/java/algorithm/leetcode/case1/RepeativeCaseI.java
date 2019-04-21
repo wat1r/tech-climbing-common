@@ -454,13 +454,46 @@ public class RepeativeCaseI {
         }
         ReturnNode left = isBinaryTree(root.left);
         ReturnNode right = isBinaryTree(root.right);
-        if (left.isB == false || right.isB == false) {
+        if (!left.isB || !right.isB) {
             return new ReturnNode(0, false);
         }
         if (Math.abs(left.depth - right.depth) > 1) {
             return new ReturnNode(0, false);
         }
         return new ReturnNode(Math.max(left.depth, right.depth) + 1, true);
+    }
+
+
+    /**
+     * 264. 丑数 II Medium
+     *
+     * @param n
+     * @return
+     */
+    public int nthUglyNumber(int n) {
+        long[] dp = new long[n + 1];
+        dp[0] = 0;
+        dp[1] = 1;
+        PriorityQueue<Long> queue = new PriorityQueue<>();
+        HashSet<Long> hashSet = new HashSet<>();
+        hashSet.add(dp[1]);
+        for (int i = 2; i <= n; i++) {
+            selectFactor(queue, hashSet, dp[i - 1], 2);
+            selectFactor(queue, hashSet, dp[i - 1], 3);
+            selectFactor(queue, hashSet, dp[i - 1], 5);
+            dp[i] = queue.poll();
+        }
+        return (int) dp[n];
+    }
+
+    private void selectFactor(PriorityQueue<Long> queue, HashSet<Long> hashSet, long last, int factor) {
+        long potential = last * factor;
+        if (!hashSet.contains(potential)) {
+            queue.offer(potential);
+            hashSet.add(potential);
+        }
+
+
     }
 
 

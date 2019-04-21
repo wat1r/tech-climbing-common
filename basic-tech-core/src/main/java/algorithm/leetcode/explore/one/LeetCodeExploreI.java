@@ -1964,6 +1964,49 @@ public class LeetCodeExploreI {
 
 
     /**
+     * 56. 合并区间 Medium PriorityQueue
+     *
+     * @param intervals
+     * @return
+     */
+    public List<Interval> merge2nd(List<Interval> intervals) {
+        List<Interval> resList = new ArrayList<>();
+        if (intervals == null || intervals.size() == 0) {
+            return resList;
+        }
+        //构造优先队列 --->[1,1],[2,1],[3,-1]...
+        PriorityQueue<Point> queue = new PriorityQueue<>(Comparator.comparing(p -> p.val));
+        for (Interval interval : intervals) {
+            queue.offer(new Point(interval.start, 1));
+            queue.offer(new Point(interval.end, -1));
+        }
+        int count = 0;
+        //执行优先队列的主逻辑
+        Interval sub = new Interval();
+        while (!queue.isEmpty()) {
+            Point cur = queue.poll();
+            if (count == 0) {
+                sub.start = cur.val;
+            }
+            count += cur.flag;
+            //此处为了处理前一个Point的值与后一个Point的值重叠的情况，如[1,4] [4,5]
+            while (!queue.isEmpty() && cur.val == queue.peek().val) {
+                Point temp = queue.poll();
+                count += temp.flag;
+            }
+            //当count值为0时，表示要执行合并区间的逻辑了
+            if (count == 0) {
+                sub.end = cur.val;
+                resList.add(sub);
+                sub = new Interval();
+            }
+        }
+        return resList;
+
+    }
+
+
+    /**
      * 179. 最大数 Medium
      *
      * @param nums
@@ -2425,6 +2468,108 @@ public class LeetCodeExploreI {
 
 
     /**
+     * 920. 会议室 LintCode
+     *
+     * @param intervals
+     * @return
+     */
+    public boolean canAttendMeetings(List<Interval> intervals) {
+        if (intervals == null || intervals.size() == 0) {
+            return true;
+        }
+        PriorityQueue<Interval> queue = new PriorityQueue<>((o1, o2) -> o1.start - o2.start);
+        for (Interval interval : intervals) {
+            queue.add(interval);
+        }
+        while (!queue.isEmpty()) {
+            Interval cur = queue.poll();
+            Interval next = queue.peek();
+            if (next != null && cur.end > next.start) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+
+    /**
+     * 919. 会议室 II  Medium
+     *
+     * @param intervals
+     * @return
+     */
+    public int minMeetingRooms(List<Interval> intervals) {
+        if (intervals == null || intervals.size() == 0) return 0;
+        Collections.sort(intervals, new Comparator<Interval>() {
+            @Override
+            public int compare(Interval o1, Interval o2) {
+                return o1.start - o2.start;
+            }
+        });
+        PriorityQueue<Integer> minHeap = new PriorityQueue<>();
+        int count = 0;
+        //当新会议的开始时间大于minHeap中的最早结束时间，说明区间未重叠，不需要开新的会议室
+        for (Interval interval : intervals) {
+            minHeap.offer(interval.end);
+            if (interval.start < minHeap.peek()) {
+                count++;
+            } else {
+                minHeap.poll();
+            }
+        }
+        return count;
+    }
+
+
+    /**
+     * 57. 插入区间 Hard
+     *
+     * @param intervals
+     * @param newInterval
+     * @return
+     */
+    public List<Interval> insert(List<Interval> intervals, Interval newInterval) {
+        List<Interval> resList = new ArrayList<>();
+        if (intervals == null || intervals.size() == 0 || newInterval == null) {
+            if (newInterval != null) {
+                resList.add(newInterval);
+            }
+            return resList;
+        }
+        PriorityQueue<Point> queue = new PriorityQueue<>(new Comparator<Point>() {
+            @Override
+            public int compare(Point o1, Point o2) {
+                return o1.val - o2.val;
+            }
+        });
+        queue.add(new Point(newInterval.start, 1));
+        queue.add(new Point(newInterval.end, -1));
+        for (Interval interval : intervals) {
+            queue.add(new Point(interval.start, 1));
+            queue.add(new Point(interval.end, -1));
+        }
+        int count = 0;
+        Interval temp = new Interval();
+        while (!queue.isEmpty()) {
+            Point cur = queue.poll();
+            if (count == 0) {
+                temp.start = cur.val;
+            }
+            count += cur.flag;
+            while (!queue.isEmpty() && cur.val == queue.peek().val) {
+                cur = queue.poll();
+                count += cur.flag;
+            }
+            if (count == 0) {
+                temp.end = cur.val;
+                resList.add(temp);
+                temp = new Interval();
+            }
+        }
+        return resList;
+    }
+
+    /**
      * 725. 分隔链表 Medium
      *
      * @param root
@@ -2617,13 +2762,19 @@ public class LeetCodeExploreI {
 //                add(new Interval(15, 18));
 
                 //
-                add(new Interval(1, 4));
-                add(new Interval(4, 5));
+//                add(new Interval(1, 4));
+//                add(new Interval(4, 5));
+                //canAttendMeetings
+                add(new Interval(0, 30));
+                add(new Interval(5, 10));
+                add(new Interval(15, 20));
             }
         };
 
 //        print(handler.merge(intervals));
-
+//        handler.merge2nd(intervals);
+//        handler.canAttendMeetings(intervals);
+        handler.minMeetingRooms(intervals);
 //        int[] nums = {3, 30, 34, 5, 9};
 //        print(handler.largestNumber(nums));
 
@@ -2644,7 +2795,9 @@ public class LeetCodeExploreI {
 //        handler.nextGreatestLetter(chars, 'e');
 //        handler.dailyTemperatures(new int[]{73, 74, 75, 71, 69, 72, 76, 73});
 //        handler.nextGreaterElement(new int[]{4, 1, 2}, new int[]{1, 3, 4, 2});
-        handler.nextGreaterElements(new int[]{1, 2, 1});
+//        handler.nextGreaterElements(new int[]{1, 2, 1});
+
+//        handler.merge()
 
 
     }
@@ -2652,6 +2805,17 @@ public class LeetCodeExploreI {
 
     private static void print(Object obj) {
         System.out.println(JSON.toJSONString(obj));
+    }
+}
+
+
+class Point {
+    int val;
+    int flag;
+
+    public Point(int val, int flag) {
+        this.val = val;
+        this.flag = flag;
     }
 }
 
