@@ -49,7 +49,8 @@ public class Quick<T extends Comparable<T>> extends Sort<T> {
 
     public static void main(String[] args) {
 
-        Integer[] nums = {70, 20, 10, 80, 30, 90, 50, 60, 40};
+//        Integer[] nums = {70, 20, 10, 80, 30, 90, 50, 60, 40};
+        Integer[] nums = {60, 30, 80, 20, 90, 10};
         handler.sort(nums);
         System.out.println(JSON.toJSON(nums));
 

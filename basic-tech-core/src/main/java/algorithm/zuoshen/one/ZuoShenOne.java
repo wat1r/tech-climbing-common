@@ -1,4 +1,4 @@
-package algorithm.zuoshen.One;
+package algorithm.zuoshen.one;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -289,6 +289,42 @@ public class ZuoShenOne {
     }
 
 
+    /**
+     * 生成带符号的字符char[] bcbaa-->#b#c#b#a#a#
+     *
+     * @param str
+     * @return
+     */
+    private char[] manacherString(String str) {
+        char[] chas = str.toCharArray();
+        char[] resChar = new char[chas.length * 2 + 1];
+        int index = 0;
+        for (int i = 0; i < resChar.length; i++) {
+            resChar[i] = (i & 1) == 0 ? '#' : chas[index++];
+        }
+        return resChar;
+    }
+
+    private int maxLcpsLength(String str) {
+        if (str == null || str.length() == 0) {
+            return 0;
+        }
+        char[] chas = manacherString(str);
+        int[] pArr = new int[chas.length];
+        int index = -1;
+        int pR = -1;
+        int max = Integer.MIN_VALUE;
+        for (int i = 0; i < chas.length; i++) {
+            //TODO
+
+
+        }
+
+
+        return 0;
+    }
+
+
     public static void main(String[] args) {
 
 //        int[] arr = {5, 10, 25};
@@ -301,9 +337,13 @@ public class ZuoShenOne {
 
 //        handler.shortestPalindrome("ABCDABA");
 //        handler.shortestPalindrome("abb");
-        String word1 = "horse", word2 = "ros";
-        System.out.println(handler.minDistance(word1, word2));
+//        String word1 = "horse", word2 = "ros";
+//        System.out.println(handler.minDistance(word1, word2));
+        System.out.println(String.valueOf(handler.manacherString("bcbaa")));
+
+
     }
+
 }
 
 class ReturnType {
