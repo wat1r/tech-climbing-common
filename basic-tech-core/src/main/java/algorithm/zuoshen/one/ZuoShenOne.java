@@ -288,6 +288,38 @@ public class ZuoShenOne {
         return new HuoReturnData(laiHuo, bulaiHuo);
     }
 
+    /**
+     * Manacher Main
+     *
+     * @param chas
+     * @return
+     */
+    private int[] maxLcpsLength(char[] chas) {
+        int[] pArr = new int[chas.length];
+        int pR = -1;
+        int index = 0;
+        int max = Integer.MIN_VALUE;
+        int center = 0;
+        for (int i = 0; i < chas.length; i++) {
+            pArr[i] = pR > i ? Math.min(pR - i, pArr[2 * index - i]) : 1;
+            while (i + pArr[i] < chas.length && i - pArr[i] > -1) {
+                if (chas[i + pArr[i]] == chas[i - pArr[i]]) {
+                    pArr[i]++;
+                } else {
+                    break;
+                }
+            }
+            if (i + pArr[i] > pR) {
+                pR = i + pArr[i];
+                index = i;
+            }
+            if (pArr[i] > max) {
+                max = pArr[i];
+                center = i;
+            }
+        }
+        return new int[]{center, max - 1};
+    }
 
     /**
      * 生成带符号的字符char[] bcbaa-->#b#c#b#a#a#
@@ -305,25 +337,21 @@ public class ZuoShenOne {
         return resChar;
     }
 
-    private int maxLcpsLength(String str) {
-        if (str == null || str.length() == 0) {
-            return 0;
-        }
+
+    public String longestPalindrome(String str) {
+
         char[] chas = manacherString(str);
-        int[] pArr = new int[chas.length];
-        int index = -1;
-        int pR = -1;
-        int max = Integer.MIN_VALUE;
-        for (int i = 0; i < chas.length; i++) {
-            //TODO
-
-
+        //返回的参数0:最大回文的中心点，1：最大回文半径
+        int[] params = maxLcpsLength(chas);
+        StringBuilder sb = new StringBuilder();
+        for (int i = params[0] - params[1]; i <= params[0] + params[1]; i++) {
+            if (chas[i] == '#') {
+                continue;
+            }
+            sb.append(chas[i]);
         }
-
-
-        return 0;
+        return sb.toString();
     }
-
 
     public static void main(String[] args) {
 
@@ -339,8 +367,8 @@ public class ZuoShenOne {
 //        handler.shortestPalindrome("abb");
 //        String word1 = "horse", word2 = "ros";
 //        System.out.println(handler.minDistance(word1, word2));
-        System.out.println(String.valueOf(handler.manacherString("bcbaa")));
-
+//        System.out.println(String.valueOf(handler.maxLcpsLength("babad")));
+        handler.longestPalindrome("babad");
 
     }
 
