@@ -55,7 +55,6 @@ public class SortUtils {
         int temp = numbers[i];
         numbers[i] = numbers[j];
         numbers[j] = temp;
-
     }
 
     /**
