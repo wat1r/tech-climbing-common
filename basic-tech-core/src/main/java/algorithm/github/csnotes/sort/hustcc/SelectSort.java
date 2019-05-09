@@ -27,7 +27,6 @@ public class SelectSort implements IArraySort {
         }
         return arr;
     }
-
     private void swap(int[] arr, int i, int j) {
         int temp = arr[i];
         arr[i] = arr[j];

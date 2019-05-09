@@ -131,7 +131,6 @@ public class SortUtils {
         System.out.println(JSON.toJSON(arr));
     }
 
-
     /**
      * 选择排序：0-n-1 找到min放在0位置，1-n-1找到min放在1位置...
      * 记录下后面的最小数的index与第一个数swap
