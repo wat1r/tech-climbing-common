@@ -3,6 +3,7 @@ package algorithm.hustcc;
 import algorithm.github.csnotes.sort.hustcc.HeapSort;
 import algorithm.github.csnotes.sort.hustcc.IArraySort;
 import algorithm.github.csnotes.sort.hustcc.QuickSort;
+import algorithm.github.csnotes.sort.hustcc.SelectSort;
 import algorithm.utils.SortUtils;
 import com.alibaba.fastjson.JSON;
 import org.junit.After;
@@ -29,8 +30,15 @@ public class SortTest {
     public void testHeapSort() throws Exception {
         HeapSort heapSort = new HeapSort();
         arr = heapSort.sort(arr);
-
     }
+
+
+    @Test
+    public void testSelectSort() throws Exception {
+        SelectSort selectSort =new SelectSort();
+        arr= selectSort.sort(arr);
+    }
+
 
     @After
     public void printArr() {
