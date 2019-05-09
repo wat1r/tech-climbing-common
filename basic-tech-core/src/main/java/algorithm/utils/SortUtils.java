@@ -197,7 +197,7 @@ public class SortUtils {
         while (p1 <= mid && p2 <= right) {
             help[i++] = arr[p1] < arr[p2] ? arr[p1++] : arr[p2++];
         }
-        //下面两个钟只会发生一个
+        //下面两个中只会发生一个
         while (p1 <= mid) {
             help[i++] = arr[p1++];
         }

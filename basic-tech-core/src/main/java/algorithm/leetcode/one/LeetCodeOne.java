@@ -936,8 +936,6 @@ public class LeetCodeOne {
     }
 
 
-
-
     //---------------------------排列类-结束----------------------------//
 
 
@@ -1757,8 +1755,45 @@ public class LeetCodeOne {
     }
 
 
+    public int findMin(int[] nums) {
+        if (nums == null || nums.length == 0) {
+            return 0;
+        }
+        int l = 0, r = nums.length - 1;
+        while (l < r) {
+            int mid = l + (r - l) / 2;
+            if (nums[mid] <= nums[r]) {
+                r = mid;
+            } else {
+                l = mid + 1;
+            }
+        }
+        return nums[l];
+    }
 
 
+    /**
+     * 540. 有序数组中的单一元素 Medium 二分查找
+     *
+     * @param nums
+     * @return
+     */
+    public int singleNonDuplicate(int[] nums) {
+        int l = 0, h = nums.length - 1;
+        while (l < h) {
+            int m = l + (h - l) / 2;
+            if (m % 2 == 1) {
+                m--;   // 保证 l/h/m 都在偶数位，使得查找区间大小一直都是奇数
+            }
+            if (nums[m] == nums[m + 1]) {//如果m 与 m+1的值不相等，由于m是偶数，那么出现的单独一个数在前半部分
+                l = m + 2;
+            } else {
+                h = m;
+            }
+
+        }
+        return nums[l];
+    }
 
     public static void main(String[] args) {
 //        int[] nums = {4, 1, 2, 1, 2};
@@ -1850,7 +1885,7 @@ public class LeetCodeOne {
             add("log");
             add("cog");
         }};
-        System.out.println(handler.ladderLength(beginWord, endWord, wordList));
+//        System.out.println(handler.ladderLength(beginWord, endWord, wordList));
 
 
 //        int[] arr = {2, 1, 2, 1, 1, 0, 0, 0, 0, 1};
@@ -1868,6 +1903,9 @@ public class LeetCodeOne {
 //        int[] nums = {1, 3, -1, -3, 5, 3, 6, 7};
 //        int k = 3;
 //        System.out.println(JSON.toJSON(handler.maxSlidingWindow(nums, k)));
+
+//        handler.findMin(new int[]{3, 4, 5, 1, 2});
+        handler.singleNonDuplicate(new int[]{1, 1, 2, 3, 3, 4, 4, 8, 8});
 
     }
 
@@ -2018,8 +2056,6 @@ class Ladder {
     }
 
 
-
-
     public static void main(String[] args) {
         Ladder ladder = new Ladder();
         String beginWord = "hit";
@@ -2032,7 +2068,7 @@ class Ladder {
             add("log");
             add("cog");
         }};
-        System.out.println(JSON.toJSON(ladder.findLadders(beginWord, endWord, wordList)));
+//        System.out.println(JSON.toJSON(ladder.findLadders(beginWord, endWord, wordList)));
 
 
     }

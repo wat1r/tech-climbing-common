@@ -1,5 +1,6 @@
 package algorithm.nowcoder.company;
 
+import java.util.Arrays;
 import java.util.Scanner;
 
 /**
@@ -97,6 +98,30 @@ public class CompanyOne {
     }
 
 
+    /**
+     * 六一儿童节 PDD 这题与455. 分发饼干 Easy 贪心
+     *
+     * @param n h数组的size
+     * @param h 每个小朋友需要的巧克力大大小的数组 h[i]
+     * @param m w数组的size
+     * @param w w数组，表示巧克力的重量 w[j]
+     * @return
+     */
+    public int countChildrenByAllocatingChocolate(int n, int[] h, int m, int[] w) {
+        Arrays.sort(h);
+        Arrays.sort(w);
+        int res = 0;
+        for (int i = 0, j = 0; i < n && j < m; ) {
+            if (w[j] >= h[i]) {
+                i++;
+                res++;
+            }
+            j++;
+        }
+        return res;
+    }
+
+
     public static void main(String[] args) {
 
 //        long[] nums = {10, 15, -9, 6, 80, -60};
@@ -104,6 +129,8 @@ public class CompanyOne {
 
 //        handler.bigIntMuti();
         handler.multiply("2345", "6789");
+
+
 
     }
 
