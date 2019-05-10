@@ -43,6 +43,12 @@ public class SortTest {
         arr = bubbleSort.sort(arr);
     }
 
+    @Test
+    public void testInsertSort() throws Exception {
+        InsertSort insertSort = new InsertSort();
+        arr = insertSort.sort(arr);
+    }
+
 
     @After
     public void printArr() {
