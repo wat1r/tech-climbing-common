@@ -50,6 +50,25 @@ public class SortTest {
     }
 
 
+    @Test
+    public void testCountSort() throws Exception {
+        CountSort countSort = new CountSort();
+        arr = countSort.sort(arr);
+    }
+
+    @Test
+    public void testBucketSort() throws Exception {
+        BucketSort bucketSort = new BucketSort();
+        arr = bucketSort.sort(arr);
+    }
+
+    @Test
+    public void testRadixSort() throws Exception {
+        RadixSort radixSort = new RadixSort();
+        arr = new int[]{542, 3521, 13459, 852, 742, 46, 2, 1, 633, 32};
+        arr = radixSort.sort(arr);
+    }
+
     @After
     public void printArr() {
         System.out.println(JSON.toJSONString(arr));

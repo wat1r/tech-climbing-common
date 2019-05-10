@@ -518,9 +518,9 @@ public class SortUtils {
 //        SortUtils.shellSort(numbers);
 
         int[] nums = {542, 3521, 13459, 852, 742, 46, 2, 1, 633, 32};
-//        radixSort(nums);
+        radixSort(nums);
 //        myRadixSort(nums);
-        bucketSort(nums);
+//        bucketSort(nums);
 
 
     }
