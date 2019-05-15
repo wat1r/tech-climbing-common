@@ -69,6 +69,19 @@ public class SortTest {
         arr = radixSort.sort(arr);
     }
 
+    @Test
+    public void testMergeSort() throws Exception {
+        MergeSort mergeSort = new MergeSort();
+        arr = mergeSort.sort(arr);
+    }
+
+    @Test
+    public void testShellSort() throws Exception {
+        ShellSort shellSort = new ShellSort();
+        arr = shellSort.sort(arr);
+    }
+
+
     @After
     public void printArr() {
         System.out.println(JSON.toJSONString(arr));
