@@ -1,7 +1,9 @@
 package algorithm.nowcoder.company;
 
-import java.util.Arrays;
-import java.util.Scanner;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.*;
 
 /**
  * Created by FrankCooper
@@ -11,49 +13,35 @@ import java.util.Scanner;
 public class Main {
 
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
 
         Main handler = new Main();
-
-        Scanner sc = new Scanner(System.in);
-        int n = sc.nextInt();// n个学生
-        int[] h = new int[n];// 学生
-        for (int i = 0; i < h.length; i++) {
-            h[i] = sc.nextInt();
+        BufferedReader buffer = new BufferedReader(new InputStreamReader(System.in));
+        String[] strs = buffer.readLine().split(" ");
+        int[] nums = new int[strs.length];
+        for (int i = 0; i < strs.length; i++) {
+            nums[i] = Integer.parseInt(strs[i]);
         }
-
-        int m = sc.nextInt();// m个巧克力
-        int[] w = new int[m];// 巧克力
-        for (int i = 0; i < w.length; i++) {
-            w[i] = sc.nextInt();
-        }
-        int result = handler.countChildrenByAllocatingChocolate(n, h, m, w);
-        System.out.println(result);
-        sc.close();
-
+        System.out.println(handler.getMaxPerimeter(nums));
     }
 
 
     /**
-     * 六一儿童节 PDD
-     *
-     * @param n h数组的size
-     * @param h 每个小朋友需要的巧克力大大小的数组 h[i]
-     * @param m w数组的size
-     * @param w w数组，表示巧克力的重量 w[j]
-     * @return
+     * 凑三角形 iQiYi
+     * 三个边长排序，如果长度小的两边加起来大于最长的边，肯定可以组成三角形，
+     * 某则，最长的边就要进行切割，切割到a + b - 1, 此时周长为a + b + a + b - 1 =
+     * 输出一个整数
      */
-    public int countChildrenByAllocatingChocolate(int n, int[] h, int m, int[] w) {
-        Arrays.sort(h);
-        Arrays.sort(w);
-        int res = 0;
-        for (int i = 0, j = 0; i < n && j < m; ) {
-            if (w[j] >= h[i]) {
-                i++;
-                res++;
-            }
-            j++;
+    public int getMaxPerimeter(int[] help) {
+        Arrays.sort(help);
+        int min1 = help[0];
+        int min2 = help[1];
+        int max = help[2];
+        int res = max + min1 + min2;
+        if (max >= (min1 + min2)) {
+            res = 2 * (min1 + min2) - 1;
         }
         return res;
     }
+
 }

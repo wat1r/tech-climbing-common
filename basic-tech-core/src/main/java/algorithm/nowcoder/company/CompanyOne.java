@@ -1,7 +1,6 @@
 package algorithm.nowcoder.company;
 
-import java.util.Arrays;
-import java.util.Scanner;
+import java.util.*;
 
 /**
  * Created by FrankCooper
@@ -122,15 +121,120 @@ public class CompanyOne {
     }
 
 
+    /**
+     * iQiYi，判断题
+     */
+    public void getCorrectAndWrongAnswer() {
+        Scanner scan = new Scanner(System.in);
+        String s = scan.nextLine();
+        String[] ss = s.split(" ");
+        int n = Integer.parseInt(ss[0]);
+        int t = Integer.parseInt(ss[1]);
+        int a = Integer.parseInt(ss[2]);
+        int res = Math.min(n - t, n - a) + Math.min(t, a);
+        System.out.println(res);
+    }
+
+    /**
+     * iQiYi 去重复字符
+     *
+     * @param str
+     */
+    public void removeRepitiveCharacter(String str) {
+        char[] chas = str.toCharArray();
+        int[] help = new int[256];
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < chas.length; i++) {
+            if (help[chas[i] - 'A'] == 0) {
+                help[chas[i] - 'A'] = 1;
+                sb.append(chas[i]);
+            }
+        }
+        System.out.println(sb.toString());
+    }
+
+
+    /**
+     * iQiYi 排序
+     * <p>
+     * 1、输入以后，复制一个一样的数组
+     * 2、对一个排序，另一个不变
+     * 3、对比两个数组有什么区别，对比每一位，有不同则加一
+     */
+    public int moveAndSort(int[] arr) {
+        int[] mirror = Arrays.copyOf(arr, arr.length);
+        Arrays.sort(mirror);
+        int times = 0;
+        for (int i = 0; i < arr.length; i++) {
+            if (arr[i] != mirror[i]) {
+                times++;
+            }
+        }
+        return times;
+    }
+
+
+    /**
+     * iQiYi 字符串价值
+     * 每次最大的值减一，得到的价值最小。
+     *
+     * @param str
+     * @param k
+     * @return
+     */
+    public int getMinValueOfStr(String str, int k) {
+        char[] chas = str.toCharArray();
+        HashMap<Character, Integer> hashmap = new HashMap();
+        for (char c : chas) {
+            hashmap.putIfAbsent(c, 0);
+            hashmap.put(c, hashmap.get(c) + 1);
+        }
+        List<Integer> valueList = new ArrayList<>(hashmap.values());
+        int[] help = new int[valueList.size()];
+        for (int i = 0; i < valueList.size(); i++) {
+            help[i] = valueList.get(i);
+        }
+        for (int i = 0; i < k; i++) {
+            Arrays.sort(help);
+            help[help.length - 1]--;
+        }
+        int sum = 0;
+        for (int i = 0; i < help.length; i++) {
+            sum += help[i] * help[i];
+        }
+        return sum;
+    }
+
+
+    /**
+     * 凑三角形 iQiYi
+     * 三个边长排序，如果长度小的两边加起来大于最长的边，肯定可以组成三角形，
+     * 某则，最长的边就要进行切割，切割到a + b - 1, 此时周长为a + b + a + b - 1 =
+     * 输出一个整数
+     * 要sout结果
+     */
+    public int getMaxPerimeter(int[] help) {
+        Arrays.sort(help);
+        int min1 = help[0];
+        int min2 = help[1];
+        int max = help[2];
+        int res = max + min1 + min2;
+        if (max >= (min1 + min2)) {
+            res = 2 * (min1 + min2) - 1;
+        }
+        return res;
+    }
+
+
     public static void main(String[] args) {
 
 //        long[] nums = {10, 15, -9, 6, 80, -60};
 //        handler.getMaxMuti(nums, 6);
 
 //        handler.bigIntMuti();
-        handler.multiply("2345", "6789");
+//        handler.multiply("2345", "6789");
 
-
+        handler.removeRepitiveCharacter("banana");
 
     }
 
