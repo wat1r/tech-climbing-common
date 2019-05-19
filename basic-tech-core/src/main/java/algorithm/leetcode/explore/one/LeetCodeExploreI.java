@@ -2632,6 +2632,36 @@ public class LeetCodeExploreI {
         return 0;
     }
 
+
+    /**
+     * 373. 查找和最小的K对数字 Medium
+     *
+     * @param nums1
+     * @param nums2
+     * @param k
+     * @return
+     */
+    public List<int[]> kSmallestPairs(int[] nums1, int[] nums2, int k) {
+        PriorityQueue<Pair> queue = new PriorityQueue<>(k);
+        for (int i = 0; i < Math.min(nums1.length, k); i++) {
+            for (int j = 0; j < Math.min(nums2.length, k); j++) {
+                Pair temp = new Pair(nums1[i], nums2[j]);
+                if (queue.size() < k) {
+                    queue.add(temp);
+                } else if (queue.peek().sum > temp.sum) {
+                    queue.poll();
+                    queue.add(temp);
+                }
+            }
+        }
+        List<int[]> resList = new ArrayList<>();
+        while (!queue.isEmpty()) {
+            resList.add(queue.poll().A);
+        }
+        return resList;
+    }
+
+
     public static void main(String[] args) {
 
 //        int[] nums = {3, 2, 3};
@@ -2860,5 +2890,53 @@ class Interval {
                 ", end=" + end +
                 '}';
     }
+
+
 }
 
+
+class Pair implements Comparable<Pair> {
+    int[] A = new int[2];
+    int sum;
+
+    public Pair(int row, int col) {
+        A[0] = row;
+        A[1] = col;
+        this.sum = row + col;
+    }
+
+
+    @Override
+    public int compareTo(Pair o) {
+        return o.sum - this.sum;
+    }
+}
+
+
+/**
+ * 703. 数据流中的第K大元素 Easy
+ */
+class KthLargest {
+
+    final PriorityQueue<Integer> queue;
+    final int k;
+
+    public KthLargest(int k, int[] nums) {
+        this.k = k;
+        queue = new PriorityQueue<Integer>(k);
+        for (int i : nums) {
+            add(i);
+        }
+    }
+
+    public int add(int val) {
+        if (queue.size() < k) {
+            queue.offer(val);
+        } else if (queue.peek() < val) {
+            queue.poll();
+            queue.offer(val);
+        }
+        return queue.peek();
+    }
+
+}

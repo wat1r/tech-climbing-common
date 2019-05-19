@@ -308,6 +308,24 @@ public class CompanyOne {
     }
 
 
+    /**
+     * 区间表达  iQiYi
+     *
+     * @param arr
+     * @return
+     */
+    public int countInterval(int[] arr) {
+        int count = 1;
+        for (int i = 0; i < arr.length-1; i++) {
+            if (arr[i] + 1 == arr[i + 1]) {
+                continue;
+            }
+            count++;
+        }
+        return count;
+    }
+
+
     public static void main(String[] args) {
 
 //        long[] nums = {10, 15, -9, 6, 80, -60};
@@ -319,7 +337,7 @@ public class CompanyOne {
 //        handler.removeRepitiveCharacter("banana");
 
 //        handler.isPalidrome(12321);
-        handler.isPrime(666);
+//        handler.isPrime(666);
 
     }
 
