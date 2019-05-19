@@ -226,6 +226,88 @@ public class CompanyOne {
     }
 
 
+    /**
+     * iQiYi DNA序列
+     * 不存在的最短DNA序列是什么？
+     * <p>
+     * 例如，长度为2的序列包括：(AA, AG, AC, AT, CA, CC, CG, CT ……..)，要全部判断一遍才可以。并不是判断(AA, CC, GG TT)就可以了。
+     * <p>
+     * 所以，要一层一层的判断，长度为1的所有子序列，长度为2的所有子序列……长度为n的所有子序列。有点像二叉树的层序遍历。
+     *
+     * @param seq
+     * @return
+     */
+    public int checkDNASequence(String seq) {
+        HashSet<String> hashSet = new HashSet<>();
+        for (int i = 1; i < seq.length(); i++) {
+            for (int j = 0; j < seq.length() - i; j++) {
+                hashSet.add(seq.substring(j, i + j));
+            }
+            if (hashSet.size() < (int) Math.pow(4, i)) {
+                return i;
+            }
+            hashSet.clear();
+        }
+        return 1;
+    }
+
+
+    /**
+     * 空中旅行 iQiYi
+     *
+     * @return
+     */
+    public int getMaxFlyingTimes(int[] arr, int fuel) {
+        int count = 0;
+        int sum = 0;
+        for (int i = 0; i < arr.length; i++) {
+            sum += arr[i];
+            if (sum <= fuel) {
+                count++;
+            } else {
+                break;
+            }
+        }
+        return count;
+    }
+
+    /**
+     * 回文素数 iQiYi
+     *
+     * @return
+     */
+    public boolean countPalindromePrime(int n) {
+        if (isPalidrome(n) && isPrime(n)) {
+            return true;
+        }
+        return false;
+    }
+
+    public static boolean isPrime(int n) {
+        if (n == 1) {
+            return false;
+        }
+        int i = (int) Math.sqrt(n);
+        while (i > 1) {
+            if (n % i == 0) {
+                return false;
+            }
+            i--;
+        }
+        return true;
+    }
+
+
+    public static boolean isPalidrome(int n) {
+        int m = 0;
+        while (m < n) {
+            m = m * 10 + n % 10;
+            n /= 10;
+        }
+        return m == n || m / 10 == n;
+    }
+
+
     public static void main(String[] args) {
 
 //        long[] nums = {10, 15, -9, 6, 80, -60};
@@ -234,7 +316,10 @@ public class CompanyOne {
 //        handler.bigIntMuti();
 //        handler.multiply("2345", "6789");
 
-        handler.removeRepitiveCharacter("banana");
+//        handler.removeRepitiveCharacter("banana");
+
+//        handler.isPalidrome(12321);
+        handler.isPrime(666);
 
     }
 
