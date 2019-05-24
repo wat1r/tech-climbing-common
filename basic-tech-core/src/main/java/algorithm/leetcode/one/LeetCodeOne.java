@@ -1795,6 +1795,91 @@ public class LeetCodeOne {
         return nums[l];
     }
 
+
+    /**
+     * 剑指offer29，超过数据一半的数
+     *
+     * @param arr
+     * @return
+     */
+    public int moreThanHalfNum(int[] arr) {
+        if (arr == null || arr.length == 0) {
+            return 0;
+        }
+        int candidate = arr[0];
+        int nTimes = 1;
+        for (int i = 1; i < arr.length; i++) {
+            if (nTimes == 0) {
+                candidate = arr[i];
+                nTimes = 1;
+            } else {
+                if (candidate == arr[i]) {
+                    nTimes++;
+                } else {
+                    nTimes--;
+                }
+            }
+        }
+        int index = 0;
+        for (int j = 0; j < arr.length; j++) {
+            if (arr[j] == candidate) {
+                index++;
+            }
+        }
+        if (index * 2 > arr.length) {
+            return candidate;
+        } else {
+            return 0;
+        }
+    }
+
+
+    /**
+     * 剑指offer29，超过数据一半的数
+     */
+    public int moreThanHalfNum2nd(int[] arr) {
+        if (arr == null || arr.length == 0) {
+            return 0;
+        }
+        HashMap<Integer, Integer> hashMap = new HashMap<>();
+        for (int i = 0; i < arr.length; i++) {
+            hashMap.put(arr[i], hashMap.getOrDefault(arr[i], 0) + 1);
+            if (hashMap.get(arr[i]) > arr.length / 2) {
+                return arr[i];
+            }
+        }
+        return 0;
+    }
+
+
+    /**
+     * 剑指offer29附加题，等于数据一半的数
+     *
+     * @param arr
+     * @return
+     */
+    public int equalHalfNum(int[] arr) {
+        if (arr == null || arr.length == 0) {
+            return 0;
+        }
+        int candidateIndex = 0;
+        int nTimes = 1;
+        for (int i = 1; i < arr.length; i++) {
+            if (nTimes == 0) {
+                candidateIndex = i;
+                nTimes = 1;
+            } else {
+                if (arr[candidateIndex] == arr[i]) {
+                    nTimes++;
+                } else {
+                    nTimes--;
+                }
+            }
+        }
+        return arr[candidateIndex + 1];
+    }
+
+
     public static void main(String[] args) {
 //        int[] nums = {4, 1, 2, 1, 2};
 //        System.out.println(handler.singleNumber(nums));
@@ -1905,8 +1990,12 @@ public class LeetCodeOne {
 //        System.out.println(JSON.toJSON(handler.maxSlidingWindow(nums, k)));
 
 //        handler.findMin(new int[]{3, 4, 5, 1, 2});
-        handler.singleNonDuplicate(new int[]{1, 1, 2, 3, 3, 4, 4, 8, 8});
+//        handler.singleNonDuplicate(new int[]{1, 1, 2, 3, 3, 4, 4, 8, 8});
 
+        int[] arr = {1, 2, 3, 2, 2, 2, 5, 4, 2};
+//        handler.moreThanHalfNum(arr);
+//        handler.moreThanHalfNum2nd(arr);
+        handler.equalHalfNum(new int[]{0, 2, 1, 1, 3, 1});
     }
 
 
