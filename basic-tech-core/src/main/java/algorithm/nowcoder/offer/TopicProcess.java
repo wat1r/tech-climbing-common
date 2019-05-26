@@ -9,12 +9,7 @@ import java.util.*;
  */
 public class TopicProcess {
 
-    private TopicProcess handler = new TopicProcess();
-
-
-    public static void main(String[] args) {
-
-    }
+    private static TopicProcess handler = new TopicProcess();
 
 
     /**
@@ -221,7 +216,8 @@ public class TopicProcess {
 
 
     /**
-     *举一反三：寻找和为定值的两个数的下标 编程之法2.2
+     * 举一反三：寻找和为定值的两个数的下标 编程之法2.2
+     *
      * @param arr
      * @param sum
      * @return
@@ -240,5 +236,56 @@ public class TopicProcess {
         return sumIndex;
     }
 
+
+    /**
+     * 剑指offer31， 编程之法2.4 利用数组的特性
+     *
+     * @param arr
+     * @return
+     */
+    public int findGreatestSumOfSubArray(int[] arr) {
+        if (arr == null || arr.length <= 0) {
+            return 0;
+        }
+        int cur = arr[0], res = cur;
+        for (int i = 1; i < arr.length; i++) {
+            cur += arr[i];
+            res = Math.max(res, cur);
+            cur = cur > 0 ? cur : 0;
+        }
+        return res;
+    }
+
+
+    /**
+     * 剑指offer31， 编程之法2.4 DP
+     *
+     * @param arr
+     * @return
+     */
+    public int findGreatestSumOfSubArray2nd(int[] arr) {
+        if (arr == null || arr.length <= 0) {
+            return 0;
+        }
+        int curSum = 0;
+        int maxSum = arr[0];
+        for (int i = 0; i < arr.length; i++) {
+            if (curSum >= 0) {
+                curSum += arr[i];
+            } else {
+                curSum = arr[i];
+            }
+            if (curSum > maxSum) {
+                maxSum = curSum;
+            }
+        }
+        return maxSum;
+    }
+
+    public static void main(String[] args) {
+
+        handler.findGreatestSumOfSubArray(new int[]{1, -2, 3, 10, -4, 7, 2, -5});
+
+    }
 
 }
