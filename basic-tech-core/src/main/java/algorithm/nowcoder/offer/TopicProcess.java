@@ -282,6 +282,31 @@ public class TopicProcess {
         return maxSum;
     }
 
+
+    /**
+     * 数组中子数组的最大累乘积P373，编程之法5.1
+     *
+     * @param arr
+     * @return
+     */
+    public double maxProductSubString(double[] arr) {
+        if (arr == null || arr.length == 0) {
+            return 0.0;
+        }
+        double max = arr[0];
+        double min = arr[0];
+        double res = arr[0];
+        for (int i = 1; i < arr.length; i++) {
+            double maxEnd = max * arr[i];
+            double minEnd = min * arr[i];
+            max = Math.max(Math.max(maxEnd, minEnd), arr[i]);
+            min = Math.min(Math.min(maxEnd, minEnd), arr[i]);
+            res = Math.max(res, max);
+        }
+        return res;
+    }
+
+
     public static void main(String[] args) {
 
         handler.findGreatestSumOfSubArray(new int[]{1, -2, 3, 10, -4, 7, 2, -5});
