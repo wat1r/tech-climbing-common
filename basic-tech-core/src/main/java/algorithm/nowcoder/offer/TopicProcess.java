@@ -307,9 +307,33 @@ public class TopicProcess {
     }
 
 
+    /**
+     * 3. 无重复字符的最长子串 双指针
+     *
+     * @param s
+     * @return
+     */
+    public int lengthOfLongestSubstring(String s) {
+        Set<Character> set = new HashSet<>();
+        int slow = 0, fast = 0, len = s.length();
+        int res = 0;
+        while (slow < len && fast < len) {
+            //快指针不在set说明，fast所在的下标到slow所在的值之间没有重复值
+            if (!set.contains(s.charAt(fast))) {
+                set.add(s.charAt(fast++));
+                res = Math.max(res, fast - slow);
+            } else {
+                set.remove(s.charAt(slow++));
+            }
+        }
+        return res;
+    }
+
+
     public static void main(String[] args) {
 
-        handler.findGreatestSumOfSubArray(new int[]{1, -2, 3, 10, -4, 7, 2, -5});
+//        handler.findGreatestSumOfSubArray(new int[]{1, -2, 3, 10, -4, 7, 2, -5});
+        handler.lengthOfLongestSubstring("abcabcbb");
 
     }
 
