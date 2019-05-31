@@ -330,10 +330,124 @@ public class TopicProcess {
     }
 
 
+    /**
+     * 编程之法1.2 方法3 素数相乘
+     *
+     * @param src
+     * @param target
+     * @return
+     */
+    private boolean stringContains(String src, String target) {
+        int[] primes = {2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97, 101};
+        int multi = 1;
+        for (int i = 0; i < src.length(); i++) {
+            int x = primes[src.charAt(i) - 'A'];
+            if (multi % x != 0) {
+                multi *= x;
+            }
+        }
+        for (int j = 0; j < target.length(); j++) {
+            int x = primes[target.charAt(j) - 'A'];
+            if (multi % x != 0) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+
+    /**
+     * 编程之法1.2 方法4:HashTable
+     *
+     * @param src
+     * @param target
+     * @return
+     */
+    private boolean stringContains2nd(String src, String target) {
+        HashMap<Character, Integer> hashMap = new HashMap<>();
+        for (int i = 0; i < src.length(); i++) {
+            hashMap.put(src.charAt(i), hashMap.getOrDefault(src.charAt(i), 0) + 1);
+        }
+        for (int j = 0; j < target.length(); j++) {
+            if (hashMap.get(target.charAt(j)) == null) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+
+    /**
+     * 程之法1.2 方法5:位运算
+     *
+     * @param a
+     * @param b
+     * @return
+     */
+    public static boolean stringContain3rd(String a, String b) {
+        int hash = 0;
+        for (int i = 0; i < a.length(); ++i) {
+            int temp = 1 << (a.charAt(i) - 'A');
+            hash |= temp;
+        }
+        for (int i = 0; i < b.length(); ++i) {
+            if ((hash & (1 << (b.charAt(i) - 'A'))) == 0) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+
+    /**
+     * 242. 有效的字母异位词
+     *
+     * @param s
+     * @param t
+     * @return
+     */
+    public boolean isAnagram(String s, String t) {
+        if (s == null || t == null || s.length() != t.length()) {
+            return false;
+        }
+        int[] comprators = new int[26];
+        for (int i = 0; i < s.length(); i++) {
+            comprators[s.charAt(i) - 'a']++;
+            comprators[t.charAt(i) - 'a']--;
+        }
+        for (int i = 0; i < comprators.length; i++) {
+            if (comprators[i] != 0) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+
+    public List<List<String>> groupAnagrams(String[] strs) {
+        List<List<String>> resultList = new ArrayList<>();
+        if (strs == null || strs.length == 0) {
+            return resultList;
+        }
+        Map<String, List<String>> hashmap = new HashMap<>();
+        for (String str : strs) {
+            char[] chas = str.toCharArray();
+            Arrays.sort(chas);
+            String temp = String.valueOf(chas);
+            hashmap.putIfAbsent(temp, new ArrayList<>());
+            hashmap.get(temp).add(str);
+        }
+        resultList =new ArrayList<>(hashmap.values());
+        return resultList;
+    }
+
     public static void main(String[] args) {
 
 //        handler.findGreatestSumOfSubArray(new int[]{1, -2, 3, 10, -4, 7, 2, -5});
-        handler.lengthOfLongestSubstring("abcabcbb");
+//        handler.lengthOfLongestSubstring("abcabcbb");
+//        handler.stringContains("ABCAD", "ABE");
+//        handler.stringContains2nd("ABCAD", "ABE");
+        handler.stringContain3rd("ABCAD", "ABE");
 
     }
 
