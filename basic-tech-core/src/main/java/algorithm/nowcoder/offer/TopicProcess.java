@@ -1,6 +1,7 @@
 package algorithm.nowcoder.offer;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Created by FrankCooper
@@ -437,9 +438,75 @@ public class TopicProcess {
             hashmap.putIfAbsent(temp, new ArrayList<>());
             hashmap.get(temp).add(str);
         }
-        resultList =new ArrayList<>(hashmap.values());
+        resultList = new ArrayList<>(hashmap.values());
         return resultList;
     }
+
+
+    /**
+     * 46. 全排列 Medium
+     *
+     * @param nums
+     * @return
+     */
+    public List<List<Integer>> permute(int[] nums) {
+        List<List<Integer>> output = new ArrayList<>();
+        List<Integer> seed = new ArrayList<>();
+        for (int num : nums) {
+            seed.add(num);
+        }
+        int n = nums.length;
+
+        permuteBackTracing(seed, output, n, 0);
+
+        return output;
+    }
+
+    private void permuteBackTracing(List<Integer> seed, List<List<Integer>> output, int n, int index) {
+        if (index == n) {
+            output.add(new ArrayList<>(seed));
+        }
+        for (int i = index; i < n; i++) {
+            Collections.swap(seed, index, i);
+            permuteBackTracing(seed, output, n, index + 1);
+            Collections.swap(seed, index, i);
+        }
+    }
+
+
+
+    private List<String> calcAllPermutation(String str) {
+        List<String> output = new ArrayList<>();
+        char[] chas = str.toCharArray();
+        int n = chas.length;
+        calcAllPermutationBackTracing(chas, output, n, 0);
+        return output;
+    }
+
+    /**
+     *
+     * @param chas seed char
+     * @param output 输出的收集List
+     * @param n 总的个数
+     * @param level 层数
+     */
+    private void calcAllPermutationBackTracing(char[] chas, List<String> output, int n, int level) {
+        if (level == n) {
+            output.add(String.valueOf(chas));
+        }
+        for (int i = level; i < n; i++) {
+            swap(chas, level, i);
+            calcAllPermutationBackTracing(chas, output, n, level + 1);
+            swap(chas, level, i);
+        }
+    }
+
+    private void swap(char[] chas, int i, int j) {
+        char temp = chas[i];
+        chas[i] = chas[j];
+        chas[j] = temp;
+    }
+
 
     public static void main(String[] args) {
 
@@ -447,7 +514,12 @@ public class TopicProcess {
 //        handler.lengthOfLongestSubstring("abcabcbb");
 //        handler.stringContains("ABCAD", "ABE");
 //        handler.stringContains2nd("ABCAD", "ABE");
-        handler.stringContain3rd("ABCAD", "ABE");
+//        handler.stringContain3rd("ABCAD", "ABE");
+//        System.out.println(handler.permute(new int[]{1, 2, 3}));
+        System.out.println(handler.calcAllPermutation("abc"));
+
+
+        System.out.println("end");
 
     }
 
