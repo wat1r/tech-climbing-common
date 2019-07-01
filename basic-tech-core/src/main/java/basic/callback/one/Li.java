@@ -1,4 +1,4 @@
-package basic.callback;
+package basic.callback.one;
 
 /**
  * Created by FrankCooper

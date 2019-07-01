@@ -1,10 +1,8 @@
 package algorithm.leetcode.explore.one;
 
-import basic.callback.Li;
 import com.alibaba.fastjson.JSON;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * Created by FrankCooper

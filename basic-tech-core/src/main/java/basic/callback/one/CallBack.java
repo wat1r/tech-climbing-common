@@ -1,4 +1,4 @@
-package basic.callback;
+package basic.callback.one;
 
 /**
  * Created by FrankCooper
@@ -11,5 +11,5 @@ public interface CallBack {
      *
      * @param result 是答案
      */
-    public void solve(String result);
+     void solve(String result);
 }
