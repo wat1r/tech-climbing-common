@@ -1,5 +1,7 @@
 package algorithm.leetcode.two;
 
+import basic.callback.one.Li;
+
 import java.util.*;
 
 /**
@@ -1781,7 +1783,6 @@ public class LeetCodeClassification {
     }
 
 
-
     /**
      * 309. 最佳买卖股票时机含冷冻期
      *
@@ -1795,6 +1796,106 @@ public class LeetCodeClassification {
 
     /*---------------动态规划结束--------------*/
     /*---------------动态规划结束--------------*/
+
+
+    /**
+     * 编程之法1.5 举一反三 链表回文
+     *
+     * @param head
+     * @return
+     */
+    public boolean isPalindrome(ListNode head) {
+        if (head == null || head.next == null) {
+            return true;
+        }
+        ListNode slow = head, fast = head;
+        while (fast.next != null && fast.next.next != null) {
+            slow = slow.next;
+            fast = fast.next.next;
+        }
+        ListNode mid = slow.next;
+        slow.next = null;
+        ListNode right = reverseList(mid);
+        ListNode left = head;
+        while (left != null && right != null) {
+            if (left.val != right.val) {
+                return false;
+            }
+            left = left.next;
+            right = right.next;
+        }
+        return true;
+    }
+
+
+    /**
+     * 返回翻转后的链表的最开始的node
+     *
+     * @param head
+     * @return
+     */
+    private ListNode reverseList(ListNode head) {
+        ListNode current = head, next, pre = null;
+        while (current != null) {
+            // 记录后继结点
+            next = current.next;
+            // 后继指针逆向
+            current.next = pre;
+            // 记录当前结点
+            pre = current;
+            // 下一结点成为当前结点
+            current = next;
+        }
+        return pre;
+    }
+
+
+    /*
+    栈回文 编程之法1.5 举一反三
+     */
+    public boolean isPalindrome(String str) {
+        if (str == null) {
+            return true;
+        }
+        char[] chas = str.toCharArray();
+        Stack<Character> stack = new Stack<>();
+        for (int i = 0; i < chas.length; i++) {
+            stack.push(chas[i]);
+        }
+        for (int i = 0; i < chas.length; i++) {
+            if (chas[i] != stack.pop()) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+
+    /**
+     * 409. 最长回文串 Easy [LeetCode]
+     *
+     * @param s
+     * @return
+     */
+    public int longestPalindrome(String s) {
+
+        char[] chas = s.toCharArray();
+        int[] count = new int[128];
+        for (int i = 0; i < chas.length; i++) {
+            count[chas[i]]++;
+        }
+        int result = 0;
+        for (int i = 0; i < count.length; i++) {
+            //当count中的元素是大于等于2个时，result等于其小于count[i]的最大的偶数
+            result += count[i] / 2 * 2;
+            //当count[i]为奇数时，且result的数量为偶数时，这个数可以放在中间组成回文的middle
+            if (count[i] % 2 == 1 && result % 2 == 0) {
+                result++;
+            }
+        }
+        return result;
+
+    }
 
 
     public static void main(String[] args) {
@@ -1871,7 +1972,8 @@ public class LeetCodeClassification {
 //        handler.getPermutation(4, 15);
 //        handler.topKFrequent(new String[]{"i", "love", "leetcode", "i", "love", "coding"}, 2);
 //        handler.getSkyline(new int[][]{{2, 9, 10}, {3, 7, 15}, {5, 12, 12}, {15, 20, 10}, {19, 24, 8}});
-        handler.findKthLargest(new int[]{3, 2, 1, 5, 6, 4}, 2);
+//        handler.findKthLargest(new int[]{3, 2, 1, 5, 6, 4}, 2);
+        handler.isPalindrome("abcdcba");
 
 
     }
@@ -1892,6 +1994,16 @@ class TreeNode {
     TreeNode right;
 
     TreeNode(int x) {
+        val = x;
+    }
+}
+
+
+class ListNode {
+    int val;
+    ListNode next;
+
+    ListNode(int x) {
         val = x;
     }
 }
