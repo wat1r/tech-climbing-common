@@ -1894,7 +1894,114 @@ public class LeetCodeClassification {
             }
         }
         return result;
+    }
 
+
+    /**
+     * 409. 最长回文串 Easy [LeetCode]
+     *
+     * @param s
+     * @return
+     */
+    public int longestPalindrome2nd(String s) {
+        char[] chas = s.toCharArray();
+        Map<Character, Integer> map = new HashMap<>();
+        for (int i = 0; i < chas.length; i++) {
+            map.put(chas[i], map.getOrDefault(chas[i], 0) + 1);
+        }
+        int result = 0;
+        for (int cnt : map.values()) {
+            result += cnt / 2 * 2;
+            if (cnt % 2 == 1 && result % 2 == 0) {
+                result++;
+            }
+        }
+        return result;
+    }
+
+
+    public int countSubstrings(String s) {
+        if (s == null || s.length() == 0) {
+            return 0;
+        }
+        int result = 0;
+        boolean[][] dp = buildDPForCountSubstrings(s);
+        for (int j = 0; j < dp.length; j++) {
+            for (int i = 0; i <= j; i++) {
+                if (dp[i][j]) {
+                    result++;
+                }
+            }
+        }
+        return result;
+    }
+
+
+    private boolean[][] buildDPForCountSubstrings(String s) {
+        int n = s.length();
+        boolean[][] dp = new boolean[n][n];
+        //注意i 和j 的边界，只计算上半部分，j - i <= 1是为了处理边界，dp[i + 1][j - 1]是dp[i][j]砍头去尾后的是否是回文
+        for (int j = 0; j < n; j++) {
+            for (int i = 0; i <= j; i++) {
+                if (i == j) {
+                    dp[i][j] = true;
+                } else {
+                    dp[i][j] = s.charAt(i) == s.charAt(j) && (j - i <= 1 || dp[i + 1][j - 1]);
+                }
+            }
+        }
+        return dp;
+    }
+
+
+    /**
+     * @param s
+     * @return
+     */
+    public int countSubstrings2nd(String s) {
+        int result = 0;
+        for (int i = 0; i < s.length(); i++) {
+            //以当前点i位置，向两边扩展,以i i+1位置向两边扩展
+            result += countSegment(s, i, i);
+            result += countSegment(s, i, i + 1);
+        }
+        return result;
+    }
+
+
+    public int countSegment(String s, int start, int end) {
+        int count = 0;
+        //start往左边跑，end往右边跑，注意边界
+        while (start >= 0 && end < s.length() && s.charAt(start--) == s.charAt(end++)) {
+            count++;
+        }
+        return count;
+    }
+
+
+    public int longestPalindromeSubseq(String s) {
+        if (s == null || s.length() == 0) {
+            return 0;
+        }
+        int n = s.length();
+        char[] chas = s.toCharArray();
+        int[][] dp = new int[n][n];
+        for (int i = 0; i < n; i++) {
+            dp[i][i] = 1;
+        }
+        for (int i = 0; i < n - 1; i++) {
+            dp[i][i + 1] = chas[i] == chas[i + 1] ? 2 : 1;
+        }
+        for (int len = 3; len <= n; len++) {
+            for (int i = 0; i <= n - len; i++) {
+                int j = len + i - 1;
+                dp[i][j] = Math.max(dp[i][j - 1], dp[i + 1][j]);
+                if (chas[i] == chas[j]) {
+                    dp[i][j] = Math.max(dp[i][j], dp[i + 1][j - 1] + 2);
+                }
+            }
+        }
+        return dp[0][n - 1];
     }
 
 
@@ -1973,7 +2080,9 @@ public class LeetCodeClassification {
 //        handler.topKFrequent(new String[]{"i", "love", "leetcode", "i", "love", "coding"}, 2);
 //        handler.getSkyline(new int[][]{{2, 9, 10}, {3, 7, 15}, {5, 12, 12}, {15, 20, 10}, {19, 24, 8}});
 //        handler.findKthLargest(new int[]{3, 2, 1, 5, 6, 4}, 2);
-        handler.isPalindrome("abcdcba");
+//        handler.isPalindrome("abcdcba");
+//        handler.buildDPForCountSubstrings("abcba");
+        handler.countSubstrings2nd("abc");
 
 
     }
