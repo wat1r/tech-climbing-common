@@ -2004,6 +2004,23 @@ public class LeetCodeClassification {
         return dp[0][n - 1];
     }
 
+    public int longestPalindromeSubseq2nd(String s) {
+        char[] chas = s.toCharArray();
+        int n = chas.length;
+        int[][] dp = new int[n][n];
+        for (int i = n - 1; i >= 0; i--) {
+            dp[i][i] = 1;
+            for (int j = i + 1; j < n; j++) {
+                if (chas[i] == chas[j]) {
+                    dp[i][j] = dp[i + 1][j - 1] + 2;
+                } else {
+                    dp[i][j] = Math.max(dp[i + 1][j], dp[i][j - 1]);
+                }
+            }
+        }
+        return dp[0][n - 1];
+    }
+
 
     public static void main(String[] args) {
 //        int[] g = new int[]{1, 2, 3};
@@ -2082,7 +2099,8 @@ public class LeetCodeClassification {
 //        handler.findKthLargest(new int[]{3, 2, 1, 5, 6, 4}, 2);
 //        handler.isPalindrome("abcdcba");
 //        handler.buildDPForCountSubstrings("abcba");
-        handler.countSubstrings2nd("abc");
+//        handler.countSubstrings2nd("abc");
+        handler.longestPalindromeSubseq2nd("bbbab");
 
 
     }
