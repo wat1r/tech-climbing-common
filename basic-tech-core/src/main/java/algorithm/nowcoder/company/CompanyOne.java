@@ -316,13 +316,36 @@ public class CompanyOne {
      */
     public int countInterval(int[] arr) {
         int count = 1;
-        for (int i = 0; i < arr.length-1; i++) {
+        for (int i = 0; i < arr.length - 1; i++) {
             if (arr[i] + 1 == arr[i + 1]) {
                 continue;
             }
             count++;
         }
         return count;
+    }
+
+
+    /**
+     * 万万没想到之聪明的编辑 bytedance
+     * @param str
+     * @return
+     */
+    public String smartEditor(String str) {
+        StringBuffer sb = new StringBuffer(str);
+        int n = sb.length();
+        for (int i = 0; i < n; i++) {
+            if (n >= 3 && i + 2 < n && sb.charAt(i) == sb.charAt(i + 1) && sb.charAt(i + 1) == sb.charAt(i + 2)) {
+                sb.deleteCharAt(i + 2);
+                i--;
+                n--;
+            } else if (n >= 4 && i + 3 < n && sb.charAt(i) == sb.charAt(i + 1) && sb.charAt(i + 2) == sb.charAt(i + 3)) {
+                sb.deleteCharAt(i + 3);
+                i--;
+                n--;
+            }
+        }
+        return sb.toString();
     }
 
 
@@ -338,6 +361,10 @@ public class CompanyOne {
 
 //        handler.isPalidrome(12321);
 //        handler.isPrime(666);
+        String str = "helloo";
+        handler.smartEditor(str);
+//                wooooooow
+
 
     }
 

@@ -2022,6 +2022,77 @@ public class LeetCodeClassification {
     }
 
 
+    /**
+     * 5. 最长回文子串 LeetCode Medium
+     *
+     * @param s
+     * @return
+     */
+    public String longestPalindromeII(String s) {
+        if (s == null || s.length() == 0) {
+            return "";
+        }
+        int n = s.length();
+        int start = 0, end = 0;
+        for (int i = 0; i < n; i++) {
+            //获取到当前点i 的奇回文和偶回文的最大长度
+            int len1 = expandBySeed(s, i, i);
+            int len2 = expandBySeed(s, i, i + 1);
+            //取最大长度，然后扩展
+            int len = Math.max(len1, len2);
+            if (len > (end - start)) {
+                start = i - (len - 1) / 2;//"bb"的这种情况下货报错，len-1-->len
+                end = i + len / 2;
+            }
+        }
+        return s.substring(start, end + 1);
+    }
+
+
+    /**
+     * 由中心往两边扩散，返回满足最大回文的长度
+     *
+     * @param s
+     * @param start
+     * @param end
+     * @return
+     */
+    private int expandBySeed(String s, int start, int end) {
+        int n = s.length();
+        while (start >= 0 && end < n && s.charAt(start) == s.charAt(end)) {
+            start--;
+            end++;
+        }
+        return end - start - 1;
+    }
+
+
+    /**
+     * 575. 分糖果 LeetCode [Easy]
+     *
+     * @param candies
+     * @return
+     */
+    public int distributeCandies(int[] candies) {
+        HashMap<Integer, Integer> map = new HashMap<>();
+        int n = candies.length;
+        int count = 0;
+        for (int candy : candies) {
+            if (!map.containsKey(candy)) {
+                map.put(candy, 1);
+                count++;
+            } else {
+                map.put(candy, map.get(candy) + 1);
+            }
+        }
+        if (count > n / 2) {
+            return n / 2;
+        } else {
+            return count;
+        }
+    }
+
+
     public static void main(String[] args) {
 //        int[] g = new int[]{1, 2, 3};
 //        int[] s = new int[]{1, 1};
@@ -2100,8 +2171,9 @@ public class LeetCodeClassification {
 //        handler.isPalindrome("abcdcba");
 //        handler.buildDPForCountSubstrings("abcba");
 //        handler.countSubstrings2nd("abc");
-        handler.longestPalindromeSubseq2nd("bbbab");
-
+//        handler.longestPalindromeSubseq2nd("bbbab");
+//        handler.longestPalindromeII("bb");
+        handler.distributeCandies(new int[]{1, 1, 2, 2, 3, 3});
 
     }
 }
