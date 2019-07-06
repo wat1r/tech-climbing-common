@@ -1,5 +1,8 @@
 package algorithm.nowcoder.company;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.*;
 
 /**
@@ -328,6 +331,7 @@ public class CompanyOne {
 
     /**
      * 万万没想到之聪明的编辑 bytedance
+     *
      * @param str
      * @return
      */
@@ -349,7 +353,139 @@ public class CompanyOne {
     }
 
 
-    public static void main(String[] args) {
+    /**
+     * bytedance 找零
+     *
+     * @param n
+     * @return
+     */
+    public int getChange(int n) {
+        int target = 1024 - n;
+        int[] coins = {64, 16, 4, 1};
+        int result = 0;
+        for (int c : coins) {
+            result += target / c;
+            target %= c;
+        }
+        return result;
+    }
+
+
+    /**
+     * 鸡鸭分类问题，招银
+     */
+    public void arange() {
+        Scanner scanner = new Scanner(System.in);
+        String input = "";
+        int result = 0;
+        input = scanner.nextLine();
+        int n = 0;
+        for (int i = 0; i < input.length(); i++) {
+            if (input.charAt(i) == 'C') {
+                result += i - n;
+                n++;
+            }
+        }
+        System.out.println(result);
+    }
+
+    /**
+     * 比特币最佳买卖时机 招银 greedy
+     *
+     * @param prices
+     * @return
+     */
+    public int maxBitCoinProfit(int[] prices) {
+        int minPrice = Integer.MAX_VALUE;
+        int maxProfit = 0;
+        for (int i = 0; i < prices.length; i++) {
+            minPrice = Math.min(prices[i], minPrice);
+            maxProfit = Math.max(maxProfit, prices[i] - minPrice);
+        }
+        return maxProfit;
+    }
+
+
+    /**
+     * 爱吃喵粮的小招喵 招银
+     *
+     * @throws IOException
+     */
+    public void minHourForCat() throws IOException {
+        BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
+        String[] input = bf.readLine().split(" ");
+        int hour = Integer.parseInt(bf.readLine());
+        int[] arr = new int[input.length];
+        for (int i = 0; i < input.length; i++) {
+            arr[i] = Integer.valueOf(input[i]);
+        }
+        int k = 1;
+        while (true) {
+            int result = 0;
+            for (int i = 0; i < arr.length; i++) {
+                //k不断叠加
+                if (arr[i] % k == 0) {
+                    result += arr[i] / k;
+                } else {
+                    result += arr[i] / k + 1;
+                }
+                if (result > hour) {
+                    k++;
+                    break;
+                }
+            }
+            if (result <= hour) {
+                System.out.println(k);
+                break;
+            }
+        }
+
+    }
+
+
+    /**
+     * 跳格子游戏 招银 [DP]
+     *
+     * @param n
+     * @return
+     */
+    public int jumpCell(int n) {
+        if (n < 0) {
+            return 0;
+        }
+        int[] dp = new int[n + 1];
+        dp[0] = 1;
+        dp[1] = 1;
+        for (int i = 2; i < dp.length; i++) {
+            dp[i] = dp[i - 1] + dp[i - 2];
+        }
+        return dp[n];
+    }
+
+
+    /**
+     * 糖果分配 招银 greedy
+     * @param g 胃口值 g
+     * @param s 糖果的尺寸
+     * @return
+     */
+    public int allocateCandies(int[] g, int[] s) {
+        Arrays.sort(g);
+        Arrays.sort(s);
+        int res = 0;
+        for (int i = 0, j = 0; i < g.length && j < s.length; ) {
+            //当糖果的尺寸>=胃口值 胃口index (i) 和 尺寸index(j) 都递增，否则只是尺寸不满足了，改糖果被跳过
+            if (s[j] >= g[i]) {
+                res++;
+                i++;
+            }
+            j++;
+        }
+        return res;
+    }
+
+
+    public static void main(String[] args) throws IOException {
 
 //        long[] nums = {10, 15, -9, 6, 80, -60};
 //        handler.getMaxMuti(nums, 6);
@@ -361,9 +497,12 @@ public class CompanyOne {
 
 //        handler.isPalidrome(12321);
 //        handler.isPrime(666);
-        String str = "helloo";
-        handler.smartEditor(str);
+//        String str = "helloo";
+//        handler.smartEditor(str);
 //                wooooooow
+//        handler.getChange(200);
+//        handler.arange();
+        handler.minHourForCat();
 
 
     }

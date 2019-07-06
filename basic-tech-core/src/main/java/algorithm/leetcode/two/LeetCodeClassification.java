@@ -2,6 +2,9 @@ package algorithm.leetcode.two;
 
 import basic.callback.one.Li;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.*;
 
 /**
@@ -2074,26 +2077,149 @@ public class LeetCodeClassification {
      * @return
      */
     public int distributeCandies(int[] candies) {
-        HashMap<Integer, Integer> map = new HashMap<>();
-        int n = candies.length;
+        HashSet<Integer> set = new HashSet<>();
         int count = 0;
         for (int candy : candies) {
-            if (!map.containsKey(candy)) {
-                map.put(candy, 1);
-                count++;
-            } else {
-                map.put(candy, map.get(candy) + 1);
+            set.add(candy);
+            if (set.size() > candies.length / 2) {
+                return candies.length / 2;
             }
         }
-        if (count > n / 2) {
-            return n / 2;
-        } else {
-            return count;
+        return set.size();
+    }
+
+
+    /**
+     * 1103. 分糖果 II LeetCode [Easy]
+     *
+     * @param candies
+     * @param num_people
+     * @return
+     */
+    public int[] distributeCandies(int candies, int num_people) {
+        int[] results = new int[num_people];
+        int temp = 1;
+        while (candies > 0) {
+            for (int i = 0; i < num_people; i++) {
+                if (candies <= 0) {
+                    break;
+                }
+                results[i] += temp < candies ? temp : candies;
+                candies -= temp;
+                temp++;
+            }
+        }
+        return results;
+    }
+
+
+    /**
+     * 竞赛143
+     *
+     * @param label
+     * @return
+     */
+    public List<Integer> pathInZigZagTree(int label) {
+        String binary = Integer.toBinaryString(label);
+        int n = binary.length();
+        int count = n - 1;
+        int[] arr = new int[count + 1];
+        arr[count] = label;
+        for (int i = n - 2; i >= 0; i--) {
+            int level = 1 << (count - 1);
+            arr[i] = 3 * level - label / 2 - 1;
+            label = arr[i];
+            count--;
+        }
+        ArrayList<Integer> resList = new ArrayList<>();
+        for (int a : arr) {
+            resList.add(a);
+        }
+        return resList;
+    }
+
+
+    /**
+     * 740. 零钱兑换 2 LintCode [Medium]
+     *
+     * @param amount
+     * @param coins
+     * @return
+     */
+    public int change(int amount, int[] coins) {
+        // write your code here
+        if (coins == null || coins.length == 0 || amount < 0) {
+            return 0;
+        }
+        int[][] dp = new int[coins.length][amount + 1];
+        for (int i = 0; i < coins.length; i++) {
+            dp[i][0] = 1;
+        }
+        for (int j = 1; coins[0] * j <= amount; j++) {
+            dp[0][coins[0] * j] = 1;
+        }
+        for (int i = 1; i < coins.length; i++) {
+            for (int j = 1; j <= amount; j++) {
+                dp[i][j] = dp[i - 1][j];
+                dp[i][j] += j - coins[i] >= 0 ? dp[i][j - coins[i]] : 0;
+            }
+        }
+        return dp[coins.length - 1][amount];
+    }
+
+
+    /**
+     * 特征提取 bytedance
+     */
+    public void featureExtraction() {
+        Scanner sc = new Scanner(System.in);
+        int n = Integer.parseInt(sc.nextLine());
+        for (int k = 0; k < n; k++) {
+            int m = Integer.valueOf(sc.nextLine());
+            HashMap<String, Integer> rootMap = new HashMap<>();
+            int res = 0;
+            for (int i = 0; i < m; i++) {
+                String[] arr = sc.nextLine().split(" ");
+                HashMap<String, Integer> map = new HashMap<>();
+                for (int j = 1; j < arr.length; j += 2) {
+                    String key = arr[j] + "," + arr[j + 1];
+                    int count = 1;
+                    if (rootMap.containsKey(key)) {
+                        count = rootMap.get(key) + 1;
+                    }
+                    if (count > res) {
+                        res = count;
+                    }
+                    map.put(key, count);
+                }
+                rootMap = map;
+            }
+            System.out.println(res);
         }
     }
 
 
-    public static void main(String[] args) {
+    /**
+     * 机器人跳跃 bytedance 没懂
+     * @throws IOException
+     */
+    public void robotJump() throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        br.readLine();
+        String str[] = br.readLine().split(" ");
+        int energy = 0;
+        for (int i = str.length - 1; i >= 0; i--) {
+            if ((Integer.parseInt(str[i]) + energy) % 2 == 0) {
+                energy = (Integer.parseInt(str[i]) + energy) / 2;
+            } else {
+                energy = (Integer.parseInt(str[i]) + energy) / 2 + 1;
+            }
+        }
+        System.out.println(energy);
+    }
+
+
+    public static void main(String[] args) throws IOException {
 //        int[] g = new int[]{1, 2, 3};
 //        int[] s = new int[]{1, 1};
 //        System.out.println(handler.findContentChildren(g, s));
@@ -2173,9 +2299,17 @@ public class LeetCodeClassification {
 //        handler.countSubstrings2nd("abc");
 //        handler.longestPalindromeSubseq2nd("bbbab");
 //        handler.longestPalindromeII("bb");
-        handler.distributeCandies(new int[]{1, 1, 2, 2, 3, 3});
+//        handler.distributeCandies(new int[]{1, 1, 2, 2, 3, 3});
+//        int candies = 10, num_people = 3;
+//        handler.distributeCandies(candies, num_people);
+//        handler.pathInZigZagTree(26);
+//        handler.featureExtraction();
+        handler.robotJump();
+
 
     }
+
+
 }
 
 class Point {
