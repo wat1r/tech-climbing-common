@@ -2201,6 +2201,7 @@ public class LeetCodeClassification {
 
     /**
      * 机器人跳跃 bytedance 没懂
+     *
      * @throws IOException
      */
     public void robotJump() throws IOException {
@@ -2216,6 +2217,53 @@ public class LeetCodeClassification {
             }
         }
         System.out.println(energy);
+    }
+
+
+    /**
+     * 730. 统计不同回文子字符串 LeetCode  Hard [DP]
+     *
+     * @param s
+     * @return
+     */
+    public int countPalindromicSubsequences(String s) {
+        if (s == null || s.length() == 0) {
+            return 0;
+        }
+        int n = s.length();
+        int[][] dp = new int[n][n];
+        for (int i = 0; i < n; i++) {
+            dp[i][i] = 1;
+        }
+        for (int i = n - 2; i >= 0; i--) {
+            for (int j = i + 1; j < n; j++) {
+                if (s.charAt(i) == s.charAt(j)) {
+                    dp[i][j] = 2 * dp[i + 1][j - 1];
+                    int l = i + 1;
+                    int r = j - 1;
+                    while (l <= r) {
+                        if (s.charAt(l) != s.charAt(i)) {
+                            l++;
+                        }
+                        if (s.charAt(r) != s.charAt(i)) {
+                            r--;
+                        }
+                    }
+                    if (l > r) {
+                        dp[i][j] += 2;
+                    } else if (l == r) {
+                        dp[i][j] += 1;
+                    } else {
+                        dp[i][j] -= dp[l + 1][r - 1];
+                    }
+                } else {
+                    dp[i][j] = dp[i + 1][j] + dp[i][j - 1] - dp[i + 1][j - 1];
+                }
+                dp[i][j] = (dp[i][j] < 0) ? dp[i][j] + 1000000007 : dp[i][j] % 1000000007;
+            }
+
+        }
+        return dp[0][n - 1];
     }
 
 
@@ -2304,7 +2352,8 @@ public class LeetCodeClassification {
 //        handler.distributeCandies(candies, num_people);
 //        handler.pathInZigZagTree(26);
 //        handler.featureExtraction();
-        handler.robotJump();
+//        handler.robotJump();
+        handler.countPalindromicSubsequences("bccb");
 
 
     }

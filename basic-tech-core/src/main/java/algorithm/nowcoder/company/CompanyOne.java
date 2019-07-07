@@ -465,6 +465,7 @@ public class CompanyOne {
 
     /**
      * 糖果分配 招银 greedy
+     *
      * @param g 胃口值 g
      * @param s 糖果的尺寸
      * @return
@@ -485,6 +486,43 @@ public class CompanyOne {
     }
 
 
+    /**
+     * 员工考勤纪录 招银 Math
+     *
+     * @param n
+     * @return Cn0 + Cn1+ Cn2
+     */
+    public int getAttendance(int n) {
+        return 1 + n + n * (n - 1) / 2;
+    }
+
+
+    /**
+     * dp[i]表示以i为结尾的其最多组成多少编码形式
+     * @param s
+     * @return
+     */
+    public int decode(String s) {
+        int len = s.length();
+        String[] strs = s.split("");
+        int[] dp = new int[len + 1];
+        dp[0] = 1;
+        dp[1] = 1;
+        for (int i = 2; i < len + 1; i++) {
+            if (strs[i - 1].equals("0")) {
+                dp[i] = dp[i - 2];
+            }
+            int tmp = Integer.parseInt(strs[i - 2] + strs[i - 1]);
+            if (tmp > 26) {
+                dp[i] = dp[i - 1];
+            } else {
+                dp[i] = dp[i - 1] + dp[i - 2];
+            }
+        }
+        return dp[len];
+    }
+
+
     public static void main(String[] args) throws IOException {
 
 //        long[] nums = {10, 15, -9, 6, 80, -60};
@@ -502,8 +540,8 @@ public class CompanyOne {
 //                wooooooow
 //        handler.getChange(200);
 //        handler.arange();
-        handler.minHourForCat();
-
+//        handler.minHourForCat();
+        handler.decode("123421");
 
     }
 
