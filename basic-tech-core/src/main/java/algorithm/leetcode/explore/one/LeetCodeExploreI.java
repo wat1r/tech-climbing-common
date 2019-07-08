@@ -2660,9 +2660,6 @@ public class LeetCodeExploreI {
     }
 
 
-
-
-
     public static void main(String[] args) {
 
 //        int[] nums = {3, 2, 3};
@@ -2831,115 +2828,114 @@ public class LeetCodeExploreI {
 //        handler.merge()
 
 
-
-
     }
 
 
     private static void print(Object obj) {
         System.out.println(JSON.toJSONString(obj));
     }
-}
 
 
-class Point {
-    int val;
-    int flag;
+    class Point {
+        int val;
+        int flag;
 
-    public Point(int val, int flag) {
-        this.val = val;
-        this.flag = flag;
-    }
-}
-
-
-class ListNode {
-    int val;
-    ListNode next;
-
-    ListNode(int x) {
-        val = x;
-    }
-}
-
-class TreeNode {
-    int val;
-    TreeNode left;
-    TreeNode right;
-
-    TreeNode(int x) {
-        val = x;
-    }
-}
-
-class Interval {
-    int start;
-    int end;
-
-    Interval() {
-        start = 0;
-        end = 0;
-    }
-
-    Interval(int s, int e) {
-        start = s;
-        end = e;
-    }
-
-    @Override
-    public String toString() {
-        return "Interval{" +
-                "start=" + start +
-                ", end=" + end +
-                '}';
-    }
-
-
-}
-
-
-class Pair implements Comparable<Pair> {
-    int[] A = new int[2];
-    int sum;
-
-    public Pair(int row, int col) {
-        A[0] = row;
-        A[1] = col;
-        this.sum = row + col;
-    }
-
-
-    @Override
-    public int compareTo(Pair o) {
-        return o.sum - this.sum;
-    }
-}
-
-
-/**
- * 703. 数据流中的第K大元素 Easy
- */
-class KthLargest {
-
-    final PriorityQueue<Integer> queue;
-    final int k;
-
-    public KthLargest(int k, int[] nums) {
-        this.k = k;
-        queue = new PriorityQueue<Integer>(k);
-        for (int i : nums) {
-            add(i);
+        public Point(int val, int flag) {
+            this.val = val;
+            this.flag = flag;
         }
     }
 
-    public int add(int val) {
-        if (queue.size() < k) {
-            queue.offer(val);
-        } else if (queue.peek() < val) {
-            queue.poll();
-            queue.offer(val);
+
+    class ListNode {
+        int val;
+        ListNode next;
+
+        ListNode(int x) {
+            val = x;
         }
-        return queue.peek();
     }
 
+    class TreeNode {
+        int val;
+        TreeNode left;
+        TreeNode right;
+
+        TreeNode(int x) {
+            val = x;
+        }
+    }
+
+    static class Interval {
+        int start;
+        int end;
+
+        Interval() {
+            start = 0;
+            end = 0;
+        }
+
+        Interval(int s, int e) {
+            start = s;
+            end = e;
+        }
+
+        @Override
+        public String toString() {
+            return "Interval{" +
+                    "start=" + start +
+                    ", end=" + end +
+                    '}';
+        }
+
+
+    }
+
+
+    class Pair implements Comparable<Pair> {
+        int[] A = new int[2];
+        int sum;
+
+        public Pair(int row, int col) {
+            A[0] = row;
+            A[1] = col;
+            this.sum = row + col;
+        }
+
+
+        @Override
+        public int compareTo(Pair o) {
+            return o.sum - this.sum;
+        }
+    }
+
+
+    /**
+     * 703. 数据流中的第K大元素 Easy
+     */
+    class KthLargest {
+
+        final PriorityQueue<Integer> queue;
+        final int k;
+
+        public KthLargest(int k, int[] nums) {
+            this.k = k;
+            queue = new PriorityQueue<Integer>(k);
+            for (int i : nums) {
+                add(i);
+            }
+        }
+
+        public int add(int val) {
+            if (queue.size() < k) {
+                queue.offer(val);
+            } else if (queue.peek() < val) {
+                queue.poll();
+                queue.offer(val);
+            }
+            return queue.peek();
+        }
+
+    }
 }
+

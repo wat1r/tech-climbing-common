@@ -2267,6 +2267,55 @@ public class LeetCodeClassification {
     }
 
 
+    /**
+     * 111. 二叉树的最小深度 Easy
+     *
+     * @param root
+     * @return
+     */
+    public int minDepth(TreeNode root) {
+        return root == null ? 0 : Math.min(minDepth(root.left), minDepth(root.right)) + 1;
+    }
+
+
+    /**
+     * 236. 二叉树的最近公共祖先 LeetCode 左神P153 [Medium]
+     *
+     * @param root
+     * @param p
+     * @param q
+     * @return
+     */
+    public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+        if (root == null || root == p || root == q) {
+            return root;
+        }
+        TreeNode left = lowestCommonAncestor(root.left, p, q);
+        TreeNode right = lowestCommonAncestor(root.right, p, q);
+        if (left != null && right != null) {
+            return root;
+        }
+        return left != null ? left : right;
+    }
+
+
+    /**
+     * @param n
+     * @return
+     */
+    public int hammingWeight(int n) {
+        int bits = 0;
+        int mask = 1;
+        for (int i = 0; i < 32; i++) {
+            if ((n & mask) != 0) {
+                bits++;
+            }
+            mask <<= 1;
+        }
+        return bits;
+    }
+
+
     public static void main(String[] args) throws IOException {
 //        int[] g = new int[]{1, 2, 3};
 //        int[] s = new int[]{1, 1};
@@ -2353,39 +2402,86 @@ public class LeetCodeClassification {
 //        handler.pathInZigZagTree(26);
 //        handler.featureExtraction();
 //        handler.robotJump();
-        handler.countPalindromicSubsequences("bccb");
+//        handler.countPalindromicSubsequences("bccb");
+        handler.hammingWeight(5);
 
 
     }
 
 
-}
+    /**
+     * 左神 P153 最近公共祖先 进阶版
+     */
+    class Record1 {
+        private HashMap<TreeNode, TreeNode> map;
 
-class Point {
-    int pos, height;
+        public Record1(TreeNode head) {
+            map = new HashMap<>();
+            if (head != null) {
+                map.put(head, null);
+            }
+            setMap(head);
+        }
 
-    public Point(int pos, int height) {
-        this.pos = pos;
-        this.height = height;
+        public void setMap(TreeNode head) {
+            if (head == null) {
+                return;
+            }
+            if (head.left != null) {
+                map.put(head.left, head);
+            }
+            if (head.right != null) {
+                map.put(head.right, head);
+            }
+            setMap(head.left);
+            setMap(head.right);
+        }
+
+
+        public TreeNode query(TreeNode o1, TreeNode o2) {
+            HashSet<TreeNode> path = new HashSet<>();
+            while (map.containsKey(o1)) {
+                path.add(o1);
+                o1 = map.get(o1);
+            }
+            while (!path.contains(o2)) {
+                o2 = map.get(o2);
+            }
+            return o2;
+        }
+
     }
-}
 
-class TreeNode {
-    int val;
-    TreeNode left;
-    TreeNode right;
 
-    TreeNode(int x) {
-        val = x;
+    class Point {
+        int pos, height;
+
+        public Point(int pos, int height) {
+            this.pos = pos;
+            this.height = height;
+        }
     }
-}
 
+    class TreeNode {
+        int val;
+        TreeNode left;
+        TreeNode right;
 
-class ListNode {
-    int val;
-    ListNode next;
-
-    ListNode(int x) {
-        val = x;
+        TreeNode(int x) {
+            val = x;
+        }
     }
+
+
+    class ListNode {
+        int val;
+        ListNode next;
+
+        ListNode(int x) {
+            val = x;
+        }
+    }
+
 }
+
+
