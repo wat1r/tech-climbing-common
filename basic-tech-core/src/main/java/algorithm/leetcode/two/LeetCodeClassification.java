@@ -2316,6 +2316,60 @@ public class LeetCodeClassification {
     }
 
 
+    /**
+     * 67. 二进制求和 LeetCode Easy
+     *
+     * @param a
+     * @param b
+     * @return
+     */
+    public String addBinary(String a, String b) {
+
+        StringBuilder sb = new StringBuilder();
+        int lena = a.length();
+        int lenb = b.length();
+        int carry = 0;
+        for (int i = lena - 1, j = lenb - 1; i >= 0 || j >= 0; i--, j--) {
+            int sum = carry;
+            sum += i >= 0 ? a.charAt(i) - '0' : 0;
+            sum += j >= 0 ? b.charAt(j) - '0' : 0;
+            sb.append(sum % 2);
+            carry = sum / 2;
+        }
+        sb.append(carry == 1 ? carry : "");
+        return sb.reverse().toString();
+    }
+
+
+    /**
+     * 67. 二进制求和 LeetCode Easy
+     *
+     * @param a
+     * @param b
+     * @return
+     */
+    public String addBinary2nd(String a, String b) {
+        StringBuilder sb = new StringBuilder();
+        int aLen = a.length() - 1, bLen = b.length() - 1;
+        int carry = 0;
+        while (aLen >= 0 || bLen >= 0) {
+            int sum = carry;
+            if (aLen >= 0) {
+                sum += a.charAt(aLen) - '0';
+                aLen--;
+            }
+            if (bLen >= 0) {
+                sum += b.charAt(bLen) - '0';
+                bLen--;
+            }
+            sb.append(sum % 2);//追加sum
+            carry = sum / 2;//进位值，2当成10
+        }
+        sb.append(carry == 1 ? carry : "");//最后的进位数
+        return sb.reverse().toString();
+    }
+
+
     public static void main(String[] args) throws IOException {
 //        int[] g = new int[]{1, 2, 3};
 //        int[] s = new int[]{1, 1};
@@ -2403,7 +2457,8 @@ public class LeetCodeClassification {
 //        handler.featureExtraction();
 //        handler.robotJump();
 //        handler.countPalindromicSubsequences("bccb");
-        handler.hammingWeight(5);
+//        handler.hammingWeight(5);
+        handler.addBinary("1010", "1011");
 
 
     }
