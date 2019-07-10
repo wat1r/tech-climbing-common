@@ -1,5 +1,7 @@
 package algorithm.lintcode.company;
 
+import com.alibaba.fastjson.JSON;
+
 import java.util.*;
 
 /**
@@ -184,6 +186,220 @@ public class LintCodeCompanyOne {
     }
 
 
+    /**
+     * @param root
+     * @return
+     */
+    List<List<Integer>> results = new ArrayList<>();
+
+    public List<List<Integer>> levelOrder(TreeNode root) {
+        if (root == null) {
+            return results;
+        }
+        helper(root, 0);
+        return results;
+    }
+
+
+    public void helper(TreeNode node, int level) {
+        if (results.size() == level) {
+            results.add(new ArrayList<>());
+        }
+        results.get(level).add(node.val);
+        if (node.left != null) {
+            helper(node.left, level + 1);
+        }
+        if (node.right != null) {
+            helper(node.right, level + 1);
+        }
+    }
+
+
+    public void sortIntegers2(int[] A) {
+        quickSortRecursive(A, 0, A.length - 1);
+    }
+
+    private void quickSortRecursive(int[] A, int left, int right) {
+        if (A == null || A.length < 2) {
+            return;
+        }
+        if (left < right) {
+            int[] partition = partition(A, left, right);
+            quickSortRecursive(A, left, partition[0] - 1);
+            quickSortRecursive(A, partition[1] + 1, right);
+        }
+
+    }
+
+    private int[] partition(int[] A, int left, int right) {
+        int less = left - 1;
+        int more = right;
+        while (left < more) {
+            if (A[left] < A[right]) {
+                swap(A, ++less, left++);
+            } else if (A[left] > A[right]) {
+                swap(A, --more, left);
+            } else {
+                left++;
+            }
+        }
+        swap(A, more, right);
+        return new int[]{less + 1, more};
+    }
+
+    private void swap(int[] nums, int m, int n) {
+        int temp = nums[m];
+        nums[m] = nums[n];
+        nums[n] = temp;
+    }
+
+
+    public int uniquePaths(int m, int n) {
+        int[][] dp = new int[m][n];
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                if (i == 0 || j == 0) {
+                    dp[i][j] = 1;
+                } else {
+                    dp[i][j] = dp[i - 1][j] + dp[i][j - 1];
+                }
+            }
+        }
+        return dp[m - 1][n - 1];
+    }
+
+
+    public int uniquePathsWithObstacles(int[][] obstacleGrid) {
+        int m = obstacleGrid.length;
+        int n = obstacleGrid[0].length;
+        int[][] dp = new int[m][n];
+        //init first column
+        for (int i = 0; i < m; i++) {
+            if (obstacleGrid[i][0] == 1) {
+                break;
+            }
+            dp[i][0] = 1;
+        }
+        //init first row
+        for (int j = 0; j < n; j++) {
+            if (obstacleGrid[0][j] == 1) {
+                break;
+            }
+            dp[0][j] = 1;
+        }
+        for (int i = 1; i < m; i++) {
+            for (int j = 1; j < n; j++) {
+                if (obstacleGrid[i][j] == 1) {
+                    continue;
+                }
+                dp[i][j] = dp[i - 1][j] + dp[i][j - 1];
+            }
+        }
+        return dp[m - 1][n - 1];
+    }
+
+
+    public int singleNumber(int[] A) {
+        int res = A[0];
+        for (int i = 1; i < A.length; i++) {
+            res ^= A[i];
+        }
+        return res;
+    }
+
+
+    public int maxSubArray(int[] nums) {
+        int res = nums[0];
+        int sum = 0;
+        for (int num : nums) {
+            if (sum > 0) {
+                sum += num;
+            } else {
+                sum = num;
+            }
+            res = Math.max(res, sum);
+        }
+        return res;
+    }
+
+    List<Integer> inOrderList = new ArrayList<>();
+
+    public List<Integer> inorderTraversal(TreeNode root) {
+        if (root == null) {
+            return inOrderList;
+        }
+        inOrder(root);
+        return inOrderList;
+    }
+
+    private void inOrder(TreeNode root) {
+        if (root == null) {
+            return;
+        }
+        inOrder(root.left);
+        inOrderList.add(root.val);
+        inOrder(root.right);
+    }
+
+
+    public List<Integer> preorderTraversal(TreeNode root) {
+        List<Integer> preOrderList = new ArrayList<>();
+        if (root == null) {
+            return preOrderList;
+        }
+        java.util.Stack<TreeNode> stack = new java.util.Stack<>();
+        stack.add(root);
+        while (!stack.isEmpty()) {
+            root = stack.pop();
+            preOrderList.add(root.val);
+            if (root.right != null) {
+                stack.add(root.right);
+            }
+            if (root.left != null) {
+                stack.add(root.left);
+            }
+        }
+        return preOrderList;
+    }
+
+
+    public List<Integer> inorderTraversal2nd(TreeNode root) {
+        List<Integer> inorderList = new ArrayList<>();
+        if (root == null) {
+            return inorderList;
+        }
+        java.util.Stack<TreeNode> stack = new java.util.Stack<>();
+        while (!stack.isEmpty() || root != null) {
+            if (root != null) {
+                stack.add(root);
+                root = root.left;
+            } else {
+                root = stack.pop();
+                inorderList.add(root.val);
+                root = root.right;
+            }
+        }
+        return inorderList;
+    }
+
+
+    public int reverseInteger(int n) {
+        int res = 0;
+        while (n != 0) {
+            int pop = n % 10;
+            n /= 10;
+            if (res > Integer.MAX_VALUE / 10 || (res == Integer.MAX_VALUE / 10 && pop > 7)) {
+                return 0;
+            }
+            if (res < Integer.MIN_VALUE / 10 || (res == Integer.MIN_VALUE / 10 && pop < -8)) {
+                return 0;
+            }
+            res = res * 10 + pop;
+        }
+        return res;
+    }
+
+
     public static void main(String[] args) {
 
 //        handler.climbStairs(3);
@@ -201,7 +417,11 @@ public class LintCodeCompanyOne {
         ListNode l2_1 = new ListNode(2);
         l2_1.next = null;
 //        handler.mergeTwoLists(l1_1, l2_1);
-        handler.binarySearch(new int[]{1, 4, 4, 5, 7, 7, 8, 9, 9, 10}, 1);
+//        handler.binarySearch(new int[]{1, 4, 4, 5, 7, 7, 8, 9, 9, 10}, 1);
+//        int[] A = {3, 2, 1, 4, 5};
+//        handler.sortIntegers2(A);
+//        System.out.println(JSON.toJSONString(A));
+        handler.reverseInteger(123);
 
         //1->3->8->11->15->null
 //        2->null

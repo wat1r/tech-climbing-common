@@ -48,7 +48,7 @@ public class LeetCodeExploreI {
         while (left < right) {
             int[] partition = partition(nums, left, right);
             quickSortRecursive(nums, left, partition[0] - 1);
-            quickSortRecursive(nums, partition[0] + 1, right);
+            quickSortRecursive(nums, partition[1] + 1, right);
         }
 
     }
