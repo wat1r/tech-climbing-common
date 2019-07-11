@@ -1,5 +1,6 @@
 package algorithm.lintcode.company;
 
+import basic.callback.one.Li;
 import com.alibaba.fastjson.JSON;
 
 import java.util.*;
@@ -464,6 +465,7 @@ public class LintCodeCompanyOne {
     /**
      * 1443. 最长AB子串 LintCode Easy
      * do it again
+     *
      * @param S
      * @return
      */
@@ -496,6 +498,173 @@ public class LintCodeCompanyOne {
     }
 
 
+    /**
+     * @param n
+     * @return
+     */
+    public int dropEggs(int n) {
+        return dropEggsSegment(n, 2);
+    }
+
+
+    /**
+     * @param n 楼层数
+     * @param m 鸡蛋个数
+     * @return
+     */
+    public int dropEggsSegment(int n, int m) {
+        int[][] dp = new int[m + 1][n + 1];
+        for (int i = 1; i <= m; i++) {
+            dp[i][1] = 1;
+        }
+        for (int j = 1; j <= n; j++) {
+            dp[1][j] = j;
+        }
+
+        for (int i = 2; i <= m; i++) {
+            for (int j = 2; j <= n; j++) {
+                int res = Integer.MAX_VALUE;
+                for (int k = 1; k <= j; k++) {
+                    //这是个状态转移方程
+                    /**
+                     * dp[egg-1][drop-1]+1, 表示在egg个鸡蛋, drop层时, 鸡蛋碎了, 因此将问题变成( egg-1 )个鸡蛋, drop-1层的答案 加1
+                     * dp[egg][floor-drop]+1 表示在egg个鸡蛋, drop层时, 鸡蛋没碎, 因此问题转换成( egg )个鸡蛋, floor-drop的答案 加1
+                     * 在每一次的判断之后, 问题转成两个子问题, 结果取两个子问题的max值,
+                     *
+                     * 子问题的构成:
+                     * 		一个新的丢鸡蛋问题,
+                     * 		鸡蛋数: 碎:egg-1,		没碎:egg
+                     * 		楼层数: 碎:drop-1,	  	没碎:floor-drop;
+                     *
+                     * 最终子问题转换成: 鸡蛋数为1, 楼层不定,	的一个子问题
+                     *
+                     */
+                    /**
+                     * 一共有floor种丢法, 每一种丢法的时候, 结果取max值
+                     * 但是在floor种丢法之间比较时选择最小值, 这样才能保证答案是最小的
+                     * 整个过程是从 1个鸡蛋, 1层楼 的子问题开始, 逐渐向高的层数和鸡数迭代, 即由下向上迭代
+                     * 当迭代完成后, dp[i][j] 即表示	i个鸡蛋, j层楼, 的丢鸡蛋问题的解, 所以迭代完之后, dp数组是一个丢鸡蛋问题的解集
+                     */
+                    int temp = Math.max(dp[i][j - k], dp[i - 1][k - 1]) + 1;
+                    res = Math.min(res, temp);
+                }
+                dp[i][j] = res;
+            }
+        }
+        System.out.println(dp[m][n]);
+        return dp[m][n];
+    }
+
+
+    /**
+     * 197. 排列序号 Medium
+     *
+     * @param A
+     * @return
+     */
+    public long permutationIndex(int[] A) {
+        if (A == null || A.length == 0) {
+            return 0;
+        }
+        HashMap<Integer, Integer> map = new HashMap<>();
+        int len = A.length;
+        for (int i = 0; i < len; i++) {
+            int count = 0;
+            for (int j = i + 1; j < len; j++) {
+                if (A[j] < A[i]) {
+                    count++;
+                }
+            }
+            map.put(A[i], count);
+        }
+        long res = 0;
+        for (int i = 0; i < len; i++) {
+            long factor = 1;
+            for (int j = (len - i - 1); j >= 1; j--) {
+                factor *= j;
+            }
+            res += map.get(A[i]) * factor;
+        }
+        return res + 1;
+    }
+
+    public int[] twoSum(int[] numbers, int target) {
+        int[] arr = new int[2];
+        if (numbers == null || numbers.length == 0) {
+            return arr;
+        }
+        int[] helper = Arrays.copyOf(numbers, numbers.length);
+        Arrays.sort(helper);
+        int l = 0, r = helper.length - 1;
+        int left = 0, right = 0;
+        while (l < r) {
+            int sum = helper[l] + helper[r];
+            if (sum == target) {
+                left = helper[l];
+                right = helper[r--];
+            } else if (sum > target) {
+                r--;
+            } else {
+                l++;
+            }
+        }
+        int m = -1, n = -1;
+        for (int i = 0; i < numbers.length; i++) {
+            if (left == numbers[i] && m == -1) {
+                m = i;
+            } else if (right == numbers[i] && n == -1) {
+                n = i;
+            }
+
+        }
+        arr[0] = m < n ? m : n;
+        arr[1] = m < n ? n : m;
+        return arr;
+    }
+
+
+    /**
+     * 100. 删除排序数组中的重复数字 LintCode Easy
+     *
+     * @param nums
+     * @return
+     */
+    public int removeDuplicates(int[] nums) {
+        if (nums == null || nums.length == 0) {
+            return 0;
+        }
+        int slow = 0, fast = 1;
+        while (fast < nums.length) {
+            if (nums[slow] == nums[fast]) {
+                fast++;
+            } else {
+                swap(nums, ++slow, fast++);
+            }
+        }
+        return slow + 1;
+    }
+
+
+    /**
+     * @param head
+     * @param n
+     * @return
+     */
+    public ListNode nthToLast(ListNode head, int n) {
+        ListNode slow = head;
+        ListNode fast = head;
+        int i = 0;
+        while (i++ < n) {
+            fast = fast.next;
+        }
+        while (fast != null) {
+            slow = slow.next;
+            fast = fast.next;
+        }
+        return slow;
+    }
+
+
     public static void main(String[] args) {
 
 //        handler.climbStairs(3);
@@ -522,7 +691,22 @@ public class LintCodeCompanyOne {
         //1->3->8->11->15->null
 //        2->null
 //        handler.fibonacci(1);
-            handler.getAns("ABAAABBBA");
+//        handler.getAns("ABAAABBBA");
+//        handler.dropEggs(100000);
+//        handler.permutationIndex(new int[]{4, 2, 1});
+//        handler.twoSum(new int[]{0, 4, 3, 0}, 0);
+//        handler.removeDuplicates(new int[]{-10, 0, 1, 2, 3});
+//3->2->1->5->null, n = 2
+        ListNode k1 = new ListNode(3);
+        ListNode k2 = new ListNode(2);
+        ListNode k3 = new ListNode(1);
+        ListNode k4 = new ListNode(5);
+        k1.next = k2;
+        k2.next = k3;
+        k3.next = k4;
+        k4.next = null;
+        handler.nthToLast(k1,2);
+
 
     }
 
