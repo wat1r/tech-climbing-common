@@ -399,6 +399,102 @@ public class LintCodeCompanyOne {
         return res;
     }
 
+    private int longestLen = 0;
+
+    public int longestConsecutive(TreeNode root) {
+        helper(root);
+        return longestLen;
+    }
+
+    private int helper(TreeNode root) {
+        if (root == null) {
+            return 0;
+        }
+        int left = helper(root.left);
+        int right = helper(root.right);
+        int len = 1;
+        if (root.left != null && root.val + 1 == root.left.val) {
+            len = Math.max(len, left + 1);
+        }
+        if (root.right != null && root.val + 1 == root.right.val) {
+            len = Math.max(len, right + 1);
+        }
+        longestLen = Math.max(longestLen, len);
+        return len;
+    }
+
+
+    public boolean validPalindrome(String s) {
+        return isPalindrome(s, true) || isPalindrome(s, false);
+    }
+
+    private boolean isPalindrome(String s, boolean flag) {
+        int delete = 0;
+        int left = 0, right = s.length() - 1;
+        while (left < right) {
+            if (s.charAt(left) == s.charAt(right)) {
+                left++;
+                right--;
+            } else {
+                delete++;
+                int i = flag ? left++ : right--;
+            }
+        }
+        return delete < 2;
+    }
+
+    public int fibonacci(int n) {
+        int[] dp = new int[n + 1];
+        if (n == 1) {
+            return 0;
+        }
+        if (n == 2 || n == 3) {
+            return 1;
+        }
+        dp[1] = 0;
+        dp[2] = 1;
+        dp[3] = 1;
+        for (int i = 4; i <= n; i++) {
+            dp[i] = dp[i - 1] + dp[i - 2];
+        }
+        return dp[n];
+    }
+
+
+    /**
+     * 1443. 最长AB子串 LintCode Easy
+     * do it again
+     * @param S
+     * @return
+     */
+    public int getAns(String S) {
+        // Write your code here
+        int l = S.length();
+        int[] numA = new int[l + 1];
+        int[] numB = new int[l + 1];
+        int a = 0, b = 0;
+
+        for (int i = 0; i < l; i++) {
+            if (S.charAt(i) == 'A') a++;
+            else b++;
+            numA[i + 1] = a;
+            numB[i + 1] = b;
+        }
+
+        if (a == 0 || b == 0) return 0;
+
+        int res = a > b ? a : b;
+        for (res *= 2; res > 0; res -= 2) {
+            for (int i = res; i < l + 1; i++) {
+                if (numA[i] - numA[i - res] == numB[i] - numB[i - res]) {
+                    return res;
+                }
+            }
+        }
+
+        return 0;
+    }
+
 
     public static void main(String[] args) {
 
@@ -421,11 +517,12 @@ public class LintCodeCompanyOne {
 //        int[] A = {3, 2, 1, 4, 5};
 //        handler.sortIntegers2(A);
 //        System.out.println(JSON.toJSONString(A));
-        handler.reverseInteger(123);
-
+//        handler.reverseInteger(123);
+//        handler.validPalindrome("aba");
         //1->3->8->11->15->null
 //        2->null
-
+//        handler.fibonacci(1);
+            handler.getAns("ABAAABBBA");
 
     }
 
