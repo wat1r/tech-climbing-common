@@ -2,6 +2,7 @@ package algorithm.lintcode.company;
 
 import basic.callback.one.Li;
 import com.alibaba.fastjson.JSON;
+import org.apache.poi.ss.formula.functions.Na;
 
 import java.util.*;
 
@@ -676,6 +677,53 @@ public class LintCodeCompanyOne {
         return pre;
     }
 
+    public int maxProfit(int[] prices) {
+        int minPrice = Integer.MAX_VALUE;
+        int res = 0;
+        for (int price : prices) {
+            minPrice = Math.min(price, minPrice);
+            res = Math.max(res, price - minPrice);
+        }
+        return res;
+    }
+
+    public int maxProfitII(int[] prices) {
+        int res = 0;
+        for (int i = 1; i < prices.length; i++) {
+            if (prices[i] > prices[i - 1]) {
+                res += prices[i] - prices[i - 1];
+            }
+        }
+        return res;
+    }
+
+    public int maxProfitIII(int[] prices) {
+        if (prices == null || prices.length == 0) {
+            return 0;
+        }
+        int s1 = -prices[0], s2 = Integer.MIN_VALUE, s3 = Integer.MIN_VALUE, s4 = Integer.MIN_VALUE;
+        for (int i = 1; i < prices.length; ++i) {
+            s1 = Math.max(s1, -prices[i]);
+            s2 = Math.max(s2, s1 + prices[i]);
+            s3 = Math.max(s3, s2 - prices[i]);
+            s4 = Math.max(s4, s3 + prices[i]);
+        }
+        return Math.max(0, s4);
+    }
+
+
+    public int mountainSequence(int[] nums) {
+        if (nums == null || nums.length == 0) {
+            return 0;
+        }
+        int res = 0;
+        for (int i = 0; i < nums.length; i++) {
+            res = Math.max(res, nums[i]);
+        }
+        return res;
+
+    }
+
 
     public static void main(String[] args) {
 
@@ -718,6 +766,8 @@ public class LintCodeCompanyOne {
         k3.next = k4;
         k4.next = null;
 //        handler.nthToLast(k1,2);
+
+        handler.maxProfitIII(new int[]{3, 3, 5, 0, 0, 3, 1, 4});
 
 
     }

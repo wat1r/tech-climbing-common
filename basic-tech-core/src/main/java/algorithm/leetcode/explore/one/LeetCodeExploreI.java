@@ -2721,6 +2721,20 @@ public class LeetCodeExploreI {
     }
 
 
+    public int peakIndexInMountainArray(int[] A) {
+        int l = 1, r = A.length - 1;
+        while (l < r) {
+            int mid = l + (r - l) / 2;
+            if (A[mid] > A[mid - 1] && A[mid] < A[mid + 1]) {
+                l = mid + 1;
+            } else {
+                r = mid;
+            }
+        }
+        return l;
+    }
+
+
     public static void main(String[] args) {
 
 //        int[] nums = {3, 2, 3};
@@ -2863,7 +2877,7 @@ public class LeetCodeExploreI {
 //        print(handler.merge(intervals));
 //        handler.merge2nd(intervals);
 //        handler.canAttendMeetings(intervals);
-        handler.minMeetingRooms(intervals);
+//        handler.minMeetingRooms(intervals);
 //        int[] nums = {3, 30, 34, 5, 9};
 //        print(handler.largestNumber(nums));
 
@@ -2887,6 +2901,7 @@ public class LeetCodeExploreI {
 //        handler.nextGreaterElements(new int[]{1, 2, 1});
 
 //        handler.merge()
+        handler.peakIndexInMountainArray(new int[]{0, 2, 1, 0});
 
 
     }

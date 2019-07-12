@@ -496,9 +496,129 @@ public class RepeativeCaseI {
 
     }
 
+    /**
+     * 121. 买卖股票的最佳时机 LeetCode Easy DP
+     *
+     * @param prices
+     * @return
+     */
+    public int maxProfitI(int[] prices) {
+        int n = prices.length;
+        int[][] dp = new int[n][2];
+        for (int i = 0; i < n; i++) {
+            if (i - 1 == -1) {
+                dp[i][0] = 0;
+                // 解释：
+                //   dp[i][0]
+                // = max(dp[-1][0], dp[-1][1] + prices[i])
+                // = max(0, -infinity + prices[i]) = 0
+                dp[i][1] = -prices[i];
+                //解释：
+                //   dp[i][1]
+                // = max(dp[-1][1], dp[-1][0] - prices[i])
+                // = max(-infinity, 0 - prices[i])
+                // = -prices[i]
+                continue;
+            }
+            dp[i][0] = Math.max(dp[i - 1][0], dp[i - 1][1] + prices[i]);
+            dp[i][1] = Math.max(dp[i - 1][1], -prices[i]);
+        }
+        return dp[n - 1][0];
+    }
 
 
+    public int maxProfitI2nd(int[] prices) {
+        int n = prices.length;
+        int dp_i_0 = 0, dp_i_1 = Integer.MIN_VALUE;
+        for (int i = 0; i < n; i++) {
+            dp_i_0 = Math.max(dp_i_0, dp_i_1 + prices[i]);
+            dp_i_1 = Math.max(dp_i_1, -prices[i]);
+        }
+        return dp_i_0;
+    }
 
+
+    public int maxProfitII(int[] prices) {
+        int n = prices.length;
+        int dp_i_0 = 0, dp_i_1 = Integer.MIN_VALUE;
+        for (int i = 0; i < n; i++) {
+            int temp = dp_i_0;//dp[i-1][0]昨天未持有股票的状态
+            dp_i_0 = Math.max(dp_i_0, dp_i_1 + prices[i]);//dp[i][0]今天未持有股票的状态  dp[i-1][0]昨天持有股票的状态
+            dp_i_1 = Math.max(dp_i_1, temp - prices[i]);//dp[i][0]今天持有股票的状态  dp[i-1][0]昨天未持有股票的状态
+        }
+        return dp_i_0;
+    }
+
+
+    public int maxProfitWithCool(int[] prices) {
+        int n = prices.length;
+        int dp_i_0 = 0, dp_i_1 = Integer.MIN_VALUE;
+        int dp_pre_0 = 0;// dp[i-2][0]
+        for (int i = 0; i < n; i++) {
+            int temp = dp_i_0;
+            //今天未持有股票#昨天未支持股票#昨天持有股票
+            dp_i_0 = Math.max(dp_i_0, dp_i_1 + prices[i]);
+            //今天持有股票#昨天持有股票#前天未持有股票
+            dp_i_1 = Math.max(dp_i_1, dp_pre_0 - prices[i]);
+            //昨天未持有股票赋给前天未持有股票
+            dp_pre_0 = temp;
+        }
+        return dp_i_0;
+    }
+
+    public int maxProfit(int[] prices, int fee) {
+        int n = prices.length;
+        int dp_i_0 = 0, dp_i_1 = Integer.MIN_VALUE;
+        for (int i = 0; i < n; i++) {
+            int temp = dp_i_0;
+            dp_i_0 = Math.max(dp_i_0, dp_i_1 + prices[i]);
+            dp_i_1 = Math.max(dp_i_1, temp - prices[i] - fee);
+        }
+        return dp_i_0;
+    }
+
+
+    public int maxProfit(int[] prices) {
+        if (prices == null || prices.length == 0) {
+            return 0;
+        }
+        int n = prices.length;
+        int max_k = 2;
+        int[][][] dp = new int[n][max_k + 1][2];
+        for (int i = 0; i < n; i++) {
+            for (int k = max_k; k >= 1; k--) {
+                if (i - 1 == -1) {
+                    dp[0][k][0] = 0;
+                    dp[0][k][1] = -prices[0];
+                    continue;
+                }
+                dp[i][k][0] = Math.max(dp[i - 1][k][0], dp[i - 1][k][1] + prices[i]);
+                dp[i][k][1] = Math.max(dp[i - 1][k][1], dp[i - 1][k - 1][0] - prices[i]);
+            }
+        }
+        return dp[n - 1][max_k][0];
+    }
+
+
+    public int maxProfitIV(int max_k, int[] prices) {
+        int n = prices.length;
+        if (max_k > n / 2) {
+            return maxProfitII(prices);
+        }
+        int[][][] dp = new int[n][max_k + 1][2];
+        for (int i = 0; i < n; i++) {
+            for (int k = max_k; k >= 1; k--) {
+                if (i - 1 == -1) {
+                    dp[0][k][0] = 0;
+                    dp[0][k][1] = -prices[0];
+                    continue;
+                }
+                dp[i][k][0] = Math.max(dp[i - 1][k][0], dp[i - 1][k][1] + prices[i]);
+                dp[i][k][1] = Math.max(dp[i - 1][k][1], dp[i - 1][k - 1][0] - prices[i]);
+            }
+        }
+        return dp[n - 1][max_k][0];
+    }
 
 
     public static void main(String[] args) {
@@ -522,6 +642,7 @@ public class RepeativeCaseI {
 //        handler.twoSumII(numbers, target);
 //        Collections.sort();
 //        handler.singleNumber(new int[]{2, 2, 3, 2});
+        handler.maxProfit(new int[]{1, 2, 3, 4, 5});
     }
 
     private class ReturnNode {
