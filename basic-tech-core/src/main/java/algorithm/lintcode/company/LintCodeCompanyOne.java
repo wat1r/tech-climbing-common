@@ -665,6 +665,18 @@ public class LintCodeCompanyOne {
     }
 
 
+    public ListNode reverse(ListNode head) {
+        ListNode curr = head, next, pre = null;
+        while (curr != null) {
+            next = curr.next;
+            curr.next = pre;
+            pre = curr;
+            curr = next;
+        }
+        return pre;
+    }
+
+
     public static void main(String[] args) {
 
 //        handler.climbStairs(3);
@@ -705,7 +717,7 @@ public class LintCodeCompanyOne {
         k2.next = k3;
         k3.next = k4;
         k4.next = null;
-        handler.nthToLast(k1,2);
+//        handler.nthToLast(k1,2);
 
 
     }

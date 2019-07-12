@@ -1,5 +1,6 @@
 package algorithm.leetcode.explore.one;
 
+import basic.callback.one.Li;
 import com.alibaba.fastjson.JSON;
 
 import java.util.*;
@@ -2657,6 +2658,66 @@ public class LeetCodeExploreI {
             resList.add(queue.poll().A);
         }
         return resList;
+    }
+
+    public List<String> binaryTreePaths(TreeNode root) {
+        List<String> resList = new ArrayList<>();
+        if (root == null) {
+            return resList;
+        }
+        binaryTreePathsDFS(resList, new ArrayList<>(), root);
+
+        return resList;
+    }
+
+    private void binaryTreePathsDFS(List<String> resList, List<Integer> levelList, TreeNode node) {
+        if (node == null) {
+            return;
+        }
+        levelList.add(node.val);
+        if (node.left == null && node.right == null) {
+            resList.add(convertList2Str(levelList));
+            levelList.remove(levelList.size() - 1);
+            return;
+        }
+        binaryTreePathsDFS(resList, levelList, node.left);
+        binaryTreePathsDFS(resList, levelList, node.right);
+        levelList.remove(levelList.size() - 1);
+    }
+
+    private String convertList2Str(List<Integer> levelList) {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < levelList.size() - 1; i++) {
+            sb.append(levelList.get(i)).append("->");
+        }
+        sb.append(levelList.get(levelList.size() - 1));
+        return sb.toString();
+    }
+
+
+    /**
+     * 在递归遍历二叉树时，需要考虑当前的节点和它的孩子节点。如果当前的节点不是叶子节点，则在当前的路径末尾添加该节点，并递归遍历该节点的每一个孩子节点。如果当前的节点是叶子节点，则在当前的路径末尾添加该节点后，就得到了一条从根节点到叶子节点的路径，可以把该路径加入到答案中。
+     *
+     * @param root
+     * @return
+     */
+    public List<String> binaryTreePaths2nd(TreeNode root) {
+        List<String> resList = new ArrayList<>();
+        binaryTreePaths2ndRecur(resList, "", root);
+        return resList;
+    }
+
+    private void binaryTreePaths2ndRecur(List<String> resList, String level, TreeNode root) {
+        if (root != null) {
+            level += String.valueOf(root.val);
+            if (root.left == null && root.right == null) {//当前节点是叶子节点
+                resList.add(level);
+            } else {//当前节点是非叶子节点
+                level += "->";
+                binaryTreePaths2ndRecur(resList, level, root.left);
+                binaryTreePaths2ndRecur(resList, level, root.right);
+            }
+        }
     }
 
 
