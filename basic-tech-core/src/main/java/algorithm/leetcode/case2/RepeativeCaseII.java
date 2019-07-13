@@ -359,13 +359,6 @@ public class RepeativeCaseII {
     }
 
 
-
-
-
-
-
-
-
     public static void main(String[] args) {
 //        int[] nums = {1, 2, 3};
 //        handler.subsets(nums);
@@ -375,23 +368,25 @@ public class RepeativeCaseII {
 //        handler.canPlaceFlowers(new int[]{1, 0, 0, 0, 1}, 1);
         handler.checkPossibility(new int[]{3, 4, 2, 3});
     }
-}
 
-class TreeNode {
-    int val;
-    TreeNode left;
-    TreeNode right;
+    class TreeNode {
+        int val;
+        TreeNode left;
+        TreeNode right;
 
-    TreeNode(int x) {
-        val = x;
+        TreeNode(int x) {
+            val = x;
+        }
+    }
+
+    class ListNode {
+        int val;
+        ListNode next;
+
+        ListNode(int x) {
+            val = x;
+        }
     }
 }
 
-class ListNode {
-    int val;
-    ListNode next;
 
-    ListNode(int x) {
-        val = x;
-    }
-}

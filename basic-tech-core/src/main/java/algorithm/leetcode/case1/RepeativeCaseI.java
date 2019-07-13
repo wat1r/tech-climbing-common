@@ -621,6 +621,142 @@ public class RepeativeCaseI {
     }
 
 
+    public int missingNumber1st(int[] nums) {
+        int standard = 0;
+        for (int i = 0; i <= nums.length; i++) {
+            standard += i;
+        }
+        int current = 0;
+        for (int i = 0; i < nums.length; i++) {
+            current += nums[i];
+        }
+        return standard - current;
+    }
+
+
+    public int missingNumber2nd(int[] nums) {
+        int res = nums[0];
+        for (int i = 1; i < nums.length; i++) {
+            res ^= nums[i];
+        }
+        for (int i = 0; i <= nums.length; i++) {
+            res ^= i;
+        }
+        return res;
+    }
+
+
+    /**
+     * 官网 41. 缺失的第一个正数 Hard LeetCode
+     *
+     * @param nums
+     * @return
+     */
+    public int firstMissingPositive1st(int[] nums) {
+        int n = nums.length;
+
+        // 基本情况
+        int contains = 0;
+        for (int i = 0; i < n; i++)
+            if (nums[i] == 1) {
+                contains++;
+                break;
+            }
+
+        if (contains == 0)
+            return 1;
+
+        // nums = [1]
+        if (n == 1)
+            return 2;
+
+        // 用 1 替换负数，0，
+        // 和大于 n 的数
+        // 在转换以后，nums 只会包含
+        // 正数
+        for (int i = 0; i < n; i++)
+            if ((nums[i] <= 0) || (nums[i] > n))
+                nums[i] = 1;
+
+        // 使用索引和数字符号作为检查器
+        // 例如，如果 nums[1] 是负数表示在数组中出现了数字 `1`
+        // 如果 nums[2] 是正数 表示数字 2 没有出现
+        for (int i = 0; i < n; i++) {
+            int a = Math.abs(nums[i]);
+            // 如果发现了一个数字 a - 改变第 a 个元素的符号
+            // 注意重复元素只需操作一次
+            if (a == n)
+                nums[0] = -Math.abs(nums[0]);
+            else
+                nums[a] = -Math.abs(nums[a]);
+        }
+
+        // 现在第一个正数的下标
+        // 就是第一个缺失的数
+        for (int i = 1; i < n; i++) {
+            if (nums[i] > 0)
+                return i;
+        }
+
+        if (nums[0] > 0)
+            return n;
+
+        return n + 1;
+    }
+
+    /**
+     * 41. 缺失的第一个正数  LeetCode Hard [bucket sort]
+     *
+     * @param nums
+     * @return
+     */
+    public int firstMissingPositive2nd(int[] nums) {
+        int n = nums.length;
+        for (int i = 0; i < n; i++) {
+            //前两个条件是为了判断nums[i]是否在0-n范围内，防止index越界
+            //后一个是判断i 这个index（当前的值）和nums[i]-1这个index（标准位置）是否相等，
+            //标准位置:某个数nums[i] 落整个array的i-1的位置上
+            while (nums[i] > 0 && nums[i] <= n && nums[i] != nums[nums[i] - 1]) {
+                swap(nums, i, nums[i] - 1);
+            }
+        }
+        //判断第一个出现异常的数字
+        for (int i = 0; i < n; i++) {
+            if (nums[i] - 1 != i) {
+                return i + 1;
+            }
+        }
+        return n + 1;
+        //[3, 4, 4, -1, 1]->[1,4,3,4,-1] 异常的时index为1的数nums[1] 其值约为 （1+1=2）但是实际是4
+        //[3, 4, -1, 1]  -->[1,-1,3,4]
+        //[3,4,-1,-2,1,5,16,0,2,0]-->[1,2,3,4,5,-1,16,0,-2,0]
+    }
+
+
+    public int firstMissingPositive3rd(int[] nums) {
+        int n = nums.length;
+        boolean[] bArr = new boolean[n];
+        for (int i = 0; i < n; i++) {
+            if (nums[i] > 0 && nums[i] <= n) {
+                bArr[nums[i] - 1] = true;
+            }
+        }
+        for (int i = 0; i < bArr.length; i++) {
+            if (!bArr[i]) {
+                return i + 1;
+            }
+        }
+
+        return n + 1;
+    }
+
+
+    private void swap(int[] nums, int m, int n) {
+        int temp = nums[m];
+        nums[m] = nums[n];
+        nums[n] = temp;
+    }
+
     public static void main(String[] args) {
         LeetCodeOne leetCodeOne = new LeetCodeOne();
         LeetCodeClassification leetCodeClassification = new LeetCodeClassification();
@@ -642,7 +778,13 @@ public class RepeativeCaseI {
 //        handler.twoSumII(numbers, target);
 //        Collections.sort();
 //        handler.singleNumber(new int[]{2, 2, 3, 2});
-        handler.maxProfit(new int[]{1, 2, 3, 4, 5});
+//        handler.maxProfit(new int[]{1, 2, 3, 4, 5});
+//        handler.firstMissingPositive1st(new int[]{3,4,-1,-2,1,5,16,0,2,0});
+//        handler.firstMissingPositive2nd(new int[]{3, 4, -1, 1});
+//        handler.firstMissingPositive2nd(new int[]{3, 4, 4, -1, 1});
+//        handler.firstMissingPositive2nd(new int[]{3, 4, -1, -2, 1, 5, 16, 0, 2, 0});
+        handler.firstMissingPositive3rd(new int[]{3, 4, -1, 1});
+
     }
 
     private class ReturnNode {

@@ -2734,6 +2734,65 @@ public class LeetCodeExploreI {
         return l;
     }
 
+    /**
+     * 941. 有效的山脉数组 LeetCode Easy
+     *
+     * @param A
+     * @return
+     */
+    public boolean validMountainArray(int[] A) {
+        if (A == null || A.length < 3) {
+            return false;
+        }
+        int n = A.length - 1;
+        int l = 0, r = n;
+        while (l < n) {
+            if (A[l] < A[l + 1]) {
+                l++;
+            } else {
+                break;
+            }
+        }
+        while (r >= 1) {
+            if (A[r] < A[r - 1]) {
+                r--;
+            } else {
+                break;
+            }
+        }
+        return l > 0 && r < n && l == r;
+    }
+
+    /**
+     * 845. 数组中的最长山脉 LeetCode Medium
+     *
+     * @param A
+     * @return
+     */
+    public int longestMountain(int[] A) {
+        if (A == null || A.length < 3) {
+            return 0;
+        }
+        int res = 0;
+        for (int i = 1; i < A.length - 1; i++) {
+            //find the maxium number [peak mountain]
+            if (A[i] > A[i - 1] && A[i] > A[i + 1]) {
+                //get the left pointer and right pointer, expand from the center ,get the maximum boundary
+                int l = i - 1;
+                int r = i + 1;
+                while (l > 0 && A[l - 1] < A[l]) {
+                    l--;
+                }
+                while (r < A.length - 1 && A[r] > A[r + 1]) {
+                    r++;
+                }
+                //record the maximum len
+                res = Math.max(res, r - l + 1);
+            }
+        }
+        return res;
+    }
+
 
     public static void main(String[] args) {
 
@@ -2901,9 +2960,9 @@ public class LeetCodeExploreI {
 //        handler.nextGreaterElements(new int[]{1, 2, 1});
 
 //        handler.merge()
-        handler.peakIndexInMountainArray(new int[]{0, 2, 1, 0});
-
-
+//        handler.peakIndexInMountainArray(new int[]{0, 2, 1, 0});
+//        handler.validMountainArray(new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9});
+        handler.longestMountain(new int[]{2, 1, 4, 7, 3, 2, 5});
     }
 
 
