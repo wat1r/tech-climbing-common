@@ -2793,6 +2793,34 @@ public class LeetCodeExploreI {
         return res;
     }
 
+    /**
+     * @param s
+     * @return
+     */
+    public boolean checkRecord(String s) {
+        char[] chas = s.toCharArray();
+        int absent = 0;
+        int late = 0;
+
+        for (int i = 0; i < chas.length; i++) {
+            if (chas[i] == 'A') {
+                absent++;
+                late = 0;
+                if (absent > 1) {
+                    return false;
+                }
+            } else if (chas[i] == 'L') {
+                late++;
+                if(late>2){
+                    return false;
+                }
+            }else {
+                late=0;
+            }
+        }
+        return true;
+    }
+
 
     public static void main(String[] args) {
 
@@ -2962,7 +2990,10 @@ public class LeetCodeExploreI {
 //        handler.merge()
 //        handler.peakIndexInMountainArray(new int[]{0, 2, 1, 0});
 //        handler.validMountainArray(new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9});
-        handler.longestMountain(new int[]{2, 1, 4, 7, 3, 2, 5});
+//        handler.longestMountain(new int[]{2, 1, 4, 7, 3, 2, 5});
+        handler.checkRecord("PPALLPL");
+
+
     }
 
 

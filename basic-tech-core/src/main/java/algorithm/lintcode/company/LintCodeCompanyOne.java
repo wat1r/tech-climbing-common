@@ -725,6 +725,125 @@ public class LintCodeCompanyOne {
     }
 
 
+    public char[] reverseWords(char[] chas) {
+        reverseWord(chas);
+        String s = String.valueOf(chas);
+        String[] arr = s.split("\\s+");
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < arr.length; i++) {
+            char[] tempChas = arr[i].toCharArray();
+            reverseWord(tempChas);
+            sb.append(tempChas);
+            if (i != arr.length - 1) {
+                sb.append(" ");
+            }
+        }
+        return sb.toString().toCharArray();
+    }
+
+    public void reverseWord(char[] chas) {
+        int l = 0, r = chas.length - 1;
+        while (l < r) {
+            swap(chas, l++, r--);
+        }
+    }
+
+    private void swap(char[] chas, int m, int n) {
+        char temp = chas[m];
+        chas[m] = chas[n];
+        chas[n] = temp;
+    }
+
+    public void heapify(int[] A) {
+        int size = A.length;
+        swap(A, 0, --size);
+        while (size > 0) {
+            heapifySegment(A, 0, size);
+            swap(A, 0, --size);
+        }
+
+    }
+
+    private void heapifySegment(int[] A, int index, int size) {
+        int left = index * 2 + 1;
+        while (left < size) {
+            int right = left + 1;
+            int largest = right < size && A[left] < A[right] ? right : left;
+            largest = A[largest] > A[index] ? largest : index;
+            if (largest == index) {
+                break;
+            }
+            swap(A, largest, index);
+            index = largest;
+            left = 2 * index + 1;
+        }
+
+    }
+
+
+    public int[] optimalUtilization(int[] A, int[] B, int K) {
+        int[] arr = new int[2];
+        if (A == null || A.length == 0 || B == null || B.length == 0) {
+            return new int[]{};
+        }
+        int m = 0, n = B.length - 1;
+        int minDiff = Integer.MAX_VALUE;
+        while (m < A.length && n >= 0) {
+            while (m < A.length && m > 0 && A[m] == A[m - 1]) {
+                m++;
+            }
+            while (n > 0 && n < B.length && B[n] == B[n - 1]) {
+                n--;
+            }
+            int sum = A[m] + B[n];
+            if (sum > K) {
+                n--;
+            } else if (sum == K) {
+                arr[0] = m;
+                arr[1] = n;
+                return arr;
+            } else {
+                if (minDiff > (K - sum)) {
+                    arr[0] = m;
+                    arr[1] = n;
+                    minDiff = (K - sum);
+                }
+                m++;
+            }
+        }
+        return arr;
+    }
+
+    /**
+     * 416. 分割等和子集 LeetCode Medium 01 背包问题
+     * @param nums
+     * @return
+     */
+    public boolean canPartition(int[] nums) {
+        int n = 0;
+        for (int num : nums) {
+            n += num;
+        }
+        if (n % 2 == 1) {
+            return false;
+        }
+        int m = nums.length;
+        boolean[][] dp = new boolean[m][n + 1];
+        for (int i = 0; i < m; i++) {
+            dp[i][0] = true;
+        }
+        for (int i = 1; i < m; i++) {
+            for (int j = 0; j <= n; j++) {
+                dp[i][j] = dp[i - 1][j];
+                if (j - nums[i] >= 0) {
+                    dp[i][j] = dp[i][j] || dp[i - 1][j - nums[i]];
+                }
+            }
+        }
+        return dp[m - 1][n / 2];
+    }
+
+
     public static void main(String[] args) {
 
 //        handler.climbStairs(3);
@@ -767,9 +886,13 @@ public class LintCodeCompanyOne {
         k4.next = null;
 //        handler.nthToLast(k1,2);
 
-        handler.maxProfitIII(new int[]{3, 3, 5, 0, 0, 3, 1, 4});
+//        handler.maxProfitIII(new int[]{3, 3, 5, 0, 0, 3, 1, 4});
+//        handler.reverseWords("the blue sky".toCharArray());
+//        handler.heapify(new int[]{2, 3, 5, 7, 1});
+//        handler.optimalUtilization(new int[]{1, 1, 3, 3, 6, 11, 12, 14, 15, 18}, new int[]{5, 5, 9, 12, 18}, 9);
+        handler.canPartition(new int[]{1, 2, 3, 5});
 
-
+        System.out.println("end");
     }
 
     static class TreeNode {
