@@ -757,6 +757,25 @@ public class RepeativeCaseI {
         nums[n] = temp;
     }
 
+
+    public List<List<Integer>> subsets(int[] nums) {
+        List<List<Integer>> resList = new ArrayList<>();
+        if (nums == null || nums.length == 0) return resList;
+        List<Integer> levelList = new ArrayList<>();
+        resList.add(new ArrayList<>(levelList));
+        subsetsDFS(resList, levelList, nums, 0);
+        return resList;
+    }
+
+    private void subsetsDFS(List<List<Integer>> resList, List<Integer> levelList, int[] nums, int index) {
+        for (int i = index; i < nums.length; i++) {
+            levelList.add(nums[i]);
+            resList.add(new ArrayList<>(levelList));
+            subsetsDFS(resList, levelList, nums, i + 1);
+            levelList.remove(levelList.size() - 1);
+        }
+    }
+
     public static void main(String[] args) {
         LeetCodeOne leetCodeOne = new LeetCodeOne();
         LeetCodeClassification leetCodeClassification = new LeetCodeClassification();
@@ -783,10 +802,12 @@ public class RepeativeCaseI {
 //        handler.firstMissingPositive2nd(new int[]{3, 4, -1, 1});
 //        handler.firstMissingPositive2nd(new int[]{3, 4, 4, -1, 1});
 //        handler.firstMissingPositive2nd(new int[]{3, 4, -1, -2, 1, 5, 16, 0, 2, 0});
-        handler.firstMissingPositive3rd(new int[]{3, 4, -1, 1});
+//        handler.firstMissingPositive3rd(new int[]{3, 4, -1, 1});
+        handler.subsets(new int[]{1, 2, 3});
 
     }
 
+    //winter
     private class ReturnNode {
         boolean isB;
         int depth;

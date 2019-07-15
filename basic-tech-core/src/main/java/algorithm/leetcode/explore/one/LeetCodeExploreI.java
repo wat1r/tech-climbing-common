@@ -2811,15 +2811,117 @@ public class LeetCodeExploreI {
                 }
             } else if (chas[i] == 'L') {
                 late++;
-                if(late>2){
+                if (late > 2) {
                     return false;
                 }
-            }else {
-                late=0;
+            } else {
+                late = 0;
             }
         }
         return true;
     }
+
+    /**
+     * 62. 不同路径 O(1) 空间压缩 DP
+     *
+     * @param m
+     * @param n
+     * @return
+     */
+    public int uniquePaths(int m, int n) {
+        int[] dp = new int[n];
+        Arrays.fill(dp, 1);
+        for (int i = 1; i < m; i++) {
+            for (int j = 1; j < n; j++) {
+                dp[j] = dp[j] + dp[j - 1];
+            }
+        }
+        return dp[n - 1];
+    }
+
+
+    public int minPathSum(int[][] grid) {
+        int row = grid.length, col = grid[0].length;
+        int[] arr = new int[col];
+        arr[0] = grid[0][0];
+        for (int j = 1; j < col; j++) {
+            arr[j] += arr[j - 1] + grid[0][j];
+        }
+        for (int i = 1; i < row; i++) {
+            arr[0] = arr[0] + grid[i][0];
+            for (int j = 1; j < col; j++) {
+                arr[j] = Math.min(arr[j], arr[j - 1]) + grid[i][j];
+            }
+        }
+        return arr[col - 1];
+    }
+
+
+    public int coinChange(int[] coins, int amount) {
+        int[][] dp = new int[coins.length][amount + 1];
+        for (int j = 1; j <= amount; j++) {
+            dp[0][j] = Integer.MAX_VALUE;
+            if (j - coins[0] >= 0 && dp[0][j - coins[0]] != Integer.MAX_VALUE) {
+                dp[0][j] = dp[0][j - coins[0]] + 1;
+            }
+        }
+        for (int i = 1; i < coins.length; i++) {
+            for (int j = 1; j <= amount; j++) {
+                int temp = Integer.MAX_VALUE;
+                if (j - coins[i] >= 0 && dp[i][j - coins[i]] != Integer.MAX_VALUE) {
+                    temp = dp[i][j - coins[i]] + 1;
+                }
+                dp[i][j] = Math.min(dp[i - 1][j], temp);
+            }
+        }
+        return dp[coins.length - 1][amount] == Integer.MAX_VALUE ? -1 : dp[coins.length - 1][amount];
+    }
+
+    public int coinChange2nd(int[] coins, int amount) {
+        int[] dp = new int[amount + 1];
+        for (int j = 1; j <= amount; j++) {
+            dp[j] = Integer.MAX_VALUE;
+            if (j - coins[0] >= 0 && dp[j - coins[0]] != Integer.MAX_VALUE) {
+                dp[j] = dp[j - coins[0]] + 1;
+            }
+        }
+
+        for (int i = 1; i < coins.length; i++) {
+            for (int j = 1; j <= amount; j++) {
+                int temp = Integer.MAX_VALUE;
+                if (j - coins[i] >= 0 && dp[j - coins[i]] != Integer.MAX_VALUE) {
+                    temp = dp[j - coins[i]] + 1;
+                }
+                dp[j] = Math.min(temp, dp[j]);
+
+            }
+        }
+        return dp[amount] != Integer.MAX_VALUE ? dp[amount] : -1;
+    }
+
+
+    public int findTargetSumWays(int[] nums, int S) {
+        if (nums == null || nums.length == 0) return 0;
+        int sum = 0;
+        for (int num : nums) {
+            sum += num;
+        }
+        if (sum < S || (sum + S) % 2 == 1) return 0;
+        int n = (sum + S) / 2;
+        int[] dp = new int[n + 1];
+        dp[0] = 1;
+        for (int i = 0; i < nums.length; i++) {
+            for (int j = n; j >= nums[i]; j--) {
+                dp[j] = dp[j] + dp[j - nums[i]];
+            }
+        }
+        return dp[n];
+    }
+
+
+
+
+
 
 
     public static void main(String[] args) {
@@ -2991,11 +3093,16 @@ public class LeetCodeExploreI {
 //        handler.peakIndexInMountainArray(new int[]{0, 2, 1, 0});
 //        handler.validMountainArray(new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9});
 //        handler.longestMountain(new int[]{2, 1, 4, 7, 3, 2, 5});
-        handler.checkRecord("PPALLPL");
-
-
+//        handler.checkRecord("PPALLPL");
+//        handler.uniquePaths(3, 2);
+//        handler.minPathSum(new int[][]{{1, 3, 1},
+//                {1, 5, 1},
+//                {4, 2, 1}});
+        handler.findTargetSumWays(new int[]{7, 9, 3, 8, 0, 2, 4, 8, 3, 9}, 0);
     }
 
+
+//    winter
 
     private static void print(Object obj) {
         System.out.println(JSON.toJSONString(obj));
