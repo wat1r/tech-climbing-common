@@ -776,6 +776,64 @@ public class RepeativeCaseI {
         }
     }
 
+
+    public List<List<String>> groupAnagrams2nd(String[] strs) {
+        List<List<String>> resList = new ArrayList<>();
+        if (strs == null || strs.length == 0) return resList;
+        HashMap<String, List<String>> hashMap = new HashMap<>();
+        for (String str : strs) {
+            char[] chas = str.toCharArray();
+            Arrays.sort(chas);
+            String temp = Arrays.toString(chas);
+            hashMap.putIfAbsent(temp, new ArrayList<>());
+            hashMap.get(temp).add(str);
+        }
+        resList = new ArrayList<>(hashMap.values());
+        return resList;
+    }
+
+
+    public List<List<String>> groupAnagrams3rd(String[] strs) {
+        List<List<String>> resList = new ArrayList<>();
+        int[] prime = {2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97, 101, 103};
+        HashMap<Integer, List<String>> hashMap = new HashMap<>();
+        for (String str : strs) {
+            char[] chas = str.toCharArray();
+            int key = 1;
+            for (char c : chas) {
+                key *= prime[c - 'a'];
+            }
+            hashMap.putIfAbsent(key, new ArrayList<>());
+            hashMap.get(key).add(str);
+        }
+        resList = new ArrayList<>(hashMap.values());
+        return resList;
+    }
+
+
+    public List<List<String>> groupAnagrams4th(String[] strs) {
+        List<List<String>> resList = new ArrayList<>();
+        HashMap<String, List<String>> hashMap = new HashMap<>();
+        for (String str : strs) {
+            char[] chas = str.toCharArray();
+            int[] counter = new int[26];
+            for (char c : chas) {
+                counter[c - 'a']++;
+            }
+            StringBuilder sb = new StringBuilder();
+            for (int count : counter) {
+                sb.append(count);
+            }
+            hashMap.putIfAbsent(sb.toString(),new ArrayList<>());
+            hashMap.get(sb.toString()).add(str);
+        }
+        resList =new ArrayList<>(hashMap.values());
+        return resList;
+    }
+
+//
+
+
     public static void main(String[] args) {
         LeetCodeOne leetCodeOne = new LeetCodeOne();
         LeetCodeClassification leetCodeClassification = new LeetCodeClassification();
@@ -803,7 +861,9 @@ public class RepeativeCaseI {
 //        handler.firstMissingPositive2nd(new int[]{3, 4, 4, -1, 1});
 //        handler.firstMissingPositive2nd(new int[]{3, 4, -1, -2, 1, 5, 16, 0, 2, 0});
 //        handler.firstMissingPositive3rd(new int[]{3, 4, -1, 1});
-        handler.subsets(new int[]{1, 2, 3});
+//        handler.subsets(new int[]{1, 2, 3});
+        String[] strs = new String[]{"eat", "tea", "tan", "ate", "nat", "bat"};
+        handler.groupAnagrams3rd(strs);
 
     }
 

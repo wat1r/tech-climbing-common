@@ -209,6 +209,95 @@ public class SwordOffer {
     }
 
 
+    public boolean HasSubtree(TreeNode root1, TreeNode root2) {
+        boolean res = false;
+        if (root1 != null && root2 != null) {
+            if (root1.val == root2.val) res = doesTreeHasSubTree(root1, root2);
+            if (!res) res = HasSubtree(root1.left, root2);
+            if (!res) res = HasSubtree(root1.right, root2);
+        }
+        return res;
+    }
+
+    private boolean doesTreeHasSubTree(TreeNode root1, TreeNode root2) {
+        if (root2 == null) return true;
+        if (root1 == null) return false;
+        if (root1.val != root2.val) return false;
+        return doesTreeHasSubTree(root1.left, root2.left) && doesTreeHasSubTree(root1.right, root2.right);
+    }
+
+    public void Mirror(TreeNode root) {
+        if (root == null) return;
+        if (root.right == null && root.left == null) return;
+        TreeNode temp = root.left;
+        root.left = root.right;
+        root.right = temp;
+        if (root.left != null) Mirror(root.left);
+        if (root.right != null) Mirror(root.right);
+    }
+
+    ArrayList<Integer> printList = new ArrayList<>();
+
+    public ArrayList<Integer> printMatrix(int[][] matrix) {
+        int topRow = 0, topCol = 0;
+        int downRow = matrix.length - 1, downCol = matrix[0].length - 1;
+        while (topRow <= downRow && topCol <= downCol) {
+            printMatrixSegment(matrix, topRow++, topCol++, downRow--, downCol--);
+        }
+        return printList;
+    }
+
+    private void printMatrixSegment(int[][] matrix, int topRow, int topCol, int downRow, int downCol) {
+        if (topRow == downRow) {
+            while (topCol <= downCol) {
+                printList.add(matrix[topRow][topCol]);
+                topCol++;
+            }
+        } else if (topCol == downCol) {
+            while (topRow <= downRow) {
+                printList.add(matrix[topRow][topCol]);
+                topRow++;
+            }
+        } else {
+            int curRow = topRow, curCol = topCol;
+            while (curCol < downCol) {
+                printList.add(matrix[topRow][curCol]);
+                curCol++;
+            }
+            while (curRow < downRow) {
+                printList.add(matrix[curRow][downCol]);
+                curRow++;
+            }
+            while (curCol > topCol) {
+                printList.add(matrix[downRow][curCol]);
+                curCol--;
+            }
+            while (curRow > topRow) {
+                printList.add(matrix[curRow][topCol]);
+                curRow--;
+            }
+        }
+    }
+
+
+    public boolean IsPopOrder(int[] pushA, int[] popA) {
+        if (pushA == null || popA == null || pushA.length == 0 || popA.length == 0 || pushA.length != popA.length)
+            return false;
+        Stack<Integer> stack = new Stack<>();
+        int i = 0, j = 0;
+        stack.push(pushA[i++]);
+        while (j != popA.length) {
+            while (popA[j] != stack.peek()) {
+                if (i == pushA.length) return false;
+                stack.push(pushA[i++]);
+            }
+            j++;
+            stack.pop();
+        }
+        return true;
+    }
+
+
     public static void main(String[] args) {
 
 //        handler.replaceSpace(new StringBuffer("We Are Happy"));
@@ -225,7 +314,9 @@ public class SwordOffer {
         l4.next = l5;
         l5.next = null;
 //        handler.FindKthToTail(l1, 5);
-        handler.ReverseList(l1);
+//        handler.ReverseList(l1);
+//        handler.printMatrix(new int[][]{{1, 3}, {3, 4}});
+        handler.IsPopOrder(new int[]{1}, new int[]{2});
 
     }
     //winter
@@ -249,6 +340,53 @@ public class SwordOffer {
         TreeNode(int x) {
             val = x;
         }
+    }
+
+
+    class MyMinStack {
+
+        Stack<Integer> dataStack = null;
+        Stack<Integer> helpStack = null;
+
+        public MyMinStack() {
+            this.dataStack = new Stack<>();
+            this.helpStack = new Stack<>();
+        }
+
+        public void push(int node) {
+            if (helpStack.isEmpty()) {
+                helpStack.push(node);
+            } else if (node <= this.min()) {
+                helpStack.push(node);
+            }
+            dataStack.push(node);
+        }
+
+        public void pop() {
+            if (this.dataStack.isEmpty()) {
+                throw new RuntimeException("empty stack");
+            }
+            int value = dataStack.pop();
+            if (value == this.min()) {
+                helpStack.pop();
+            }
+        }
+
+        public int top() {
+            if (this.dataStack.isEmpty()) {
+                throw new RuntimeException("empty stack");
+            }
+            int value = dataStack.peek();
+            return value;
+        }
+
+        public int min() {
+            if (this.helpStack.isEmpty()) {
+                throw new RuntimeException("empty stack");
+            }
+            return this.helpStack.peek();
+        }
+
     }
 
 
