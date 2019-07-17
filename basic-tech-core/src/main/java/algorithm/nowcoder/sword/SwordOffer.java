@@ -2,9 +2,7 @@ package algorithm.nowcoder.sword;
 
 import org.omg.SendingContext.RunTime;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Stack;
+import java.util.*;
 
 /**
  * Created by FrankCooper
@@ -298,6 +296,48 @@ public class SwordOffer {
     }
 
 
+    public ArrayList<Integer> PrintFromTopToBottom(TreeNode root) {
+        ArrayList<Integer> results = new ArrayList<>();
+        if (root == null) return results;
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.offer(root);
+        while (!queue.isEmpty()) {
+            TreeNode current = queue.poll();
+            results.add(current.val);
+            if (current.left != null) {
+                queue.offer(current.left);
+            }
+            if (current.right != null) {
+                queue.offer(current.right);
+            }
+        }
+        return results;
+    }
+
+
+    public boolean VerifySquenceOfBST(int[] sequence) {
+        if (sequence == null || sequence.length == 0) return false;
+        int len = sequence.length;
+        int root = sequence[len - 1];
+        int i = 0;
+        for (; i < len - 1; i++) {
+            if (sequence[i] > root) break;
+        }
+        int j = i;
+        for (; j < len - 1; j++) {
+            if (sequence[j] < root) return false;
+        }
+        boolean left = true;
+        if (i > 0) left = VerifySquenceOfBST(Arrays.copyOfRange(sequence, 0, i));
+        boolean right = true;
+        if (i < len - 1) right = VerifySquenceOfBST(Arrays.copyOfRange(sequence, i, len - 1));
+        return left && right;
+    }
+
+    ArrayList<ArrayList<Integer>> resList = new ArrayList<>();
+
+
+
     public static void main(String[] args) {
 
 //        handler.replaceSpace(new StringBuffer("We Are Happy"));
@@ -316,7 +356,7 @@ public class SwordOffer {
 //        handler.FindKthToTail(l1, 5);
 //        handler.ReverseList(l1);
 //        handler.printMatrix(new int[][]{{1, 3}, {3, 4}});
-        handler.IsPopOrder(new int[]{1}, new int[]{2});
+//        handler.IsPopOrder(new int[]{1}, new int[]{2});
 
     }
     //winter
