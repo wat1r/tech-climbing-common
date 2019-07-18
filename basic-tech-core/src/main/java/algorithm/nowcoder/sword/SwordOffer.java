@@ -1,5 +1,6 @@
 package algorithm.nowcoder.sword;
 
+import basic.effective.stepone.PhoneNumber;
 import org.omg.SendingContext.RunTime;
 
 import java.util.*;
@@ -334,8 +335,131 @@ public class SwordOffer {
         return left && right;
     }
 
-    ArrayList<ArrayList<Integer>> resList = new ArrayList<>();
 
+    public ArrayList<ArrayList<Integer>> FindPath(TreeNode root, int target) {
+        ArrayList<ArrayList<Integer>> resList = new ArrayList<>();
+        if (root == null) return resList;
+        FindPathDFS(resList, new ArrayList<>(), root, target);
+        return resList;
+    }
+
+    private void FindPathDFS(ArrayList<ArrayList<Integer>> resList,
+                             ArrayList<Integer> levelList, TreeNode node, int target) {
+        if (node == null) return;
+        levelList.add(node.val);
+        if (node.left == null && node.right == null && node.val == target) {
+            resList.add(new ArrayList<>(levelList));
+            levelList.remove(levelList.size() - 1);
+            return;
+        }
+        FindPathDFS(resList, levelList, node.left, target - node.val);
+        FindPathDFS(resList, levelList, node.right, target - node.val);
+        levelList.remove(levelList.size() - 1);
+    }
+
+
+    public RandomListNode Clone(RandomListNode pHead) {
+        HashMap<RandomListNode, RandomListNode> map = new HashMap<>();
+        RandomListNode cur = pHead;
+        while (cur != null) {
+            map.put(cur, new RandomListNode(cur.label));
+            cur = cur.next;
+        }
+        cur = pHead;
+        while (cur != null) {
+            map.get(cur).next = map.get(cur.next);
+            map.get(cur).random = map.get(cur.random);
+            cur = cur.next;
+        }
+        return map.get(pHead);
+    }
+
+
+    public RandomListNode Clone2nd(RandomListNode pHead) {
+        if (pHead == null) return null;
+        RandomListNode cur = pHead;
+        RandomListNode next = null;
+        //复制并连接每一个节点
+        while (cur != null) {
+            next = cur.next;
+            cur.next = new RandomListNode(cur.label);
+            cur.next.next = next;
+            cur = next;
+        }
+        //设置节点的rand节点
+        cur = pHead;
+        RandomListNode curCopy = null;
+        while (cur != null) {
+            next = cur.next.next;
+            curCopy = cur.next;
+            curCopy.random = cur.random != null ? cur.random.next : null;
+            cur = next;
+        }
+        //拆分链表
+        RandomListNode res = pHead.next;
+        cur = pHead;
+        while (cur != null) {
+            next = cur.next.next;
+            curCopy = cur.next;
+            cur.next = next;
+            curCopy.next = next != null ? next.next : null;
+            cur = next;
+        }
+        return res;
+    }
+
+    /*
+    设N = abcde ,其中abcde分别为十进制中各位上的数字。
+    如果要计算百位上1出现的次数，它要受到3方面的影响：百位上的数字，百位以下（低位）的数字，百位以上（高位）的数字。
+    ① 如果百位上数字为0，百位上可能出现1的次数由更高位决定。比如：12013，则可以知道百位出现1的情况可能是：100~199，1100~1199,2100~2199，，...，11100~11199，一共1200个。可以看出是由更高位数字（12）决定，并且等于更高位数字（12）乘以 当前位数（100）。
+    ② 如果百位上数字为1，百位上可能出现1的次数不仅受更高位影响还受低位影响。比如：12113，则可以知道百位受高位影响出现的情况是：100~199，1100~1199,2100~2199，，....，11100~11199，一共1200个。和上面情况一样，并且等于更高位数字（12）乘以 当前位数（100）。但同时它还受低位影响，百位出现1的情况是：12100~12113,一共114个，等于低位数字（113）+1。
+    ③ 如果百位上数字大于1（2~9），则百位上出现1的情况仅由更高位决定，比如12213，则百位出现1的情况是：100~199,1100~1199，2100~2199，...，11100~11199,12100~12199,一共有1300个，并且等于更高位数字+1（12+1）乘以当前位数（100）。
+    */
+    public int NumberOf1Between1AndN_Solution(int n) {
+        int count = 0;//1的个数
+        int i = 1;//当前位
+        int current = 0, after = 0, before = 0;
+        while ((n / i) != 0) {
+            current = (n / i) % 10; //高位数字
+            before = n / (i * 10); //当前位数字
+            after = n - (n / i) * i; //低位数字
+            //如果为0,出现1的次数由高位决定,等于高位数字 * 当前位数
+            if (current == 0)
+                count += before * i;
+                //如果为1,出现1的次数由高位和低位决定,高位*当前位+低位+1
+            else if (current == 1)
+                count += before * i + after + 1;
+                //如果大于1,出现1的次数由高位决定,//（高位数字+1）* 当前位数
+            else {
+                count += (before + 1) * i;
+            }
+            //前移一位
+            i = i * 10;
+        }
+        return count;
+    }
+
+    public int GetUglyNumber_Solution(int index) {
+        if (index <= 0) return 0;
+        int i = 0;
+        int j = 0;
+        while (j < index) {
+            i++;
+            if (isUgly(i)) {
+                j++;
+            }
+        }
+
+        return i;
+    }
+
+
+    public boolean isUgly(int num) {
+        while (num % 2 == 0) num /= 2;
+        while (num % 3 == 0) num /= 3;
+        while (num % 5 == 0) num /= 5;
+        return num == 1;
+    }
 
 
     public static void main(String[] args) {
@@ -368,6 +492,16 @@ public class SwordOffer {
 
         ListNode(int val) {
             this.val = val;
+        }
+    }
+
+    class RandomListNode {
+        int label;
+        RandomListNode next = null;
+        RandomListNode random = null;
+
+        RandomListNode(int label) {
+            this.label = label;
         }
     }
 

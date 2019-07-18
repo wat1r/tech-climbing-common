@@ -2919,9 +2919,23 @@ public class LeetCodeExploreI {
     }
 
 
-
-
-
+    public boolean canConstruct(String ransomNote, String magazine) {
+        int[] counter = new int[256];
+        char[] ransomChar = ransomNote.toCharArray();
+        for (int i = 0; i < ransomChar.length; i++) {
+            counter[ransomChar[i] - 'a']++;
+        }
+        char[] magazineChar = magazine.toCharArray();
+        for (int i = 0; i < magazineChar.length; i++) {
+            counter[magazineChar[i] - 'a']--;
+        }
+        for (int count : counter) {
+            if (count > 0) {
+                return false;
+            }
+        }
+        return true;
+    }
 
 
     public static void main(String[] args) {
