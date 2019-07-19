@@ -1,5 +1,6 @@
 package algorithm.nowcoder.sword;
 
+import basic.callback.one.Li;
 import basic.effective.stepone.PhoneNumber;
 import org.omg.SendingContext.RunTime;
 
@@ -462,6 +463,138 @@ public class SwordOffer {
     }
 
 
+    public ListNode FindFirstCommonNode(ListNode pHead1, ListNode pHead2) {
+        if (pHead1 == null || pHead2 == null) {
+            return null;
+        }
+        Stack<ListNode> stack1 = new Stack<>();
+        Stack<ListNode> stack2 = new Stack<>();
+        while (pHead1 != null) {
+            stack1.push(pHead1);
+            pHead1 = pHead1.next;
+        }
+        while (pHead2 != null) {
+            stack2.push(pHead2);
+            pHead2 = pHead2.next;
+        }
+        ListNode res = null;
+        while (!stack1.isEmpty() && !stack2.isEmpty()) {
+            if (stack1.peek() != stack2.peek()) {
+                break;
+            }
+            res = stack1.peek();
+            stack1.pop();
+            stack2.pop();
+
+        }
+        return res;
+    }
+
+    public ListNode FindFirstCommonNode2nd(ListNode pHead1, ListNode pHead2) {
+        if (pHead1 == null || pHead2 == null) return null;
+        ListNode cur1 = pHead1;
+        ListNode cur2 = pHead2;
+        int i1 = 0, i2 = 0;
+        while (cur1 != null) {
+            i1++;
+            cur1 = cur1.next;
+        }
+        while (cur2 != null) {
+            i2++;
+            cur2 = cur2.next;
+        }
+        int delta = 0;
+        if (i1 > i2) {
+            delta = i1 - i2;
+            while (delta > 0) {
+                pHead1 = pHead1.next;
+                delta--;
+            }
+        } else {
+            delta = i2 - i1;
+            while (delta > 0) {
+                pHead2 = pHead2.next;
+                delta--;
+            }
+        }
+        while (pHead1 != null && pHead2 != null) {
+            if (pHead1 == pHead2) {
+                return pHead1;
+            }
+            pHead1 = pHead1.next;
+            pHead2 = pHead2.next;
+        }
+        return null;
+    }
+
+    public int GetNumberOfK(int[] array, int k) {
+        int count = 0;
+        if (array != null && array.length > 0) {
+            int first = GetFirstK(array, array.length, k, 0, array.length - 1);
+            int last = GetLastK(array, array.length, k, 0, array.length - 1);
+            if (first != -1 && last != -1) count = last - first + 1;
+        }
+        return count;
+    }
+
+
+    private int GetFirstK(int[] array, int len, int k, int start, int end) {
+        if (start > end) return -1;
+        int mid = (start + end) / 2;
+        int midData = array[mid];
+        if (midData == k) {
+            if ((mid > 0 && array[mid - 1] != k) || mid == 0) {
+                return mid;
+            } else {
+                end = mid - 1;
+            }
+        } else if (midData > k) {
+            end = mid - 1;
+        } else {
+            start = mid + 1;
+        }
+        return GetFirstK(array, len, k, start, end);
+    }
+
+
+    private int GetLastK(int[] array, int len, int k, int start, int end) {
+        if (start > end) return -1;
+        int mid = (start + end) / 2;
+        int midData = array[mid];
+        if (midData == k) {
+            if ((mid < len - 1 && array[mid] != array[mid + 1]) || mid == len - 1) {
+                return mid;
+            } else {
+                start = mid + 1;
+            }
+        } else if (mid > k) {
+            end = mid - 1;
+        } else {
+            start = mid + 1;
+        }
+
+        return GetLastK(array, len, k, start, end);
+    }
+
+    public int TreeDepth(TreeNode root) {
+        return root == null ? 0 : Math.max(TreeDepth(root.left), TreeDepth(root.right)) + 1;
+    }
+
+
+    public boolean IsBalanced_Solution(TreeNode root) {
+        return IsBalanced_Solution_Segment(root).isBalance;
+    }
+
+    public BalanceReturn IsBalanced_Solution_Segment(TreeNode root) {
+        if (root == null) return new BalanceReturn(true, 0);
+        BalanceReturn leftReturn = IsBalanced_Solution_Segment(root.left);
+        BalanceReturn rightReturn = IsBalanced_Solution_Segment(root.right);
+        if (!leftReturn.isBalance || !rightReturn.isBalance) return new BalanceReturn(false, 0);
+        if (Math.abs(leftReturn.depth - rightReturn.depth) > 1) return new BalanceReturn(false, 0);
+        return new BalanceReturn(true, Math.max(leftReturn.depth, rightReturn.depth) + 1);
+    }
+
+
     public static void main(String[] args) {
 
 //        handler.replaceSpace(new StringBuffer("We Are Happy"));
@@ -472,18 +605,42 @@ public class SwordOffer {
         ListNode l3 = new ListNode(3);
         ListNode l4 = new ListNode(4);
         ListNode l5 = new ListNode(5);
-        l1.next = l2;
-        l2.next = l3;
-        l3.next = l4;
-        l4.next = l5;
-        l5.next = null;
+        ListNode l6 = new ListNode(6);
+        ListNode l7 = new ListNode(7);
+//        l1.next = l2;
+//        l2.next = l3;
+//        l3.next = l4;
+//        l4.next = l5;
+//        l5.next = null;
 //        handler.FindKthToTail(l1, 5);
 //        handler.ReverseList(l1);
 //        handler.printMatrix(new int[][]{{1, 3}, {3, 4}});
 //        handler.IsPopOrder(new int[]{1}, new int[]{2});
+        l1.next = l2;
+        l2.next = l3;
+        l3.next = l6;
+        l6.next = l7;
+        l7.next = null;
+        l4.next = l5;
+        l5.next = l6;
+        l6.next = l7;
+        l7.next = null;
+
+        handler.FindFirstCommonNode2nd(l1, l4);
+
 
     }
     //winter
+
+    class BalanceReturn {
+        boolean isBalance;
+        int depth;
+
+        public BalanceReturn(boolean isBalance, int depth) {
+            this.isBalance = isBalance;
+            this.depth = depth;
+        }
+    }
 
 
     static class ListNode {
