@@ -595,6 +595,109 @@ public class SwordOffer {
     }
 
 
+    public void FindNumsAppearOnce(int[] array, int num1[], int num2[]) {
+        if (array == null || array.length == 0) return;
+        int temp = 0;
+        for (int a : array) {
+            temp ^= a;
+        }
+        int index = 0;
+        while ((temp & 1) == 0) {
+            index++;
+            temp >>= 1;
+        }
+        for (int a : array) {
+            if ((a >> index & 1) != 0) {
+                num1[0] ^= a;
+            } else {
+                num2[0] ^= a;
+            }
+        }
+    }
+
+
+    public ArrayList<ArrayList<Integer>> FindContinuousSequence(int sum) {
+        ArrayList<ArrayList<Integer>> resList = new ArrayList<>();
+        int start = 1, end = 2;
+        int temp = 0;
+        int mid = (1 + sum) / 2;
+        temp = start + end;
+        while (start < mid) {
+            if (temp == sum) {
+                resList.add(segmentList(start, end));
+            }
+            while (temp > sum && start < mid) {
+                temp -= start;
+                start++;
+                if (temp == sum) {
+                    resList.add(segmentList(start, end));
+                }
+            }
+            end++;
+            temp += end;
+        }
+        return resList;
+    }
+
+
+    private ArrayList<Integer> segmentList(int start, int end) {
+        ArrayList<Integer> list = new ArrayList<>();
+        for (int i = start; i <= end; i++) {
+            list.add(i);
+        }
+        return list;
+    }
+
+
+    public int Add(int num1, int num2) {
+        int sum = 0, carry = 0;
+        while (num2 != 0) {
+            sum = num1 ^ num2;
+            carry = (num1 & num2) << 1;
+            num1 = sum;
+            num2 = carry;
+        }
+        return num1;
+    }
+
+
+    public ListNode EntryNodeOfLoop(ListNode pHead) {
+        ListNode meeting = meetingNode(pHead);
+        if (meeting == null) return null;
+        ListNode node = meeting;
+        int count = 1;
+        while (node.next != meeting) {
+            node = node.next;
+            count++;
+        }
+        node = pHead;
+        for (int i = 0; i < count; i++) {
+            node = node.next;
+        }
+        ListNode another = pHead;
+        while (node != another) {
+            node = node.next;
+            another = another.next;
+        }
+        return node;
+    }
+
+
+    private ListNode meetingNode(ListNode pHead) {
+        if (pHead == null) return null;
+        ListNode slow = pHead;
+        if (slow == null) return null;
+        ListNode fast = slow.next;
+        while (slow != null && fast != null) {
+            if (slow == fast) return fast;
+            slow = slow.next;
+            fast = fast.next;
+            if (fast != null) fast = fast.next;
+        }
+        return null;
+    }
+
+
     public static void main(String[] args) {
 
 //        handler.replaceSpace(new StringBuffer("We Are Happy"));
@@ -626,7 +729,9 @@ public class SwordOffer {
         l6.next = l7;
         l7.next = null;
 
-        handler.FindFirstCommonNode2nd(l1, l4);
+//        handler.FindFirstCommonNode2nd(l1, l4);
+//        handler.FindNumsAppearOnce(new int[]{2, 4, 3, 6, 3, 2, 5, 5}, new int[]{0}, new int[]{0});
+        handler.Add(5, 17);
 
 
     }

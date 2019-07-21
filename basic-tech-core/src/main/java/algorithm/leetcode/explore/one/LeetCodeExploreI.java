@@ -1,5 +1,6 @@
 package algorithm.leetcode.explore.one;
 
+import algorithm.lintcode.one.LintCodeExplorerI;
 import basic.callback.one.Li;
 import com.alibaba.fastjson.JSON;
 
@@ -2938,6 +2939,117 @@ public class LeetCodeExploreI {
     }
 
 
+    public int maximumProduct(int[] nums) {
+        if (nums == null || nums.length <= 0) return 0;
+        if (nums.length == 3) return nums[0] * nums[1] * nums[2];
+        Arrays.sort(nums);
+        int res = 0;
+        int len = nums.length;
+        res = nums[len - 1] * nums[len - 2] * nums[len - 3];
+        res = Math.max(res, nums[0] * nums[len - 1] * nums[len - 2]);
+        res = Math.max(res, nums[0] * nums[1] * nums[len - 1]);
+        return res;
+    }
+
+    public int maximumProduct2nd(int[] nums) {
+        if (nums == null || nums.length <= 0) return 0;
+        if (nums.length == 3) return nums[0] * nums[1] * nums[2];
+        int max1 = Integer.MIN_VALUE, max2 = Integer.MIN_VALUE, max3 = Integer.MIN_VALUE;
+        int min1 = Integer.MAX_VALUE, min2 = Integer.MAX_VALUE;
+        for (int num : nums) {
+            if (max1 < num) {
+                max3 = max2;
+                max2 = max1;
+                max1 = num;
+            } else if (max2 < num) {
+                max3 = max2;
+                max2 = num;
+            } else if (max3 < num) {
+                max3 = num;
+            }
+
+            if (num < min1) {
+                min2 = min1;
+                min1 = num;
+            } else if (num < min2) {
+                min2 = num;
+            }
+        }
+
+        return Math.max(max1 * max2 * max3, min1 * min2 * max1);
+    }
+
+
+    public void deleteNode2nd(ListNode node) {
+        if (node == null) return;
+        node.val = node.next.val;
+        node.next = node.next.next;
+    }
+
+
+    public ListNode removeElements(ListNode head, int val) {
+        //添加一个哑节点
+        ListNode dummy = new ListNode(-1);
+        dummy.next = head;
+        ListNode pre = dummy;
+        while (pre.next != null) {
+            if (pre.next.val == val) {
+                pre.next = pre.next.next;
+            } else {
+                pre = pre.next;
+            }
+        }
+        return dummy.next;
+    }
+
+
+    public ListNode deleteDuplicates1st(ListNode head) {
+        ListNode cur = head;
+        while (cur != null && cur.next != null) {
+            if (cur.val == cur.next.val) {
+                cur.next = cur.next.next;
+            } else {
+                cur = cur.next;
+            }
+        }
+        return head;
+    }
+
+    public ListNode deleteDuplicates2nd(ListNode head) {
+        if (head == null || head.next == null) return head;
+        head.next = deleteDuplicates2nd(head.next);
+        return head.val == head.next.val ? head.next : head;
+    }
+
+
+    public ListNode deleteDuplicatesII(ListNode head) {
+        ListNode dummy = new ListNode(0);
+        dummy.next = head;
+        ListNode pre = dummy, cur = head;
+        ListNode del = new ListNode(0);
+        boolean isDuplicate = false;
+        while (cur != null) {
+            if (cur.next != null && cur.val == cur.next.val) {
+                isDuplicate = true;
+                del = cur.next;
+                cur.next = cur.next.next;
+                del = null;
+            } else {
+                cur = cur.next;
+                if (isDuplicate) {
+                    del = pre.next;
+                    pre.next = cur;
+                    del.next = null;
+                    isDuplicate = false;
+                } else {
+                    pre = pre.next;
+                }
+            }
+        }
+        return dummy.next;
+    }
+
+
     public static void main(String[] args) {
 
 //        int[] nums = {3, 2, 3};
@@ -3112,7 +3224,25 @@ public class LeetCodeExploreI {
 //        handler.minPathSum(new int[][]{{1, 3, 1},
 //                {1, 5, 1},
 //                {4, 2, 1}});
-        handler.findTargetSumWays(new int[]{7, 9, 3, 8, 0, 2, 4, 8, 3, 9}, 0);
+//        handler.findTargetSumWays(new int[]{7, 9, 3, 8, 0, 2, 4, 8, 3, 9}, 0);
+//        handler.maximumProduct(new int[]{-710, -107, -851, 657, -14, -859, 278, -182, -749, 718, -640, 127, -930, -462, 694, 969, 143, 309, 904, -651, 160, 451, -159, -316, 844, -60, 611, -169, -73, 721, -902, 338, -20, -890, -819, -644, 107, 404, 150, -219, 459, -324, -385, -118, -307, 993, 202, -147, 62, -94, -976, -329, 689, 870, 532, -686, 371, -850, -186, 87, 878, 989, -822, -350, -948, -412, 161, -88, -509, 836, -207, -60, 771, 516, -287, -366, -512, 509, 904, -459, 683, -563, -766, -837, -333, 93, 893, 303, 908, 532, -206, 990, 280, 826, -13, 115, -732, 525, -939, -787});
+        ListNode l1 = new ListNode(1);
+        ListNode l2 = new ListNode(2);
+        ListNode l3_1 = new ListNode(3);
+        ListNode l3_2 = new ListNode(3);
+        ListNode l4_1 = new ListNode(4);
+        ListNode l4_2 = new ListNode(4);
+        ListNode l5 = new ListNode(5);
+        l1.next = l2;
+        l2.next = l3_1;
+        l3_1.next = l3_2;
+        l3_2.next = l4_1;
+        l4_1.next = l4_2;
+        l4_2.next = l5;
+        l5.next = null;
+        handler.deleteDuplicatesII(l1);
+
+
     }
 
 
@@ -3134,7 +3264,7 @@ public class LeetCodeExploreI {
     }
 
 
-    class ListNode {
+    static class ListNode {
         int val;
         ListNode next;
 
