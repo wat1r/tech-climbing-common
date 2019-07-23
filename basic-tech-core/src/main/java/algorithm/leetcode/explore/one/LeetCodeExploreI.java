@@ -3050,6 +3050,146 @@ public class LeetCodeExploreI {
     }
 
 
+    public boolean wordPattern(String pattern, String str) {
+        if (pattern != null && str != null && pattern.length() == 0 && str.length() == 0) {
+            return true;
+        }
+        if (pattern == null || pattern.length() == 0 || str == null || str.length() == 0) {
+            return false;
+        }
+        String[] strArr = str.split(" ");
+        if (pattern.length() != strArr.length) {
+            return false;
+        }
+        Map<Character, String> map1 = new HashMap<>();
+        Map<String, Character> map2 = new HashMap<>();
+        for (int i = 0; i < strArr.length; i++) {
+            char c = pattern.charAt(i);
+            String s = strArr[i];
+            if (!map1.containsKey(c)) {
+                map1.put(c, s);
+            } else {
+                if (!Objects.equals(map1.get(c), s)) {
+                    return false;
+                }
+            }
+            if (!map2.containsKey(s)) {
+                map2.put(s, c);
+            } else {
+                if (!map2.get(s).equals(c)) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+
+    public TreeLinkNode GetNext(TreeLinkNode pNode) {
+        if (pNode == null) return null;
+        TreeLinkNode pNext = null;
+        if (pNode.right != null) {
+            TreeLinkNode pRight = pNode.right;
+            while (pRight.left != null) {
+                pRight = pRight.left;
+            }
+            pNext = pRight;
+        } else if (pNode.next != null) {
+            TreeLinkNode pCur = pNode;
+            TreeLinkNode pParent = pNode.next;
+            while (pParent != null && pCur == pParent.right) {
+                pCur = pParent;
+                pParent = pParent.next;
+            }
+            pNext = pParent;
+        }
+        return pNext;
+    }
+
+    boolean isSymmetrical(TreeNode pRoot) {
+        return isSymmetricalSegment(pRoot, pRoot);
+
+    }
+
+    private boolean isSymmetricalSegment(TreeNode pRoot1, TreeNode pRoot2) {
+        if (pRoot1 == null && pRoot2 == null) return true;
+        if (pRoot1 == null || pRoot2 == null) return false;
+        if (pRoot1.val != pRoot2.val) return false;
+        return isSymmetricalSegment(pRoot1.left, pRoot2.right) &&
+                isSymmetricalSegment(pRoot1.right, pRoot2.left);
+    }
+
+
+    private ArrayList<ArrayList<Integer>> Print(TreeNode pRoot) {
+        ArrayList<ArrayList<Integer>> resList = new ArrayList<>();
+        if (pRoot == null) return resList;
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.add(pRoot);
+        int nextLevel = 0;
+        int toBePrinted = 1;
+        ArrayList<Integer> levelList = new ArrayList<>();
+        while (!queue.isEmpty()) {
+            TreeNode cur = queue.poll();
+            levelList.add(cur.val);
+            if (cur.left != null) {
+                queue.add(cur.left);
+                ++nextLevel;
+            }
+            if (cur.right != null) {
+                queue.add(cur.right);
+                ++nextLevel;
+            }
+            --toBePrinted;
+            if (toBePrinted == 0) {
+                resList.add(levelList);
+                levelList = new ArrayList<>();
+                toBePrinted = nextLevel;
+                nextLevel = 0;
+            }
+        }
+        return resList;
+    }
+
+
+    public ArrayList<ArrayList<Integer>> Print1(TreeNode pRoot) {
+        ArrayList<ArrayList<Integer>> resList = new ArrayList<>();
+        if (pRoot == null) return resList;
+        Stack<TreeNode> stackOdd = new Stack<>();
+        Stack<TreeNode> stackEven = new Stack<>();
+        stackOdd.push(pRoot);
+        ArrayList<Integer> levelList = new ArrayList<>();
+        while (!stackOdd.empty() || !stackEven.empty()) {
+            if (!stackOdd.empty()) {
+                levelList = new ArrayList<>();
+                while (!stackOdd.empty()) {
+                    TreeNode node = stackOdd.pop();
+                    levelList.add(node.val);
+                    if (node.left != null) {
+                        stackEven.push(node.left);
+                    }
+                    if (node.right != null) {
+                        stackEven.push(node.right);
+                    }
+                }
+            } else {
+                levelList = new ArrayList<>();
+                while (!stackEven.empty()){
+                   TreeNode node = stackEven.pop();
+                   levelList.add(node.val);
+                   if (node.right != null) {
+                       stackOdd.push(node.right);
+                   }
+                   if (node.left != null) {
+                       stackOdd.push(node.left);
+                   }
+               }
+            }
+            resList.add(levelList);
+        }
+        return resList;
+    }
+
+
     public static void main(String[] args) {
 
 //        int[] nums = {3, 2, 3};
@@ -3240,8 +3380,30 @@ public class LeetCodeExploreI {
         l4_1.next = l4_2;
         l4_2.next = l5;
         l5.next = null;
-        handler.deleteDuplicatesII(l1);
-
+//        handler.deleteDuplicatesII(l1);
+        TreeNode pRoot = new TreeNode(8);
+        TreeNode t6 = new TreeNode(6);
+        TreeNode t5 = new TreeNode(5);
+        TreeNode t7 = new TreeNode(7);
+        TreeNode t10 = new TreeNode(10);
+        TreeNode t9 = new TreeNode(9);
+        TreeNode t11 = new TreeNode(11);
+        pRoot.left = t6;
+        pRoot.right = t10;
+        t6.left = t5;
+        t6.right = t7;
+        t5.left = null;
+        t5.right = null;
+        t7.left = null;
+        t7.right = null;
+        t10.left = t9;
+        t10.right = t11;
+        t9.left = null;
+        t9.right = null;
+        t11.left = null;
+        t11.right = null;
+//        handler.Print(pRoot);
+        handler.Print1(pRoot);
 
     }
 
@@ -3263,6 +3425,17 @@ public class LeetCodeExploreI {
         }
     }
 
+    static class TreeLinkNode {
+        int val;
+        TreeLinkNode left = null;
+        TreeLinkNode right = null;
+        TreeLinkNode next = null;
+
+        TreeLinkNode(int val) {
+            this.val = val;
+        }
+    }
+
 
     static class ListNode {
         int val;
@@ -3273,7 +3446,7 @@ public class LeetCodeExploreI {
         }
     }
 
-    class TreeNode {
+    static class TreeNode {
         int val;
         TreeNode left;
         TreeNode right;
