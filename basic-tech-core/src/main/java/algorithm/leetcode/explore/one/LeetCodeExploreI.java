@@ -1,7 +1,5 @@
 package algorithm.leetcode.explore.one;
 
-import algorithm.lintcode.one.LintCodeExplorerI;
-import basic.callback.one.Li;
 import com.alibaba.fastjson.JSON;
 
 import java.util.*;
@@ -3173,20 +3171,191 @@ public class LeetCodeExploreI {
                 }
             } else {
                 levelList = new ArrayList<>();
-                while (!stackEven.empty()){
-                   TreeNode node = stackEven.pop();
-                   levelList.add(node.val);
-                   if (node.right != null) {
-                       stackOdd.push(node.right);
-                   }
-                   if (node.left != null) {
-                       stackOdd.push(node.left);
-                   }
-               }
+                while (!stackEven.empty()) {
+                    TreeNode node = stackEven.pop();
+                    levelList.add(node.val);
+                    if (node.right != null) {
+                        stackOdd.push(node.right);
+                    }
+                    if (node.left != null) {
+                        stackOdd.push(node.left);
+                    }
+                }
             }
             resList.add(levelList);
         }
         return resList;
+    }
+
+
+    // 增加全局last节点
+    TreeNode last = null;
+
+    public void flatten(TreeNode root) {
+        if (root == null) return;
+        if (last != null) {
+            //左节点为null,右节点为当前处理到的root节点
+            last.left = null;
+            last.right = root;
+        }
+        last = root;
+        //记录下当前节点的右键点
+        TreeNode copyRight = root.right;
+        flatten(root.left);
+        flatten(copyRight);
+    }
+
+
+    public List<Integer> findDisappearedNumbers1st(int[] nums) {
+        List<Integer> resList = new ArrayList<>();
+        if (nums == null || nums.length == 0) return resList;
+        for (int i = 0; i < nums.length; i++) {
+            while (nums[i] != (i + 1) && nums[nums[i] - 1] != nums[i]) {
+                swapEOR(nums, i, nums[i] - 1);
+            }
+        }
+        for (int i = 0; i < nums.length; i++) {
+            if (nums[i] != (i + 1)) {
+                resList.add(i + 1);
+            }
+        }
+        return resList;
+    }
+
+    /**
+     * 异或的方式交换两个整数类型的值，通过下标的方式
+     *
+     * @param nums
+     * @param i
+     * @param j
+     */
+    public void swapEOR(int[] nums, int i, int j) {
+        nums[i] = nums[i] ^ nums[j];
+        nums[j] = nums[i] ^ nums[j];
+        nums[i] = nums[i] ^ nums[j];
+    }
+
+
+    public List<Integer> findDisappearedNumbers(int[] nums) {
+        int len = nums.length;
+        for (int i = 0; i < len; i++) {
+            //第一个判断当前值是否与i+1相等，第二个判断当前值-1的下标与当前值是否相等
+            while (nums[i] != i + 1 && nums[nums[i] - 1] != nums[i]) {
+                swap(nums, i, nums[i] - 1);
+            }
+        }
+        List<Integer> res = new ArrayList<>();
+        for (int i = 0; i < nums.length; i++) {
+            if (nums[i] != i + 1) {
+                res.add(i + 1);
+            }
+        }
+        return res;
+    }
+
+    /**
+     * input:[4, 3, 2, 7, 8, 2, 3, 1]
+     * [4, 3, 2, -7, 8, 2, 3, 1]
+     * [4, 3, -2, -7, 8, 2, 3, 1]
+     * [4, -3, -2, -7, 8, 2, 3, 1]
+     * [4, -3, -2, -7, 8, 2, -3, 1]
+     * [4, -3, -2, -7, 8, 2, -3, -1]
+     * [4, -3, -2, -7, 8, 2, -3, -1]
+     * [4, -3, -2, -7, 8, 2, -3, -1]
+     * [-4, -3, -2, -7, 8, 2, -3, -1]
+     * 将不在位置上某固定位置上的数字设置为相反数，当重复出现同样的数后，其是正数，其对应的下标+1是缺失的数
+     *
+     * @param nums
+     * @return
+     */
+    public List<Integer> findDisappearedNumbers2nd(int[] nums) {
+        List<Integer> resList = new ArrayList<>();
+        if (nums == null || nums.length == 0) return resList;
+        for (int i = 0; i < nums.length; i++) {
+            int index = Math.abs(nums[i]) - 1;
+            nums[index] = nums[index] < 0 ? nums[index] : -nums[index];
+            System.out.println(Arrays.toString(nums));
+        }
+        for (int i = 0; i < nums.length; i++) {
+            if (nums[i] > 0) {
+                resList.add(i + 1);
+            }
+        }
+        return resList;
+    }
+
+
+    public List<Integer> findDisappearedNumbers3rd(int[] nums) {
+        List<Integer> resList = new ArrayList<>();
+        if (nums == null || nums.length == 0) return resList;
+
+
+        return resList;
+    }
+
+    public int lengthOfLongestSubstring(String s) {
+        Set<Character> set = new HashSet<>();
+        int fast = 0, slow = 0, len = s.length();
+        int res = 0;
+        while (slow < len && fast < len) {
+            if (!set.contains(s.charAt(fast))) {
+                set.add(s.charAt(fast++));
+                res = Math.max(res, fast - slow);
+            } else {
+                set.remove(s.charAt(slow++));
+            }
+        }
+        return res;
+    }
+
+    public int lengthOfLongestSubstring2nd(String s) {
+        int i = 0, len = s.length(), res = 0;
+        Map<Character, Integer> hashmap = new HashMap<>();
+        for (int j = 0; j < len; j++) {
+            //使用hashmap作为存储，每次i的值取最大的
+            if (hashmap.containsKey(s.charAt(j))) {
+                i = Math.max(hashmap.get(s.charAt(j)), i);
+            }
+            //计算下标的距离，记录下标的绝对物理index
+            res = Math.max(res, j - i + 1);
+            hashmap.put(s.charAt(j), j + 1);
+        }
+        return res;
+    }
+
+
+    public int lengthOfLongestSubstring3rd(String s) {
+        int i = 0, len = s.length(), res = 0;
+        int[] arr = new int[128];
+        for (int j = 0; j < s.length(); j++) {
+            i = Math.max(arr[s.charAt(j)], i);
+            res = Math.max(j - i + 1, res);
+            arr[s.charAt(j)] = j + 1;
+        }
+        return res;
+    }
+
+
+    public int[] maxSlidingWindow(int[] nums, int k) {
+        if (nums == null || nums.length == 0) return new int[]{};
+        int len = nums.length;
+        Deque<Integer> deque = new LinkedList<>();
+        int[] ans = new int[len - k + 1];
+        int index = 0;
+        for (int i = 0; i < len; i++) {
+            while (!deque.isEmpty() && nums[deque.peekLast()] < nums[i]) {
+                deque.pollLast();
+            }
+            deque.addLast(i);
+            //处理[1,-1] 1 类型的case，当i-k是表示当前位置i往前k能到达的最远位置，当deque 的 first等于其时，说明这个first已经过期了
+            if ((i - k) == deque.peekFirst()) {
+                deque.pollFirst();
+            }
+            if (i >= k - 1) {
+                ans[index++] = nums[deque.peekFirst()];
+            }
+        }
+        return ans;
     }
 
 
@@ -3403,8 +3572,13 @@ public class LeetCodeExploreI {
         t11.left = null;
         t11.right = null;
 //        handler.Print(pRoot);
-        handler.Print1(pRoot);
-
+//        handler.Print1(pRoot);
+//        handler.flatten(pRoot);
+//        handler.findDisappearedNumbers(new int[]{4, 3, 2, 7, 8, 2, 3, 1});
+//        handler.findDisappearedNumbers2nd(new int[]{4, 3, 2, 7, 8, 2, 3, 1});
+//        handler.lengthOfLongestSubstring2nd("abcabcbb");
+//        handler.maxSlidingWindow(new int[]{1, 3, -1, -3, 5, 3, 6, 7}, 3);
+        handler.maxSlidingWindow(new int[]{10,14,12,11}, 0);
     }
 
 
