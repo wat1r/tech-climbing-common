@@ -3359,6 +3359,27 @@ public class LeetCodeExploreI {
     }
 
 
+    public double findMedianSortedArrays(int[] nums1, int[] nums2) {
+        int m = nums1.length, n = nums2.length;
+        int len = m + n;
+        int left = -1, right = -1;
+        int start1 = 0, start2 = 0;
+        for (int i = 0; i < len / 2; i++) {
+            left = right;
+            if (start1 < m && (nums1[start1] < nums2[start2] || start2 >= n)) {
+                right = nums1[start1++];
+            } else {
+                right = nums2[start2++];
+            }
+        }
+        if ((len & 1) == 0) {
+
+        }
+
+        return 0;
+    }
+
+
     public static void main(String[] args) {
 
 //        int[] nums = {3, 2, 3};
@@ -3578,7 +3599,7 @@ public class LeetCodeExploreI {
 //        handler.findDisappearedNumbers2nd(new int[]{4, 3, 2, 7, 8, 2, 3, 1});
 //        handler.lengthOfLongestSubstring2nd("abcabcbb");
 //        handler.maxSlidingWindow(new int[]{1, 3, -1, -3, 5, 3, 6, 7}, 3);
-        handler.maxSlidingWindow(new int[]{10,14,12,11}, 0);
+        handler.maxSlidingWindow(new int[]{10, 14, 12, 11}, 0);
     }
 
 
