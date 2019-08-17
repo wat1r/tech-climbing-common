@@ -359,6 +359,78 @@ public class RepeativeCaseII {
     }
 
 
+    public int findMin(int[] nums) {
+        //一个元素时，返回其自身
+        if (nums.length == 1) return nums[0];
+        int left = 0, right = nums.length - 1;
+        //1 < 2 < 3 < 4 < 5 < 7 类似于这样严格升序，最后一个元素第一个元素，第一个元素即为最小的数
+        if (nums[0] < nums[right]) return nums[0];
+        //采用二分查找
+        while (left < right) {
+            int mid = left + (right - left) / 2;
+            //4, 5, 6, 7, 0, 1, 2 中的7对应的index为3，其为mid，但是7>0证明0是最小的,当前的mid是最小数的前一个数
+            if (nums[mid] > nums[mid + 1]) return nums[mid + 1];
+            //4, 5, 6, 7，2,3到7,2,3时，mid为对应的数为2 7>2 返回mid为2，mid指向的是最小的数
+            if (nums[mid - 1] > nums[mid]) return nums[mid];
+            //如果[mid]>[0]，说明0到mid没有出现先升后降的趋势，left往mid+1移动
+            if (nums[mid] > nums[0]) left = mid + 1;
+                //如果[mid]<[0] 说明0到mid出现先升后降的趋势，right往mid-1移动
+            else right = mid - 1;
+        }
+        return -1;
+    }
+
+    public int findMin2nd(int[] nums) {
+        if (nums == null || nums.length == 0) return 0;
+        int left = 0, right = nums.length - 1;
+        while (left < right) {
+            int mid = left + (right - left) / 2;
+            if (nums[mid] <= nums[right]) right = mid;
+            else left = mid + 1;
+        }
+        return nums[left];
+    }
+
+
+    public int findMinII(int[] nums) {
+        if (nums == null || nums.length == 0) return 0;
+        int left = 0, right = nums.length - 1, mid = 0;
+        while (left < right) {
+            //解决2, 2, 2, 0, 1这类case的死循环
+            if (left == right - 1) break;
+            if (nums[left] < nums[right]) return nums[left];
+            mid = left + (right - left) / 2;
+            if (nums[left] > nums[mid]) {
+                right = mid;
+                continue;
+            }
+            if (nums[mid] > nums[right]) {
+                left = mid;
+                continue;
+            }
+            //以下的逻辑是处理相等的情况，case:1,1,1
+            while (left < mid) {
+                if (nums[left] == nums[mid]) left++;
+                else if (nums[left] < nums[mid]) return nums[left];
+                else {
+                    right = mid;
+                    break;
+                }
+            }
+        }
+        return Math.min(nums[left], nums[right]);
+    }
+
+    public int findMinII2nd(int[] nums) {
+        int left = 0, right = nums.length - 1;
+        while (left < right) {
+            int mid = left + (right - left) / 2;
+            if (nums[mid] > nums[right]) left = mid + 1;
+            else if (nums[mid] < nums[right]) right = mid;
+            else right--;
+        }
+        return nums[left];
+    }
 
 
     public static void main(String[] args) {
@@ -368,7 +440,13 @@ public class RepeativeCaseII {
 //        System.out.println(handler.isSubsequence("abc", "ahbgdc"));
 //        handler.maxProfitII(new int[]{7, 1, 5, 8, 3, 6, 4});
 //        handler.canPlaceFlowers(new int[]{1, 0, 0, 0, 1}, 1);
-        handler.checkPossibility(new int[]{3, 4, 2, 3});
+//        handler.checkPossibility(new int[]{3, 4, 2, 3});
+//        handler.findMin(new int[]{4, 5, 6, 7, 0, 1, 2});
+//        handler.findMin(new int[]{4, 5, 6, 7, 2, 3});
+//        handler.findMin2nd(new int[]{4, 5, 6, 7, 2, 3});
+//        handler.findMinII(new int[]{2, 2, 2, 0, 1});
+//        handler.findMinII(new int[]{1, 1, 1});
+        handler.findMinII2nd(new int[]{1, 1, 1, 1});
     }
 
     class TreeNode {

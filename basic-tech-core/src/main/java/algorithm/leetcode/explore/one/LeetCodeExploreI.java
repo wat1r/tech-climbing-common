@@ -3359,25 +3359,144 @@ public class LeetCodeExploreI {
     }
 
 
-    public double findMedianSortedArrays(int[] nums1, int[] nums2) {
-        int m = nums1.length, n = nums2.length;
-        int len = m + n;
-        int left = -1, right = -1;
-        int start1 = 0, start2 = 0;
-        for (int i = 0; i < len / 2; i++) {
-            left = right;
-            if (start1 < m && (nums1[start1] < nums2[start2] || start2 >= n)) {
-                right = nums1[start1++];
-            } else {
-                right = nums2[start2++];
+//    public double findMedianSortedArrays(int[] nums1, int[] nums2) {
+//        int m = nums1.length, n = nums2.length;
+//        int len = m + n;
+//        int left = -1, right = -1;
+//        int start1 = 0, start2 = 0;
+//        for (int i = 0; i < len / 2; i++) {
+//            left = right;
+//            if (start1 < m && (nums1[start1] < nums2[start2] || start2 >= n)) {
+//                right = nums1[start1++];
+//            } else {
+//                right = nums2[start2++];
+//            }
+//        }
+//        if ((len & 1) == 0) {
+//
+//        }
+//
+//        return 0;
+//    }
+
+
+    public TreeNode buildTree(int[] preorder, int[] inorder) {
+
+
+        return null;
+    }
+
+
+    private TreeNode preIn(int[] preorder, int preStart, int preEnd, int[] inorder, int inStart, int inEnd, Map<Integer, Integer> map) {
+
+
+        return null;
+    }
+
+
+    public ListNode swapPairs1st(ListNode head) {
+        ListNode dummy = new ListNode(0);
+        dummy.next = head;
+        ListNode pre = dummy;
+        while (pre.next != null && pre.next.next != null) {
+            ListNode node1 = pre.next;
+            ListNode node2 = pre.next.next;
+            ListNode next = node2.next;
+            node2.next = node1;
+            node1.next = next;
+            pre.next = node2;
+            pre = node1;
+        }
+        return dummy.next;
+    }
+
+
+    public ListNode swapPairs2nd(ListNode head) {
+        if (head == null || head.next == null) return head;
+        ListNode next = head.next;
+        head.next = swapPairs2nd(next.next);
+        next.next = head;
+        return next;
+    }
+
+
+    public int divide(int dividend, int divisor) {
+        int res = 0;
+        int sign = (dividend ^ divisor) >= 0 ? 1 : -1;
+        //转成long类型，2147483647, 2过不了-->1073741823
+        long dividendL = Math.abs((long) dividend);
+        long divisorL = Math.abs((long) divisor);
+        if (divisorL == 1) {
+            long r = dividendL * sign;
+            return r > Integer.MAX_VALUE ? Integer.MAX_VALUE : (int) r;
+        }
+        while (dividendL >= divisorL) {
+            long i = 1, temp = divisorL;
+            // 不断指数级temp和i，不会超时
+            while (dividendL >= temp) {
+                dividendL -= temp;
+                res += i;
+                i <<= 1;
+                temp <<= 1;
             }
         }
-        if ((len & 1) == 0) {
+        res *= sign;
+        return res;
+    }
 
+
+    public double findMedianSortedArrays(int[] nums1, int[] nums2) {
+        int m = nums1.length;
+        int n = nums2.length;
+        if (m > n) {
+            int[] temp = nums1;
+            nums1 = nums2;
+            nums2 = temp;
+            int tmp = m;
+            m = n;
+            n = tmp;
         }
+        int iMin = 0, iMax = m, halfLen = (m + n + 1) / 2;
+        while (iMin <= iMax) {
+            int i = (iMin + iMax) / 2;
+            int j = halfLen - i;
+            if (i < iMax && nums2[j - 1] > nums1[i]) {
+                iMin = i + 1;
+            } else if (i > iMin && nums1[i - 1] > nums2[j]) {
+                iMax = i - 1;
+            } else {
+                int maxLeft = 0;
+                if (i == 0) maxLeft = nums2[j - 1];
+                else if (j == 0) maxLeft = nums1[i - 1];
+                else maxLeft = Math.max(nums1[i - 1], nums2[j - 1]);
+                if ((m + n) % 2 == 1) return maxLeft;
+
+                int minRight = 0;
+                if (i == m) minRight = nums2[j];
+                else if (j == n) minRight = nums1[i];
+                else minRight = Math.min(nums1[i], nums2[j]);
+                return (maxLeft + minRight) / 2.0;
+            }
+        }
+        return 0.0;
+    }
+
+    public void nextPermutation(int[] nums) {
+
+
+    }
+
+
+    private int findRotateIndex(int left, int right) {
+
 
         return 0;
     }
+
+
+
+
+
 
 
     public static void main(String[] args) {
@@ -3599,7 +3718,12 @@ public class LeetCodeExploreI {
 //        handler.findDisappearedNumbers2nd(new int[]{4, 3, 2, 7, 8, 2, 3, 1});
 //        handler.lengthOfLongestSubstring2nd("abcabcbb");
 //        handler.maxSlidingWindow(new int[]{1, 3, -1, -3, 5, 3, 6, 7}, 3);
-        handler.maxSlidingWindow(new int[]{10, 14, 12, 11}, 0);
+//        handler.maxSlidingWindow(new int[]{10, 14, 12, 11}, 0);
+//        System.out.println(handler.divide(2147483647, 2));
+        int[] nums = new int[]{4, 5, 6, 7, 8, 1, 2, 3};
+        handler.findRotateIndex(0, nums.length - 1);
+
+
     }
 
 
