@@ -3487,11 +3487,7 @@ public class LeetCodeExploreI {
     }
 
 
-    private int findRotateIndex(int left, int right) {
 
-
-        return 0;
-    }
 
 
 
@@ -3721,7 +3717,7 @@ public class LeetCodeExploreI {
 //        handler.maxSlidingWindow(new int[]{10, 14, 12, 11}, 0);
 //        System.out.println(handler.divide(2147483647, 2));
         int[] nums = new int[]{4, 5, 6, 7, 8, 1, 2, 3};
-        handler.findRotateIndex(0, nums.length - 1);
+//        handler.findRotateIndex(0, nums.length - 1);
 
 
     }

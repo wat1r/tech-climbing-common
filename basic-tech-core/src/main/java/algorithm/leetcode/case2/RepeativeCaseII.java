@@ -433,6 +433,86 @@ public class RepeativeCaseII {
     }
 
 
+    /**
+     * 33. 搜索旋转排序数组
+     * 你可以假设数组中不存在重复的元素。
+     *
+     * @param nums
+     * @param target
+     * @return
+     */
+    public int search(int[] nums, int target) {
+        if (nums == null || nums.length == 0) return -1;
+        int left = 0, right = nums.length - 1;
+        while (left < right) {
+            int mid = left + (right - left) / 2;
+            if (nums[mid] == target) return mid;
+            else if (nums[mid] >= nums[left]) {
+                if (nums[left] <= target && target < nums[mid]) right = mid - 1;
+                else left = mid + 1;
+            } else if (nums[mid] < nums[right]) {
+                if (nums[mid] < target && target <= nums[right]) left = mid + 1;
+                else right = mid - 1;
+            }
+        }
+        return nums[left] == target ? left : -1;
+    }
+
+    public int search2nd(int[] nums, int target) {
+        if (nums == null || nums.length == 0) return -1;
+        int left = 0, right = nums.length - 1;
+        if (right == 0) return nums[0] == target ? 0 : -1;
+        int rotateIndex = findRotateIndex(nums, left, right);
+        if (nums[rotateIndex] == target) return rotateIndex;
+        if (rotateIndex == 0) return binarySearch(nums, left, right, target);
+        if (target < nums[0]) return binarySearch(nums, rotateIndex, right, target);
+        else return binarySearch(nums, 0, rotateIndex, target);
+    }
+
+    /**
+     * 找到旋转数组的旋转点，如4567123中的1对应的index=4
+     *
+     * @param arr   旋转数组
+     * @param left  旋转数组左边界index
+     * @param right 旋转数组右边界index
+     * @return
+     */
+    private int findRotateIndex(int[] arr, int left, int right) {
+        if (arr[left] < arr[right]) return 0;
+        while (left <= right) {
+            int mid = left + (right - left) / 2;
+            //此处返回发生时，需要的时前面一段升序数组后面一段降序数组，mid为升序数组的最后一个也就是升序数组的最大值
+            if (arr[mid] > arr[mid + 1]) return mid + 1;
+            else {
+                if (arr[left] > arr[mid]) right = mid - 1;
+                else left = mid + 1;
+            }
+        }
+        return 0;
+    }
+
+    /**
+     * 在一个升序数组arr中找target的index，不存在返回-1
+     *
+     * @param arr    升序数组
+     * @param left   arr的左边界index
+     * @param right  arr的右边界index
+     * @param target 目标数
+     * @return
+     */
+    private int binarySearch(int[] arr, int left, int right, int target) {
+        while (left <= right) {
+            int mid = left + (right - left) / 2;
+            if (arr[mid] == target) return mid;
+            else {
+                if (arr[mid] > target) right = mid - 1;
+                else left = mid + 1;
+            }
+        }
+        return -1;
+    }
+
+
     public static void main(String[] args) {
 //        int[] nums = {1, 2, 3};
 //        handler.subsets(nums);
@@ -446,8 +526,16 @@ public class RepeativeCaseII {
 //        handler.findMin2nd(new int[]{4, 5, 6, 7, 2, 3});
 //        handler.findMinII(new int[]{2, 2, 2, 0, 1});
 //        handler.findMinII(new int[]{1, 1, 1});
-        handler.findMinII2nd(new int[]{1, 1, 1, 1});
+//        handler.findMinII2nd(new int[]{1, 1, 1, 1});
+//        handler.search(new int[]{4, 5, 6, 7, 0, 1, 2}, 0);
+//        handler.search(new int[]{4, 5, 6, 7, 0, 1, 2}, 3);
+//        handler.search(new int[]{1, 3}, 1);
+        int[] nums = new int[]{4, 5, 6, 7, 8, 1, 2, 3};
+//        handler.findRotateIndex(nums, 0, nums.length - 1);
+        handler.search2nd(new int[]{1, 3}, 3);
+
     }
+
 
     class TreeNode {
         int val;
