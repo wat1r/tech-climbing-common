@@ -3487,14 +3487,6 @@ public class LeetCodeExploreI {
     }
 
 
-
-
-
-
-
-
-
-
     public static void main(String[] args) {
 
 //        int[] nums = {3, 2, 3};
@@ -3722,6 +3714,32 @@ public class LeetCodeExploreI {
 
     }
 
+
+    public List<List<Integer>> permute1st(int[] nums) {
+        List<List<Integer>> result = new ArrayList<>();
+        int len = nums.length;
+        boolean[] visited = new boolean[len];
+        helper(result, nums, new ArrayList<Integer>(), visited);
+        return result;
+
+    }
+
+    private void helper(List<List<Integer>> result, int[] nums, ArrayList<Integer> list, boolean[] visited) {
+        if (list.size() == nums.length) {
+            result.add(new ArrayList<>(list));
+            return;
+        }
+        for (int i = 0; i < nums.length; i++) {
+            if (visited[i]) continue;
+            visited[i] = true;
+            list.add(nums[i]);
+            helper(result, nums, list, visited);
+            visited[i] = false;
+            list.remove(list.size() - 1);
+        }
+
+
+    }
 
 //    winter
 

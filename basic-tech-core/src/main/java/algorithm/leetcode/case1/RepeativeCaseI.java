@@ -824,14 +824,54 @@ public class RepeativeCaseI {
             for (int count : counter) {
                 sb.append(count);
             }
-            hashMap.putIfAbsent(sb.toString(),new ArrayList<>());
+            hashMap.putIfAbsent(sb.toString(), new ArrayList<>());
             hashMap.get(sb.toString()).add(str);
         }
-        resList =new ArrayList<>(hashMap.values());
+        resList = new ArrayList<>(hashMap.values());
         return resList;
     }
 
 //
+
+    public List<List<Integer>> combinationSum(int[] candidates, int target) {
+        List<List<Integer>> result = new ArrayList<>();
+        if (candidates == null || candidates.length == 0) return result;
+        backtrack(result, new ArrayList<Integer>(), 0, candidates, target);
+        return result;
+    }
+
+    private void backtrack(List<List<Integer>> result, ArrayList<Integer> levelList, int index, int[] candidates, int target) {
+        if (target < 0) return;
+        if (target == 0) {
+            result.add(new ArrayList<>(levelList));
+            return;
+        }
+        for (int i = index; i < candidates.length; i++) {
+            levelList.add(candidates[i]);
+            backtrack(result, levelList, i, candidates, target - candidates[i]);
+            levelList.remove(levelList.size() - 1);
+        }
+    }
+
+    public List<List<Integer>> permute(int[] nums) {
+        List<List<Integer>> result = new ArrayList<>();
+        List<Integer> basicList = new ArrayList<>();
+        for (int num : nums) {
+            basicList.add(num);
+        }
+        backtrack(result, basicList, 0, nums.length);
+        return result;
+    }
+
+    private void backtrack(List<List<Integer>> result, List<Integer> basicList, int index, int len) {
+        if (index == len) result.add(new ArrayList<>(basicList));
+        for (int i = index; i < len; i++) {
+            Collections.swap(basicList, index, i);
+            backtrack(result, basicList, index + 1, len);
+            Collections.swap(basicList, index, i);
+        }
+
+    }
 
 
     public static void main(String[] args) {
@@ -863,8 +903,8 @@ public class RepeativeCaseI {
 //        handler.firstMissingPositive3rd(new int[]{3, 4, -1, 1});
 //        handler.subsets(new int[]{1, 2, 3});
         String[] strs = new String[]{"eat", "tea", "tan", "ate", "nat", "bat"};
-        handler.groupAnagrams3rd(strs);
-
+//        handler.groupAnagrams3rd(strs);
+        handler.permute(new int[]{1, 2, 3});
     }
 
     //winter

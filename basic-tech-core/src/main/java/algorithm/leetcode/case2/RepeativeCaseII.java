@@ -513,6 +513,98 @@ public class RepeativeCaseII {
     }
 
 
+    public boolean searchII(int[] arr, int target) {
+        if (arr == null || arr.length == 0) return false;
+        int left = 0, right = arr.length - 1;
+        while (left <= right) {
+            int mid = left + (right - left) / 2;
+            if (arr[mid] == target) return true;
+            if (arr[left] == arr[mid] && arr[mid] == arr[right]) {
+                while (left != mid && arr[left] == arr[mid]) left++;
+                if (left == mid) {
+                    left = mid + 1;
+                    continue;
+                }
+            }
+            if (arr[left] != arr[mid]) {
+                if (arr[mid] > arr[left]) {
+                    if (target >= arr[left] && target < arr[mid]) {
+                        right = mid - 1;
+                    } else {
+                        left = mid + 1;
+                    }
+                } else {
+                    //注意<=
+                    if (target > arr[mid] && target <= arr[right]) {
+                        left = mid + 1;
+                    } else {
+                        right = mid - 1;
+                    }
+                }
+            } else {
+                //注意<=
+                if (arr[mid] < arr[right]) {
+                    if (target > arr[mid] && target <= arr[right]) {
+                        left = mid + 1;
+                    } else {
+                        right = mid - 1;
+                    }
+                } else {
+                    if (target >= arr[left] && target < arr[mid]) {
+                        right = mid - 1;
+                    } else {
+                        left = mid + 1;
+                    }
+                }
+            }
+        }
+        return false;
+
+    }
+
+    public boolean searchII2nd(int[] nums, int target) {
+        int left = 0, right = nums.length - 1;
+        while (left <= right) {
+            int mid = left + (right - left) / 2;
+            if (nums[mid] == target) return true;
+            if (nums[left] == nums[mid] && nums[mid] == nums[right]) {
+                left++;
+                right--;
+            } else if (nums[left] <= nums[mid]) {
+                if (target >= nums[left] && target < nums[mid]) right = mid - 1;
+                else left = mid + 1;
+            } else {
+                if (nums[mid] < target && target <= nums[right]) left = mid + 1;
+                else right = mid - 1;
+            }
+        }
+        return false;
+    }
+
+
+    public List<List<Integer>> combinationSum(int[] candidates, int target) {
+        List<List<Integer>> result = new ArrayList<>();
+        if (candidates == null || candidates.length == 0) return result;
+        combinationSumDFS(result, new ArrayList<Integer>(), 0, candidates, target);
+        return result;
+    }
+
+    private void combinationSumDFS(List<List<Integer>> result, ArrayList<Integer> levelList, int index, int[] candidates, int target) {
+        for (int i = index; i < candidates.length; i++) {
+            int cur = candidates[i];
+            levelList.add(cur);
+            int remain = target - cur;
+            if (remain == 0) {
+                result.add(new ArrayList<>(levelList));
+            } else if (remain > 0) {
+                combinationSumDFS(result, levelList, i, candidates, remain);
+            }
+            levelList.remove(levelList.size() - 1);
+        }
+
+    }
+
+
     public static void main(String[] args) {
 //        int[] nums = {1, 2, 3};
 //        handler.subsets(nums);
@@ -532,7 +624,9 @@ public class RepeativeCaseII {
 //        handler.search(new int[]{1, 3}, 1);
         int[] nums = new int[]{4, 5, 6, 7, 8, 1, 2, 3};
 //        handler.findRotateIndex(nums, 0, nums.length - 1);
-        handler.search2nd(new int[]{1, 3}, 3);
+//        handler.search2nd(new int[]{1, 3}, 3);
+        nums = new int[]{1, 3};
+        handler.searchII(nums, 3);
 
     }
 
