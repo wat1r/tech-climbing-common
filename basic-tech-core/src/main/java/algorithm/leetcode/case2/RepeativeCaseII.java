@@ -604,6 +604,80 @@ public class RepeativeCaseII {
 
     }
 
+    public List<List<Integer>> subsets1st(int[] nums) {
+        List<List<Integer>> result = new ArrayList<>();
+        if (nums == null || nums.length == 0) return result;
+        List<Integer> levelList = new ArrayList<>();
+        result.add(levelList);
+        helper(result, levelList, nums, 0);
+        return result;
+    }
+
+    private void helper(List<List<Integer>> result, List<Integer> levelList, int[] nums, int index) {
+        for (int i = index; i < nums.length; i++) {
+            levelList.add(nums[i]);
+            result.add(new ArrayList<>(levelList));
+            helper(result, levelList, nums, i + 1);
+            levelList.remove(levelList.size() - 1);
+        }
+    }
+
+    public List<List<Integer>> subsetsWithDup(int[] nums) {
+        List<List<Integer>> result = new ArrayList<>();
+        if (nums == null || nums.length == 0) return result;
+        Arrays.sort(nums);
+        List<Integer> levelList = new ArrayList<>();
+        result.add(levelList);
+        helperWithDup(result, levelList, nums, 0);
+        return result;
+    }
+
+    private void helperWithDup(List<List<Integer>> result, List<Integer> levelList, int[] nums, int index) {
+        for (int i = index; i < nums.length; i++) {
+            if (i > index && nums[i] == nums[i - 1]) continue;
+            levelList.add(nums[i]);
+            result.add(new ArrayList<>(levelList));
+            helperWithDup(result, levelList, nums, i + 1);
+            levelList.remove(levelList.size() - 1);
+        }
+    }
+
+    public List<List<String>> groupAnagrams(String[] strs) {
+        List<List<String>> result = new ArrayList<>();
+        Map<String, List<String>> map = new HashMap<>();
+        for (String str : strs) {
+            int[] helper = new int[26];
+            char[] chas = str.toCharArray();
+            for (char c : chas) {
+                helper[c - 'a']++;
+            }
+            StringBuilder sb = new StringBuilder();
+            for (int h : helper) {
+                sb.append(h);
+            }
+            map.putIfAbsent(sb.toString(), new ArrayList<>());
+            map.get(sb.toString()).add(str);
+        }
+        result = new ArrayList<>(map.values());
+        return result;
+    }
+
+    public boolean canJump(int[] nums) {
+        if (nums == null || nums.length == 0) return false;
+        int n = nums.length;
+        boolean[] dp = new boolean[n];
+        dp[0] = true;
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < i; j++) {
+                if (dp[j] && nums[j] >= (i - j)) {
+                    dp[i] = true;
+                    break;
+                }
+            }
+        }
+        return dp[n - 1];
+    }
+
 
     public static void main(String[] args) {
 //        int[] nums = {1, 2, 3};
