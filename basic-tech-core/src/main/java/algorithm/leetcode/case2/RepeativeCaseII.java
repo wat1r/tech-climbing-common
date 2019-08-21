@@ -678,6 +678,138 @@ public class RepeativeCaseII {
         return dp[n - 1];
     }
 
+    Index[] memo;
+
+    public boolean canJump1st(int[] nums) {
+        memo = new Index[nums.length];
+        for (int i = 0; i < memo.length; i++) {
+            memo[i] = Index.UNKNOWN;
+        }
+        memo[memo.length - 1] = Index.GOOD;
+        return canJumpFromPosition(0, nums);
+    }
+
+    private boolean canJumpFromPosition(int position, int[] nums) {
+        if (memo[position] != Index.UNKNOWN) return memo[position] == Index.GOOD;
+        int furtherJump = Math.min(position + nums[position], nums.length - 1);
+        for (int nextPosition = position + 1; nextPosition <= furtherJump; nextPosition++) {
+            if (canJumpFromPosition(nextPosition, nums)) {
+                memo[nextPosition] = Index.GOOD;
+                return true;
+            }
+        }
+        memo[position] = Index.BAD;
+        return false;
+    }
+
+
+    public boolean canJump2nd(int[] nums) {
+        Index[] memo = new Index[nums.length];
+        for (int i = 0; i < memo.length; i++) {
+            memo[i] = Index.UNKNOWN;
+        }
+        memo[memo.length - 1] = Index.GOOD;
+        for (int i = nums.length - 2; i >= 0; i--) {
+            int furtherJump = Math.min(i + nums[i], nums.length - 1);
+            for (int j = i + 1; j <= furtherJump; j++) {
+                if (memo[j] == Index.GOOD) {
+                    memo[i] = Index.GOOD;
+                    break;
+                }
+            }
+        }
+        return memo[0] == Index.GOOD;
+    }
+
+    public boolean canJump3rd(int[] nums) {
+        int lastPos = nums.length - 1;
+        for (int i = nums.length - 1; i >= 0; i--) {
+            if (i + nums[i] >= lastPos) {
+                lastPos = i;
+            }
+        }
+        return lastPos == 0;
+    }
+
+
+    public List<Interval> merge(List<Interval> intervals) {
+        if (intervals == null || intervals.size() <= 1) return intervals;
+        intervals.sort(Comparator.comparing(interval -> interval.start));
+        int i = 0;
+        while (i < intervals.size() - 1) {
+            Interval cur = intervals.get(i);
+            Interval next = intervals.get(i + 1);
+            if (cur.end >= next.start) {
+                cur.end = (cur.end >= next.end) ? cur.end : next.end;
+                intervals.remove(i + 1);
+                continue;
+            }
+            i++;
+        }
+        return intervals;
+    }
+
+
+    public int[][] merge(int[][] intervals) {
+        List<int[]> result = new ArrayList<>();
+        if (intervals == null || intervals.length == 0) return result.toArray(new int[0][]);
+        Arrays.sort(intervals, Comparator.comparingInt(a -> a[0]));
+        int i = 0;
+        while (i < intervals.length) {
+            int curStart = intervals[i][0];
+            int curEnd = intervals[i][1];
+            while (i < intervals.length - 1 && curEnd >= intervals[i + 1][0]) {
+                curEnd = Math.max(curEnd, intervals[i + 1][1]);
+                i++;
+            }
+            result.add(new int[]{curStart, curEnd});
+            i++;
+        }
+        return result.toArray(new int[0][]);
+    }
+
+    public boolean canAttendMeetings(List<Interval> intervals) {
+        if (intervals == null || intervals.size() == 0) return true;
+        PriorityQueue<Interval> queue = new PriorityQueue<>(Comparator.comparingInt(o -> o.start));
+        for (Interval interval : intervals) {
+            queue.add(interval);
+        }
+        while (!queue.isEmpty()) {
+            Interval cur = queue.poll();
+            Interval next = queue.peek();
+            while (next != null && cur.end > next.start) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public int minMeetingRooms(List<Interval> intervals) {
+        if (intervals == null || intervals.size() == 0) return 0;
+        intervals.sort(Comparator.comparingInt(o -> o.start));
+        PriorityQueue<Integer> queue = new PriorityQueue<>();
+        int count = 0;
+        for (Interval interval : intervals) {
+            queue.add(interval.end);
+            if (interval.start < queue.peek()) {
+                count++;
+            } else {
+                queue.poll();
+            }
+        }
+        return count;
+    }
+
+    public int maxSubArray1st(int[] nums) {
+        int pre = nums[0];
+        int max = 0;
+        for (int i = 1; i < nums.length; i++) {
+            pre = pre > 0 ? pre + nums[i] : nums[i];
+            max = Math.max(pre, max);
+        }
+        return max;
+    }
+
 
     public static void main(String[] args) {
 //        int[] nums = {1, 2, 3};
@@ -699,8 +831,9 @@ public class RepeativeCaseII {
         int[] nums = new int[]{4, 5, 6, 7, 8, 1, 2, 3};
 //        handler.findRotateIndex(nums, 0, nums.length - 1);
 //        handler.search2nd(new int[]{1, 3}, 3);
-        nums = new int[]{1, 3};
-        handler.searchII(nums, 3);
+//        nums = new int[]{1, 3};
+//        handler.searchII(nums, 3);
+        handler.merge(new int[][]{{1, 3}, {2, 6}, {8, 10}, {15, 18}});
 
     }
 
@@ -721,6 +854,20 @@ public class RepeativeCaseII {
 
         ListNode(int x) {
             val = x;
+        }
+    }
+
+    enum Index {
+        GOOD, BAD, UNKNOWN;
+    }
+
+
+    class Interval {
+        int start, end;
+
+        Interval(int start, int end) {
+            this.start = start;
+            this.end = end;
         }
     }
 }
