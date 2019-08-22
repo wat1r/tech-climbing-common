@@ -811,6 +811,52 @@ public class RepeativeCaseII {
     }
 
 
+    public int uniquePaths(int m, int n) {
+        //dp[i][j]是从(0,0)位置走到(i,j)位置的走法
+        int[][] dp = new int[m][n];
+        for (int j = 0; j < n; j++) dp[0][j] = 1;
+        for (int i = 0; i < m; i++) dp[i][0] = 1;
+        for (int i = 1; i < m; i++) {
+            for (int j = 1; j < n; j++) {
+                dp[i][j] = dp[i - 1][j] + dp[i][j - 1];
+            }
+        }
+        return dp[m - 1][n - 1];
+    }
+
+
+    public int uniquePaths1st(int m, int n) {
+        int[] dp = new int[n];
+        for (int i = 0; i < n; i++) dp[i] = 1;
+        for (int i = 1; i < m; i++) {
+            for (int j = 1; j < n; j++) {
+                dp[j] = dp[j] + dp[j - 1];
+            }
+        }
+        return dp[n - 1];
+    }
+
+    public int uniquePathsWithObstacles(int[][] obstacleGrid) {
+        if (obstacleGrid == null || obstacleGrid.length == 0) return 0;
+        int m = obstacleGrid.length, n = obstacleGrid[0].length;
+        int[] dp = new int[n];
+        for (int j = 0; j < n; j++) {
+            if (obstacleGrid[0][j] == 1) break;
+            dp[j] = 1;
+        }
+        for (int i = 1; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                if (obstacleGrid[i][j] == 1) {
+                    dp[j] = 0;
+                    continue;
+                }
+                dp[j] = (j == 0) ? dp[j] : dp[j] + dp[j - 1];
+            }
+        }
+        return dp[n - 1];
+    }
+
+
     public static void main(String[] args) {
 //        int[] nums = {1, 2, 3};
 //        handler.subsets(nums);
@@ -833,8 +879,8 @@ public class RepeativeCaseII {
 //        handler.search2nd(new int[]{1, 3}, 3);
 //        nums = new int[]{1, 3};
 //        handler.searchII(nums, 3);
-        handler.merge(new int[][]{{1, 3}, {2, 6}, {8, 10}, {15, 18}});
-
+//        handler.merge(new int[][]{{1, 3}, {2, 6}, {8, 10}, {15, 18}});
+        handler.uniquePathsWithObstacles(new int[][]{{0}, {1}});
     }
 
 
