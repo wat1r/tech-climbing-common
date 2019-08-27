@@ -857,6 +857,224 @@ public class RepeativeCaseII {
     }
 
 
+    public int uniquePathsWithObstacles1st(int[][] obstacleGrid) {
+        if (obstacleGrid == null || obstacleGrid.length == 0) return 0;
+        int m = obstacleGrid.length, n = obstacleGrid[0].length;
+        int[][] dp = new int[m][n];
+        for (int i = 0; i < m; i++) {
+            if (obstacleGrid[i][0] == 1) break;
+            dp[i][0] = 1;
+        }
+        for (int j = 0; j < n; j++) {
+            if (obstacleGrid[0][j] == 1) break;
+            dp[0][j] = 1;
+        }
+        for (int i = 1; i < m; i++) {
+            for (int j = 1; j < n; j++) {
+                if (obstacleGrid[i][j] == 1) continue;
+                dp[i][j] = dp[i - 1][j] + dp[i][j - 1];
+            }
+        }
+        return dp[m - 1][n - 1];
+    }
+
+
+    public int minPathSum(int[][] grid) {
+        if (grid == null || grid.length <= 0) return 0;
+        int m = grid.length, n = grid[0].length;
+        int[][] dp = new int[m][n];
+        dp[0][0] = grid[0][0];
+        for (int i = 1; i < m; i++) {
+            dp[i][0] = dp[i - 1][0] + grid[i][0];
+        }
+        for (int j = 1; j < n; j++) {
+            dp[0][j] = dp[0][j - 1] + grid[0][j];
+        }
+        for (int i = 1; i < m; i++) {
+            for (int j = 1; j < n; j++) {
+                dp[i][j] = Math.min(dp[i - 1][j], dp[i][j - 1]) + grid[i][j];
+            }
+        }
+        return dp[m - 1][n - 1];
+    }
+
+
+    public void sortColors(int[] nums) {
+        if (nums == null || nums.length == 0) return;
+        int left = 0, right = nums.length - 1;
+        int i = 0;
+        while (i <= right) {
+            if (nums[i] == 0) {
+                swap(nums, i, left);
+                left++;
+                i++;
+            } else if (nums[i] == 1) {
+                i++;
+            } else if (nums[i] == 2) {
+                swap(nums, i, right);
+                right--;
+            }
+        }
+    }
+
+    public void swap(int[] arr, int m, int n) {
+        int temp = arr[m];
+        arr[m] = arr[n];
+        arr[n] = temp;
+//        arr[m] = arr[m] ^ arr[n];
+//        arr[n] = arr[m] ^ arr[n];
+//        arr[m] = arr[m] ^ arr[n];
+    }
+
+    public int numDecodings(String s) {
+        char[] chas = s.toCharArray();
+        int n = chas.length;
+        int[] dp = new int[n + 1];
+        dp[0] = 1;
+        dp[1] = chas[0] != '0' ? 1 : 0;
+        for (int i = 2; i <= n; i++) {
+            int oneDigit = chas[i - 1] - '0';
+            if (oneDigit >= 1 && oneDigit <= 9) {
+                dp[i] += dp[i - 1];
+            }
+            int twoDigit = (chas[i - 1] - '0') + 10 * (chas[i - 2] - '0');
+            if (twoDigit >= 10 && twoDigit <= 26) {
+                dp[i] += dp[i - 2];
+            }
+        }
+        return dp[n];
+    }
+
+
+    List<Integer> inoderList = new ArrayList<>();
+
+    public List<Integer> inorderTraversal(TreeNode root) {
+        if (root == null) return inoderList;
+        inorderTraversal(root.left);
+        inoderList.add(root.val);
+        inorderTraversal(root.right);
+        return inoderList;
+    }
+
+    public List<Integer> inorderTraversal1st(TreeNode root) {
+        List<Integer> result = new ArrayList<>();
+        Stack<TreeNode> stack = new Stack<>();
+        while (!stack.isEmpty() || root != null) {
+            if (root != null) {
+                stack.push(root);
+                root = root.left;
+            } else {
+                root = stack.pop();
+                result.add(root.val);
+                root = root.right;
+            }
+        }
+        return result;
+    }
+
+    public List<List<Integer>> levelOrder(TreeNode root) {
+        List<List<Integer>> result = new ArrayList<>();
+        if (root == null) return result;
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.offer(root);
+        int level = 0;
+        while (!queue.isEmpty()) {
+            result.add(new ArrayList<>());
+            int size = queue.size();
+            for (int i = 0; i < size; i++) {
+                TreeNode cur = queue.poll();
+                result.get(level).add(cur.val);
+                if (cur.left != null) queue.add(cur.left);
+                if (cur.right != null) queue.add(cur.right);
+            }
+            ++level;
+        }
+        return result;
+    }
+
+    public void printByLevel(TreeNode head) {
+        if (head == null) return;
+        Queue<TreeNode> queue = new LinkedList<>();
+        int level = 0;
+        TreeNode last = head;
+        TreeNode nLast = null;
+        queue.offer(last);
+        System.out.print("Level " + (level++) + " : ");
+        while (!queue.isEmpty()) {
+            TreeNode cur = queue.poll();
+            System.out.print(cur.val + " ");
+            if (cur.left != null) {
+                queue.offer(cur.left);
+                nLast = cur.left;
+            }
+            if (cur.right != null) {
+                queue.offer(cur.right);
+                nLast = cur.right;
+            }
+            if (cur == last && !queue.isEmpty()) {
+                System.out.print("\nLevel" + (level++) + " : ");
+                last = nLast;
+            }
+        }
+    }
+
+
+    public List<List<Integer>> zigzagLevelOrder(TreeNode root) {
+        List<List<Integer>> result = new ArrayList<>();
+        if (root == null) return result;
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.add(root);
+        int level = 0;
+        while (!queue.isEmpty()) {
+            List<Integer> levelList = new ArrayList<>();
+            int size = queue.size();//一次性倒出queue的一层元素
+            for (int i = 0; i < size; i++) {
+                TreeNode cur = queue.poll();
+                //level记录层数，按奇偶行来添加元素，add(0, cur.val)表示新进来的元素都放在头部
+                if (level % 2 == 0) levelList.add(cur.val);
+                else levelList.add(0, cur.val);
+                if (cur.left != null) queue.offer(cur.left);
+                if (cur.right != null) queue.offer(cur.right);
+            }
+            level++;
+            result.add(levelList);
+        }
+        return result;
+    }
+
+    public List<List<Integer>> zigzagLevelOrder1st(TreeNode root) {
+        List<List<Integer>> result = new ArrayList<>();
+        if (root == null) return result;
+        //odd 奇栈，even 偶栈，FILO
+        // 第一层，第二层为从左到右，stackOdd先加right元素，再加left元素
+        //第二层，第四为从右到左，stackEven先加left元素，再加right元素
+        Stack<TreeNode> stackOdd = new Stack<>();
+        Stack<TreeNode> stackEven = new Stack<>();
+        stackOdd.add(root);
+        List<Integer> levelList = null;
+        while (!stackOdd.isEmpty() || !stackEven.isEmpty()) {
+            levelList = new ArrayList<>();
+            if (!stackOdd.isEmpty()) {
+                while (!stackOdd.isEmpty()) {
+                    TreeNode odd = stackOdd.pop();
+                    levelList.add(odd.val);
+                    if (odd.left != null) stackEven.push(odd.left);
+                    if (odd.right != null) stackEven.push(odd.right);
+                }
+            } else {
+                while (!stackEven.isEmpty()) {
+                    TreeNode even = stackEven.pop();
+                    levelList.add(even.val);
+                    if (even.right!=null) stackOdd.push(even.right);
+                    if (even.left!=null) stackOdd.push(even.left);
+                }
+            }
+            result.add(levelList);
+        }
+        return result;
+    }
+
+
     public static void main(String[] args) {
 //        int[] nums = {1, 2, 3};
 //        handler.subsets(nums);
@@ -880,7 +1098,9 @@ public class RepeativeCaseII {
 //        nums = new int[]{1, 3};
 //        handler.searchII(nums, 3);
 //        handler.merge(new int[][]{{1, 3}, {2, 6}, {8, 10}, {15, 18}});
-        handler.uniquePathsWithObstacles(new int[][]{{0}, {1}});
+//        handler.uniquePathsWithObstacles(new int[][]{{0}, {1}});
+        nums = new int[]{2, 0, 2, 1, 1, 0};
+        handler.sortColors(nums);
     }
 
 
