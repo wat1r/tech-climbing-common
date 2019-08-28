@@ -1065,13 +1065,59 @@ public class RepeativeCaseII {
                 while (!stackEven.isEmpty()) {
                     TreeNode even = stackEven.pop();
                     levelList.add(even.val);
-                    if (even.right!=null) stackOdd.push(even.right);
-                    if (even.left!=null) stackOdd.push(even.left);
+                    if (even.right != null) stackOdd.push(even.right);
+                    if (even.left != null) stackOdd.push(even.left);
                 }
             }
             result.add(levelList);
         }
         return result;
+    }
+
+
+    public boolean hasPathSum(TreeNode root, int sum) {
+        if (root == null) return false;
+        if (root.left == null && root.right == null && sum == root.val) return true;
+        return hasPathSum(root.left, sum - root.val) || hasPathSum(root.right, sum - root.val);
+    }
+
+
+    public boolean hasPathSum1st(TreeNode root, int sum) {
+        if (root == null) return false;
+        Stack<TreeNode> nodeStack = new Stack<>();
+        Stack<Integer> sumStack = new Stack<>();
+        nodeStack.push(root);
+        sumStack.push(sum - root.val);
+        while (!nodeStack.isEmpty()) {
+            TreeNode curNode = nodeStack.pop();
+            Integer curSum = sumStack.pop();
+            if (curNode.left == null && curNode.right == null && curSum == 0) return true;
+            if (curNode.right != null) {
+                nodeStack.push(curNode.right);
+                sumStack.push(curSum - curNode.right.val);
+            }
+            if (curNode.left != null) {
+                nodeStack.push(curNode.left);
+                sumStack.push(curSum - curNode.left.val);
+            }
+        }
+        return false;
+    }
+
+    public List<List<Integer>> pathSum(TreeNode root, int sum) {
+        List<List<Integer>> result = new ArrayList<>();
+        if (root == null) return result;
+        pathSumDFS(result, new ArrayList<Integer>(), root, sum);
+        return result;
+    }
+
+    private void pathSumDFS(List<List<Integer>> result, ArrayList<Integer> tmpList, TreeNode root, int sum) {
+        if (root == null) return;
+        tmpList.add(root.val);
+        if (root.left == null && root.right == null && sum == root.val) result.add(new ArrayList<>(tmpList));
+        pathSumDFS(result,tmpList,root.left,sum-root.val);
+        pathSumDFS(result,tmpList,root.right,sum-root.val);
+        tmpList.remove(tmpList.size()-1);
     }
 
 
