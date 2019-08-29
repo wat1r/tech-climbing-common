@@ -1115,9 +1115,57 @@ public class RepeativeCaseII {
         if (root == null) return;
         tmpList.add(root.val);
         if (root.left == null && root.right == null && sum == root.val) result.add(new ArrayList<>(tmpList));
-        pathSumDFS(result,tmpList,root.left,sum-root.val);
-        pathSumDFS(result,tmpList,root.right,sum-root.val);
-        tmpList.remove(tmpList.size()-1);
+        pathSumDFS(result, tmpList, root.left, sum - root.val);
+        pathSumDFS(result, tmpList, root.right, sum - root.val);
+        tmpList.remove(tmpList.size() - 1);
+    }
+
+    int sum = 0;
+
+    public int sumNumbers(TreeNode root) {
+        if (root == null) return sum;
+        sumNumbersDFS(root, root.val);
+        return sum;
+    }
+
+    private void sumNumbersDFS(TreeNode root, int curSum) {
+        if (root.left == null && root.right == null) {
+            sum += curSum;
+            return;
+        }
+        if (root.left != null) {
+            sumNumbersDFS(root.left, curSum * 10 + root.left.val);
+        }
+        if (root.right != null) {
+            sumNumbersDFS(root.right, curSum * 10 + root.right.val);
+        }
+    }
+
+    public int evalRPN(String[] tokens) {
+        String[] symbols = new String[]{"+", "-", "*", "/"};
+        Stack<Integer> stack = new Stack<>();
+        for (String token : tokens) {
+            if (Arrays.asList(symbols).contains(token)) {
+                int left = stack.pop();
+                int right = stack.pop();
+                if (token.equals("+")) stack.push(right + left);
+                if (token.equals("-")) stack.push(right - left);
+                if (token.equals("*")) stack.push(right * left);
+                if (token.equals("/")) stack.push(right / left);
+            } else {
+                stack.push(Integer.valueOf(token));
+            }
+        }
+        return stack.pop();
+    }
+
+    public int trailingZeroes(int n) {
+        int res = 0;
+        while (n > 4) {
+            n /= 5;
+            res += n;
+        }
+        return res;
     }
 
 
@@ -1146,7 +1194,9 @@ public class RepeativeCaseII {
 //        handler.merge(new int[][]{{1, 3}, {2, 6}, {8, 10}, {15, 18}});
 //        handler.uniquePathsWithObstacles(new int[][]{{0}, {1}});
         nums = new int[]{2, 0, 2, 1, 1, 0};
-        handler.sortColors(nums);
+//        handler.sortColors(nums);
+        String[] arrs = new String[]{"4", "13", "5", "/", "+"};
+        handler.evalRPN(arrs);
     }
 
 
