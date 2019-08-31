@@ -1169,6 +1169,84 @@ public class RepeativeCaseII {
     }
 
 
+    public int rob(int[] nums) {
+        if (nums == null || nums.length == 0) return 0;
+        int[] dp = robHelper(nums);
+        return dp[nums.length];
+    }
+
+    public int[] robHelper(int[] nums) {
+        int n = nums.length;
+        int[] dp = new int[n + 1];
+        dp[0] = 0;
+        dp[1] = nums[0];
+        for (int i = 2; i <= n; i++) {
+            dp[i] = Math.max(dp[i - 1], dp[i - 2] + nums[i - 1]);
+        }
+        return dp;
+    }
+
+
+    public int robII(int[] nums) {
+        if (nums == null || nums.length == 0) return 0;
+        if (nums.length == 1) return nums[0];
+        if (nums.length == 2) return Math.max(nums[0], nums[1]);
+        int n = nums.length;
+        int[] head = Arrays.copyOfRange(nums, 0, n - 1);
+        int[] tail = Arrays.copyOfRange(nums, 1, n);
+        int[] headDp = robHelper(head);
+        int[] tailDp = robHelper(tail);
+        return Math.max(headDp[head.length], tailDp[tail.length]);
+    }
+
+    //dp[0]表示不选根节点的的max，dp[1]表示选了根节点的max
+    public int robIII(TreeNode root) {
+        int[] dp = robHelper(root);
+        return Math.max(dp[0], dp[1]);
+    }
+
+    public int[] robHelper(TreeNode root) {
+        int[] dp = new int[2];
+        if (root == null) return dp;
+        int[] left = robHelper(root.left);
+        int[] right = robHelper(root.right);
+        //dp[0]=max{左子树选与不选根节点的最大值+右子树选与不选根节点的最大值}
+        dp[0] = Math.max(left[0], left[1]) + Math.max(right[0], right[1]);
+        //dp[1]=左子树不选根节点的左孩子节点（因为选了根节点root,root.left不能再选了）+
+        //右子树不选根节点的右孩子节点（因为选了根节点root,root.right不能再选了）+root.val
+        dp[1] = left[0] + right[0] + root.val;
+        return dp;
+    }
+
+
+    public int robIII1st(TreeNode root) {
+        if (root == null) return 0;
+        if (root.left == null && root.right == null) return root.val;
+        return Math.max(robIII1stDFS(root, true), robIII1stDFS(root, false));
+    }
+
+    private int robIII1stDFS(TreeNode root, boolean visit) {
+        if (root.left == null && root.right == null) {
+            return visit ? root.val : 0;
+        }
+        int left = 0, right = 0;
+        //当前节点被visit的过，其孩子节点left和right不可使用，传入 !visit即false，
+        // 最后返回左子树和右子树的和，+这个root被访问了，root.val
+        if (visit) {
+            if (root.left != null) left = robIII1stDFS(root.left, !visit);
+            if (root.right != null) right = robIII1stDFS(root.right, !visit);
+            return root.val + left + right;
+        }
+        //当前节点没有被访问，其左孩子可以被访问，也可以不被访问，取Max，右孩子同理
+        //返回结果是左子树的Max与右子树的Max值的和，因为没有访问root，root.val的值被舍弃
+        else {
+            if (root.left != null) left = Math.max(robIII1stDFS(root.left, !visit), robIII1stDFS(root.left, visit));
+            if (root.right != null) right = Math.max(robIII1stDFS(root.right, !visit), robIII1stDFS(root.right, visit));
+            return left + right;
+        }
+    }
+
+
     public static void main(String[] args) {
 //        int[] nums = {1, 2, 3};
 //        handler.subsets(nums);
