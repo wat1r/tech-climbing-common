@@ -1247,6 +1247,146 @@ public class RepeativeCaseII {
     }
 
 
+    public List<Integer> preorderTraversal(TreeNode root) {
+        List<Integer> result = new ArrayList<>();
+        if (root == null) return result;
+        Stack<TreeNode> stack = new Stack<>();
+        stack.push(root);
+        while (!stack.isEmpty()) {
+            TreeNode cur = stack.pop();
+            result.add(cur.val);
+            if (cur.right != null) stack.push(cur.right);
+            if (cur.left != null) stack.push(cur.left);
+        }
+        return result;
+    }
+
+    public ListNode rotateRight(ListNode head, int k) {
+        if (head == null) return null;
+        if (head.next == null) return head;
+        ListNode cur = head;
+        int n = 1;
+        while (cur.next != null) {
+            cur = cur.next;
+            n++;
+        }
+        cur.next = head;
+        int i = n - k % n - 1;
+        cur = head;
+        while (i > 0) {
+            cur = cur.next;
+            i--;
+        }
+        ListNode newTail = cur;
+        ListNode newHead = cur.next;
+        newTail.next = null;
+        return newHead;
+    }
+
+    public List<List<Integer>> generate(int numRows) {
+        List<List<Integer>> result = new ArrayList<>();
+        if (numRows == 0) return result;
+        List<Integer> levelList = new ArrayList<>();
+        levelList.add(1);
+        result.add(levelList);
+        levelList = new ArrayList<>();
+        for (int i = 1; i < numRows; i++) {
+            levelList.add(1);
+            List<Integer> preList = result.get(i - 1);
+            for (int j = 0; j < preList.size() - 1; j++) {
+                int cur = preList.get(j) + preList.get(j + 1);
+                levelList.add(cur);
+            }
+            levelList.add(1);
+            result.add(levelList);
+            levelList = new ArrayList<>();
+        }
+        return result;
+    }
+
+    int[] dx = {0, 0, 1, -1};
+    int[] dy = {1, -1, 0, 0};
+
+
+    public boolean exist(char[][] board, String word) {
+        if (board == null || board[0] == null || board.length == 0 || board[0].length == 0 ||
+                word == null || word.length() == 0)
+            return false;
+        for (int i = 0; i < board.length; i++) {
+            for (int j = 0; j < board[0].length; j++) {
+                if (word.charAt(0) == board[i][j] && existDFS(board, word, i, j, 0)) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    private boolean existDFS(char[][] board, String word, int x, int y, int index) {
+        if (x < 0 || x >= board.length || y < 0 || y >= board[0].length ||
+                word.charAt(index) != board[x][y] || board[x][y] == '#')
+            return false;
+        if (index == word.length() - 1) return true;
+        board[x][y] = '#';
+        for (int i = 0; i < dx.length; i++) {
+            if (existDFS(board, word, x + dx[i], y + dy[i], index + 1)) {
+                return true;
+            }
+        }
+        board[x][y] = word.charAt(index);
+        return false;
+    }
+
+
+    public int canCompleteCircuit(int[] gas, int[] cost) {
+        if (gas == null || gas.length == 0 || cost == null || cost.length == 0) return -1;
+        int total = 0, remain = 0, start = 0;
+        for (int i = 0; i < gas.length; i++) {
+            remain += gas[i] - cost[i];
+            if (remain < 0) {
+                remain = 0;
+                start = i + 1;
+            }
+            total += gas[i] - cost[i];
+        }
+        if (total < 0) return -1;
+        return start;
+    }
+
+
+    public String countAndSay(int n) {
+        String str = "1";
+        for (int i = 2; i <= n; i++) {
+            StringBuilder sb = new StringBuilder();
+            char pre = str.charAt(0);
+            int count = 1;
+            for (int j = 1; j < str.length(); j++) {
+                char cur = str.charAt(j);
+                if (cur == pre) count++;
+                else {
+                    sb.append(count).append(pre);
+                    pre = cur;
+                    count = 1;
+                }
+            }
+            sb.append(count).append(pre);
+            str = sb.toString();
+        }
+        return str;
+    }
+
+    public int findPeakElement(int[] nums) {
+        int l = 0, r = nums.length - 1;
+        while (l < r) {
+            int mid = l + (r - l) / 2;
+            if (nums[mid] > nums[mid + 1]) r = mid;
+            else l = mid + 1;
+        }
+        return l;
+    }
+
+
     public static void main(String[] args) {
 //        int[] nums = {1, 2, 3};
 //        handler.subsets(nums);
@@ -1273,8 +1413,11 @@ public class RepeativeCaseII {
 //        handler.uniquePathsWithObstacles(new int[][]{{0}, {1}});
         nums = new int[]{2, 0, 2, 1, 1, 0};
 //        handler.sortColors(nums);
-        String[] arrs = new String[]{"4", "13", "5", "/", "+"};
-        handler.evalRPN(arrs);
+//        String[] arrs = new String[]{"4", "13", "5", "/", "+"};
+//        handler.evalRPN(arrs);
+//        handler.generate(1);
+        handler.countAndSay(5);
+
     }
 
 
