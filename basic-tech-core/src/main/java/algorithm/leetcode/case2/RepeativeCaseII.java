@@ -1386,6 +1386,185 @@ public class RepeativeCaseII {
         return l;
     }
 
+    public ListNode detectCycle(ListNode head) {
+        Set<ListNode> set = new HashSet<>();
+        ListNode node = head;
+        while (node != null) {
+            if (set.contains(node)) return node;
+            set.add(node);
+            node = node.next;
+        }
+        return null;
+    }
+
+
+    public ListNode detectCycle1st(ListNode head) {
+        if (head == null || head.next == null) return null;
+        ListNode slow = head;
+        ListNode fast = head.next;
+        while (fast.next != null && fast.next.next != null) {
+            if (slow == fast) break;
+            slow = slow.next;
+            fast = fast.next.next;
+        }
+        if (slow != fast) return null;
+        while (head != slow.next) {
+            head = head.next;
+            slow = slow.next;
+        }
+        return head;
+    }
+
+
+    public ListNode detectCycle2nd(ListNode head) {
+        if (head == null || head.next == null) return null;
+        //step1：快慢指针找到相遇的节点，没有找到相遇的节点，证明不成环，返回null
+        ListNode slow = head;
+        ListNode fast = head.next;
+        ListNode tmp = null;
+        while (fast.next != null && fast.next.next != null) {
+            if (fast == slow) {
+                tmp = slow;
+                break;
+            }
+            slow = slow.next;
+            fast = fast.next.next;
+        }
+        if (fast != slow) return null;
+        //step2:找到环的step
+        int step = 1;
+        ListNode cur = tmp.next;
+        while (cur != tmp) {
+            cur = cur.next;
+            step++;
+        }
+        slow = head;
+        fast = head;
+        //step3：将fast指针移动step步
+        for (int i = 0; i < step; i++) {
+            fast = fast.next;
+        }
+        //step4:slow与fast指针同步走，相交即为环的入口
+        while (slow != fast) {
+            slow = slow.next;
+            fast = fast.next;
+        }
+        return slow;
+    }
+
+
+    public TreeNode invertTree(TreeNode root) {
+        if (root == null) return null;
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.offer(root);
+        while (!queue.isEmpty()) {
+            TreeNode cur = queue.poll();
+            TreeNode tmp = cur.left;
+            cur.left = cur.right;
+            cur.right = tmp;
+            if (cur.left != null) queue.offer(cur.left);
+            if (cur.right != null) queue.offer(cur.right);
+        }
+        return root;
+    }
+
+
+    public int numPrimeArrangements(int n) {
+        int primes = 0;
+        for (int i = 1; i <= n; i++) {
+            if (isPrime(i)) primes++;
+        }
+        long result = 1;
+        int max = Math.max(primes, n - primes);
+        int min = Math.min(primes, n - primes);
+        for (int i = 1; i <= max; i++) {
+            result *= i;
+            result %= 1000000007;
+            if (i <= min) {
+                result *= i;
+                result %= 1000000007;
+            }
+        }
+        return (int) result;
+    }
+
+
+    private boolean isPrime(int n) {
+        if (n == 1) return false;
+        if (n == 2) return true;
+        for (int i = 2; i < n; i++) {
+            if (n % i == 0) return false;
+            else return true;
+        }
+        return false;
+    }
+
+    public int numPrimeArrangements1st(int n) {
+        if (n == 1 || n == 2) {
+            return 1;
+        }
+        //质数的个数 厄拉多塞筛法
+        boolean[] sign = new boolean[n + 1];
+        int primes = 0;
+        for (int i = 2; i <= n; i++) {
+            if (!sign[i]) {
+                primes++;
+                for (int j = i + i; j <= n; j += i) {
+                    sign[j] = true;
+                }
+            }
+        }
+        //求阶乘
+        int max = Math.max(n - primes, primes);
+        int min = Math.min(n - primes, primes);
+        //模运算复合交换律
+        long result = 1;
+        for (int i = 1; i <= max; i++) {
+            result *= i;
+            result %= 1000000007;
+            if (i <= min) {
+                result *= i;
+                result %= 1000000007;
+            }
+        }
+        return (int) result;
+    }
+
+
+    //优化暴力算法
+    public int countPrimes(int n) {
+        if (n < 3) return 0;
+        int count = 1;
+        //从3开始，初始值为1，2为质数
+        for (int i = 3; i < n; i++) {
+            if ((i & 1) == 0) continue;//排除掉偶数，除了2的偶数均不是质数
+            boolean sign = true;
+            for (int j = 3; j * j <= i; j += 2) {//j+=2排除掉偶数，j*j
+                if (i % j == 0) {
+                    sign = false;
+                    break;
+                }
+            }
+            if (sign) count++;
+        }
+        return count;
+    }
+
+    public int countPrimes1st(int n) {
+        if (n < 2) return 0;
+        boolean[] signs = new boolean[n];
+        int count = 0;
+        for (int i = 2; i < n; i++) {
+            if (!signs[i]) {
+                count++;
+                for (int j = i + i; j < n; j += i) {
+                    signs[j] = true;
+                }
+            }
+        }
+        return count;
+    }
+
 
     public static void main(String[] args) {
 //        int[] nums = {1, 2, 3};
@@ -1416,7 +1595,10 @@ public class RepeativeCaseII {
 //        String[] arrs = new String[]{"4", "13", "5", "/", "+"};
 //        handler.evalRPN(arrs);
 //        handler.generate(1);
-        handler.countAndSay(5);
+//        handler.countAndSay(5);
+//        handler.numPrimeArrangements(100);
+//        handler.numPrime(100);
+        handler.countPrimes(10);
 
     }
 
