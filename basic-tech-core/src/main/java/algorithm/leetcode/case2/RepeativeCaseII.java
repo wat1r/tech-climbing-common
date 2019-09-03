@@ -1566,6 +1566,61 @@ public class RepeativeCaseII {
     }
 
 
+    public int dietPlanPerformance(int[] calories, int k, int lower, int upper) {
+        int scores = 0;
+        outer:
+        for (int i = 0; i < calories.length; i++) {
+            int tmp = 0;
+            for (int j = 0; j < k; j++) {
+                if ((i + j) > calories.length - 1) break outer;
+                tmp += calories[i + j];
+            }
+            if (tmp < lower) scores--;
+            if (tmp > upper) scores++;
+        }
+        return scores;
+    }
+
+    public int dietPlanPerformance1st(int[] calories, int k, int lower, int upper) {
+        int scores = 0;
+        int tmp = 0;
+        //如果k的长度大于数组的长度，证明不可以
+        if (k > calories.length) return scores;
+        //初始化，并进行统计
+        for (int i = 0; i < k; i++) tmp += calories[i];
+        if (tmp < lower) scores--;
+        else if (tmp > upper) scores++;
+        //从k开始，维持一个k的滑动窗口，先+calories[i]，再-窗口的最开始的元素 calories[i - k]
+        for (int i = k; i < calories.length; i++) {
+            tmp += calories[i];
+            tmp -= calories[i - k];
+            if (tmp < lower) scores--;
+            else if (tmp > upper) scores++;
+        }
+        return scores;
+    }
+
+    public List<Boolean> canMakePaliQueries(String s, int[][] queries) {
+        List<Boolean> results = new ArrayList<>();
+        if (queries == null || queries.length == 0) return results;
+        for (int i = 0; i < queries.length; i++) {
+            int[] arr = queries[i];
+            String cur = s.substring(arr[0], arr[1] + 1);
+            int[] counter = new int[26];
+            for (int j = 0; j < cur.length(); j++) {
+                counter[cur.charAt(j) - 'a']++;
+            }
+            int odd = 0;
+            for (int j = 0; j < counter.length; j++) {
+                if (counter[j] % 2 == 1) odd++;
+            }
+            if (arr[2] >= (odd / 2)) results.add(true);
+            else results.add(false);
+        }
+        return results;
+    }
+
+
     public static void main(String[] args) {
 //        int[] nums = {1, 2, 3};
 //        handler.subsets(nums);
@@ -1598,7 +1653,12 @@ public class RepeativeCaseII {
 //        handler.countAndSay(5);
 //        handler.numPrimeArrangements(100);
 //        handler.numPrime(100);
-        handler.countPrimes(10);
+//        handler.countPrimes(10);
+//        handler.dietPlanPerformance(new int[]{6, 13, 8, 7, 10, 1, 12, 11}, 6, 5, 37);
+        String s = "abcda";
+        int[][] queries = new int[][]{{3, 3, 0}, {1, 2, 0}, {0, 3, 1}, {0, 3, 2}, {0, 4, 1}};
+        handler.canMakePaliQueries(s, queries);
+
 
     }
 
@@ -1635,6 +1695,24 @@ public class RepeativeCaseII {
             this.end = end;
         }
     }
+
+    class NumArray {
+
+        private int[] sum;
+
+
+        public NumArray(int[] nums) {
+            sum = new int[nums.length + 1];
+            for (int i = 0; i < nums.length; i++) {
+                sum[i + 1] = sum[i] + nums[i];
+            }
+        }
+
+        public int sumRange(int i, int j) {
+            return sum[j+1]-sum[i];
+        }
+    }
+
 }
 
 
