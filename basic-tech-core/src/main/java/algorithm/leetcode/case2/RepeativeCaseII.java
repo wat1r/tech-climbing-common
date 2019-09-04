@@ -1621,6 +1621,58 @@ public class RepeativeCaseII {
     }
 
 
+    public List<Boolean> canMakePaliQueries1st(String s, int[][] queries) {
+        List<Boolean> results = new ArrayList<>();
+        char[] chas = s.toCharArray();
+        int len = chas.length;
+        int[] dp = new int[len + 1];
+        for (int i = 0; i < len; i++) {
+            int num = (1 << (chas[i] - 'a'));
+            dp[i + 1] = (dp[i] ^ num);
+        }
+        for (int i = 0; i < queries.length; i++) {
+            int[] query = queries[i];
+            int start = query[0], end = query[1], k = query[2];
+            int cur = (dp[end + 1] ^ dp[start]);
+            int odd = 0;
+            while (cur != 0) {
+                odd++;
+                cur &= (cur - 1);
+            }
+            if (k >= (odd / 2)) results.add(true);
+            else results.add(false);
+        }
+        return results;
+    }
+
+    public List<String> invalidTransactions(String[] transactions) {
+        if (transactions == null || transactions.length == 0) return new ArrayList<>();
+        Set<String> results = new HashSet<>();
+        int len = transactions.length;
+        String[] names = new String[len];
+        int[] times = new int[len];
+        int[] amounts = new int[len];
+        String[] cities = new String[len];
+        for (int i = 0; i < len; i++) {
+            String[] arr = transactions[i].split(",");
+            names[i] = arr[0];
+            times[i] = Integer.valueOf(arr[1]);
+            amounts[i] = Integer.valueOf(arr[2]);
+            cities[i] = arr[3];
+        }
+        for (int i = 0; i < len; i++) {
+            if (amounts[i] > 1000) results.add(transactions[i]);
+            for (int j = i + 1; j < len; j++) {
+                if (names[i].equals(names[j]) && !cities[i].equals(cities[j]) && Math.abs(times[i] - times[j]) <= 60) {
+                    results.add(transactions[i]);
+                    results.add(transactions[j]);
+                }
+            }
+        }
+        return new ArrayList<>(results);
+    }
+
+
     public static void main(String[] args) {
 //        int[] nums = {1, 2, 3};
 //        handler.subsets(nums);
@@ -1657,8 +1709,10 @@ public class RepeativeCaseII {
 //        handler.dietPlanPerformance(new int[]{6, 13, 8, 7, 10, 1, 12, 11}, 6, 5, 37);
         String s = "abcda";
         int[][] queries = new int[][]{{3, 3, 0}, {1, 2, 0}, {0, 3, 1}, {0, 3, 2}, {0, 4, 1}};
-        handler.canMakePaliQueries(s, queries);
-
+//        handler.canMakePaliQueries(s, queries);
+//        handler.canMakePaliQueries1st(s, queries);
+        String[] t = new String[]{"alice,20,800,mtv", "alice,50,100,beijing"};
+        handler.invalidTransactions(t);
 
     }
 
@@ -1709,7 +1763,7 @@ public class RepeativeCaseII {
         }
 
         public int sumRange(int i, int j) {
-            return sum[j+1]-sum[i];
+            return sum[j + 1] - sum[i];
         }
     }
 
