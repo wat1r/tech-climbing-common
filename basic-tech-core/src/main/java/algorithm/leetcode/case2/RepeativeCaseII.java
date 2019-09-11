@@ -1673,6 +1673,354 @@ public class RepeativeCaseII {
     }
 
 
+    public int[] numSmallerByFrequency(String[] queries, String[] words) {
+        int[] results = new int[queries.length];
+        if (queries == null || queries.length == 0 || words == null || words.length == 0) return results;
+        for (int i = 0; i < queries.length; i++) {
+            int query = f(queries[i]);
+            int count = 0;
+            for (int j = 0; j < words.length; j++) {
+                int word = f(words[j]);
+                if (query < word) count++;
+            }
+            results[i] = count;
+        }
+        return results;
+    }
+
+
+    public int f(String str) {
+        char[] chas = str.toCharArray();
+        int[] arr = new int[26];
+        int min = 0;
+        for (int i = 0; i < chas.length; i++) {
+            arr[chas[i] - 'a']++;
+        }
+        for (int i = 0; i < arr.length; i++) {
+            if (arr[i] != 0) {
+                min = arr[i];
+                return min;
+            }
+        }
+        return min;
+    }
+
+
+    public int splitArray(int[] nums, int m) {
+        int max = 0;
+        long sum = 0;
+        for (int num : nums) {
+            max = Math.max(num, max);
+            sum += num;
+        }
+        if (m == 1) {
+            return (int) sum;
+        }
+        //binary search
+        long l = max;
+        long r = sum;
+        while (l <= r) {
+            long mid = (l + r) / 2;
+            if (valid(mid, nums, m)) {
+                r = mid - 1;
+            } else {
+                l = mid + 1;
+            }
+        }
+        return (int) l;
+    }
+
+    public boolean valid(long target, int[] nums, int m) {
+        int count = 1;
+        long total = 0;
+        for (int num : nums) {
+            total += num;
+            if (total > target) {
+                total = num;
+                count++;
+                if (count > m) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    public ListNode removeZeroSumSublists(ListNode head) {
+        if (head == null) return null;
+        if (head.next == null) return head.val == 0 ? null : head;
+        if (head.val == 0) return removeZeroSumSublists(head.next);
+        ListNode cur = head.next;
+        int num = head.val;
+        while (cur != null) {
+            num += cur.val;
+            if (num == 0) break;
+            cur = cur.next;
+        }
+        if (num == 0) return removeZeroSumSublists(cur.next);
+        head.next = removeZeroSumSublists(head.next);
+        return head;
+    }
+
+
+    public int countCharacters(String[] words, String chars) {
+        if (words == null || words.length == 0 || chars.length() == 0) return 0;
+        Map<Character, Integer> map = new HashMap<>();
+        for (int i = 0; i < chars.length(); i++) {
+            char c = chars.charAt(i);
+            map.put(c, map.getOrDefault(c, 0) + 1);
+        }
+        int result = 0;
+        for (int i = 0; i < words.length; i++) {
+            String word = words[i];
+            boolean sign = false;
+            for (int j = 0; j < word.length(); j++) {
+                char c = word.charAt(j);
+                if (!map.containsKey(c)) {
+                    sign = true;
+                    break;
+                } else {
+                    if (map.get(c) >= 1) map.put(c, map.get(c) - 1);
+                    else {
+                        sign = true;
+                        break;
+                    }
+                }
+
+            }
+            if (sign) continue;
+            result += word.length();
+        }
+        return result;
+    }
+
+
+    public double myPow(double x, int n) {
+        long N = n;
+        if (N < 0) {
+            x = 1 / x;
+            N = -N;
+        }
+        double result = 1;
+        for (int i = 0; i < N; i++) {
+            result *= x;
+        }
+        return result;
+    }
+
+    public double myPow1st(double x, int n) {
+        long N = n;
+        if (N < 0) {
+            x = 1 / x;
+            N = -N;
+        }
+        return fastPow(x, N);
+    }
+
+    private double fastPow(double x, long n) {
+        if (n == 0) return 1.0;
+        double half = fastPow(x, n / 2);
+        if (n % 2 == 0) return half * half;
+        else return half * half * x;
+    }
+
+    public int maxLevelSum(TreeNode root) {
+        if (root == null) return 0;
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.offer(root);
+        int level = 1;
+        int max = 0;
+        int maxLevel = 1;
+        while (!queue.isEmpty()) {
+            int sum = 0;
+            int size = queue.size();
+            for (int i = 0; i < size; i++) {
+                TreeNode cur = queue.poll();
+                sum += cur.val;
+                if (cur.left != null) queue.offer(cur.left);
+                if (cur.right != null) queue.offer(cur.right);
+            }
+            if (sum > max) {
+                max = sum;
+                maxLevel = level;
+            }
+            level++;
+        }
+        return maxLevel;
+    }
+
+
+    public boolean canFinish(int numCourses, int[][] prerequisites) {
+        int[] indegrees = new int[numCourses];
+        for (int[] p : prerequisites) {
+            indegrees[p[0]]++;
+        }
+        Queue<Integer> queue = new LinkedList<>();
+        for (int i = 0; i < numCourses; i++) {
+            if (indegrees[i] == 0) {
+                queue.offer(i);
+            }
+        }
+        while (!queue.isEmpty()) {
+            Integer pre = queue.poll();
+            numCourses--;
+            for (int[] p : prerequisites) {
+                if (p[1] != pre) continue;
+                indegrees[p[0]]--;
+                if (indegrees[p[0]] == 0) queue.offer(p[0]);
+            }
+        }
+        return numCourses == 0;
+    }
+
+
+    public boolean canFinish1st(int numCourses, int[][] prerequisites) {
+        int[][] adjacency = new int[numCourses][numCourses];
+        int[] flags = new int[numCourses];
+        for (int[] p : prerequisites) {
+            adjacency[p[1]][p[0]] = 1;
+        }
+        for (int i = 0; i < numCourses; i++) {
+            if (!canFinish1stDFS(adjacency, flags, i)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private boolean canFinish1stDFS(int[][] adjacency, int[] flags, int i) {
+        if (flags[i] == 1) return false;
+        if (flags[i] == -1) return true;
+        flags[i] = 1;
+        for (int j = 0; j < adjacency.length; j++) {
+            if (adjacency[i][j] == 1 && !canFinish1stDFS(adjacency, flags, j)) {
+                return false;
+            }
+        }
+        flags[i] = -1;
+        return true;
+    }
+
+
+    public int maxDistance(int[][] grid) {
+        int m = grid.length, n = grid[0].length;
+        Queue<int[]> queue = new LinkedList<>();
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                if (grid[i][j] == 1) queue.offer(new int[]{i, j});
+            }
+        }
+        if (queue.isEmpty() || queue.size() == m * n) return -1;
+        int[][] dx = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
+        int result = -1;
+        while (!queue.isEmpty()) {
+            int size = queue.size();
+            for (int i = 0; i < size; i++) {
+                int[] cur = queue.poll();
+                for (int[] d : dx) {
+                    int nx = cur[0] - d[0];
+                    int ny = cur[1] - d[1];
+                    if (nx >= m || nx < 0 || ny >= n || ny < 0 || grid[nx][ny] == 1) continue;
+                    grid[nx][ny] = 1;
+                    queue.offer(new int[]{nx, ny});
+                }
+            }
+            result++;
+        }
+
+        return result;
+    }
+
+    public int dayOfYear(String date) {
+        String year = date.substring(0, 4);
+        String month = date.substring(5, 7);
+        String day = date.substring(8);
+
+        String[] bigMonth = {"1", "3", "5", "7", "8", "10", "12"};
+        //默认二月28天
+        int two = 28;
+        int total = 0;
+        //累加月
+        for (int i = 1; i < Integer.valueOf(month); i++) {
+            if (i == 2) {
+                if (Integer.valueOf(year) % 100 == 0) {
+                    if (Integer.valueOf(year) % 400 == 0) {
+                        two = 29;
+                    }
+                } else if (Integer.valueOf(year) % 4 == 0) {
+                    two = 29;
+                }
+                total += two;
+            } else if (Arrays.asList(bigMonth).contains(String.valueOf(i))) {
+                total += 31;
+            } else {
+                total += 30;
+            }
+        }
+        //天
+        total += Integer.valueOf(day);
+        return total;
+
+    }
+
+    public int numRollsToTarget(int d, int f, int target) {
+        int mod = 1000000007;
+        int[][] dp = new int[d + 1][target + 1];
+        dp[0][0] = 1;
+        for (int i = 1; i <= d; i++) {
+            for (int j = 1; j <= f; j++) {
+                for (int k = j; k <= target; k++) {
+                    dp[i][k] = (dp[i][k] + dp[i - 1][k - j]) % mod;
+                }
+            }
+        }
+        return dp[d][target];
+    }
+
+    public int maxRepOpt1(String text) {
+        char[] chas = text.toCharArray();
+        int len = chas.length;
+        int[] total = new int[26];
+        int[] left = new int[len];
+        int[] right = new int[len];
+        for (int i = 0; i < len; i++) total[chas[i] - 'a']++;
+        int result = 1;
+        int cnt = 1;
+        left[0] = 1;
+        for (int i = 1; i < len; i++) {
+            if (chas[i] == chas[i - 1]) cnt++;
+            else cnt = 1;
+            left[i] = cnt;
+            result = Math.max(result, left[i]);
+        }
+        cnt = 1;
+        right[len - 1] = 1;
+        for (int i = len - 2; i >= 0; i--) {
+            if (chas[i] == chas[i + 1]) cnt++;
+            else cnt = 1;
+            right[i] = cnt;
+            result = Math.max(result, right[i]);
+        }
+        for (int i = 1; i < len - 1; i++) {
+            if (total[chas[i - 1] - 'a'] > left[i - 1]) {
+                result = Math.max(result, left[i - 1] + 1);
+            }
+            if (total[chas[i + 1] - 'a'] > right[i + 1]) {
+                result = Math.max(result, right[i + 1] + 1);
+            }
+            if (chas[i - 1] == chas[i + 1] && chas[i - 1] != chas[i]) {
+                if (total[chas[i - 1] - 'a'] > (left[i - 1] + right[i + 1])) {
+                    result = Math.max(result, left[i - 1] + right[i + 1] + 1);
+                } else {
+                    result = Math.max(result, left[i - 1] + right[i + 1]);
+                }
+            }
+
+        }
+        return result;
+    }
+
+
     public static void main(String[] args) {
 //        int[] nums = {1, 2, 3};
 //        handler.subsets(nums);
@@ -1708,11 +2056,24 @@ public class RepeativeCaseII {
 //        handler.countPrimes(10);
 //        handler.dietPlanPerformance(new int[]{6, 13, 8, 7, 10, 1, 12, 11}, 6, 5, 37);
         String s = "abcda";
-        int[][] queries = new int[][]{{3, 3, 0}, {1, 2, 0}, {0, 3, 1}, {0, 3, 2}, {0, 4, 1}};
+//        int[][] queries = new int[][]{{3, 3, 0}, {1, 2, 0}, {0, 3, 1}, {0, 3, 2}, {0, 4, 1}};
 //        handler.canMakePaliQueries(s, queries);
 //        handler.canMakePaliQueries1st(s, queries);
-        String[] t = new String[]{"alice,20,800,mtv", "alice,50,100,beijing"};
-        handler.invalidTransactions(t);
+//        String[] t = new String[]{"alice,20,800,mtv", "alice,50,100,beijing"};
+//        handler.invalidTransactions(t);
+//        String[] queries = new String[]{"bbb", "cc"};
+//        String[] words = new String[]{"a", "aa", "aaa", "aaaa"};
+//        queries = new String[]{"bba", "abaaaaaa", "aaaaaa", "bbabbabaab", "aba", "aa", "baab", "bbbbbb", "aab", "bbabbaabb"};
+//        words = new String[]{"aaabbb", "aab", "babbab", "babbbb", "b", "bbbbbbbbab", "a", "bbbbbbbbbb", "baaabbaab", "aa"};
+//        handler.numSmallerByFrequency(queries, words);
+//        handler.splitArray(new int[]{7, 2, 5, 10, 8}, 2);
+        int[][] prerequisites = new int[][]{{1, 0}, {2, 1}, {3, 1}, {3, 2}};
+        prerequisites = new int[][]{{1, 0}, {3, 0}, {3, 1}, {2, 1}, {4, 2}, {4, 3}};
+        prerequisites = new int[][]{{0, 1}};
+//        handler.canFinish(2, prerequisites);
+//        handler.dayOfYear("2016-02-29");
+//        handler.numRollsToTarget(30, 30, 500);
+        handler.maxRepOpt1("aaabaaa");
 
     }
 
