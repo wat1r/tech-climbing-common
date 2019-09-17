@@ -1986,7 +1986,7 @@ public class RepeativeCaseII {
         for (int i = 0; i < len; i++) total[chas[i] - 'a']++;
         int result = 1;
         int cnt = 1;
-        left[0] = 1;
+        left[0] = 1;//初始化left
         for (int i = 1; i < len; i++) {
             if (chas[i] == chas[i - 1]) cnt++;
             else cnt = 1;
@@ -1994,7 +1994,7 @@ public class RepeativeCaseII {
             result = Math.max(result, left[i]);
         }
         cnt = 1;
-        right[len - 1] = 1;
+        right[len - 1] = 1;//初始化right
         for (int i = len - 2; i >= 0; i--) {
             if (chas[i] == chas[i + 1]) cnt++;
             else cnt = 1;
@@ -2018,6 +2018,189 @@ public class RepeativeCaseII {
 
         }
         return result;
+    }
+
+
+    public int candy(int[] ratings) {
+        int n = ratings.length;
+        int[] candies = new int[n];
+        Arrays.fill(candies, 1);
+        int result = 0;
+        boolean b = true;
+        while (b) {
+            b = false;
+            for (int i = 0; i < n; i++) {
+                if (i > 0 && ratings[i] > ratings[i - 1] && candies[i] <= candies[i - 1]) {
+                    candies[i] = candies[i - 1] + 1;
+                    b = true;
+                }
+                if (i != (n - 1) && ratings[i] > ratings[i + 1] && candies[i] <= candies[i + 1]) {
+                    candies[i] = candies[i + 1] + 1;
+                    b = true;
+                }
+            }
+        }
+        for (int i = 0; i < n; i++) result += candies[i];
+        return result;
+    }
+
+
+    public int candy1st(int[] ratings) {
+        int n = ratings.length;
+        int[] left2right = new int[n];
+        int[] right2left = new int[n];
+        Arrays.fill(left2right, 1);
+        Arrays.fill(right2left, 1);
+        for (int i = 1; i < n; i++) {
+            if (ratings[i] > ratings[i - 1]) left2right[i] = left2right[i - 1] + 1;
+        }
+        for (int i = n - 2; i >= 0; i--) {
+            if (ratings[i] > ratings[i + 1]) right2left[i] = right2left[i + 1] + 1;
+        }
+        int result = 0;
+        for (int i = 0; i < n; i++) {
+            result += Math.max(left2right[i], right2left[i]);
+        }
+        return result;
+    }
+
+    public int candy2nd(int[] ratings) {
+        int n = ratings.length;
+        int[] candies = new int[n];
+        Arrays.fill(candies, 1);
+        for (int i = 1; i < n; i++) {
+            if (ratings[i] > ratings[i - 1]) candies[i] = candies[i - 1] + 1;
+        }
+        int result = candies[n - 1];
+        for (int i = n - 2; i >= 0; i--) {
+            if (ratings[i] > ratings[i + 1]) {
+                candies[i] = Math.max(candies[i], candies[i + 1] + 1);
+            }
+            result += candies[i];
+        }
+        return result;
+    }
+
+
+    public boolean find132pattern(int[] nums) {
+        if (nums == null || nums.length == 0) return false;
+        int secondMax = Integer.MIN_VALUE;
+        Stack<Integer> stack = new Stack<>();
+        int n = nums.length;
+        stack.push(nums[n - 1]);
+        for (int i = n - 2; i >= 0; i--) {
+            if (nums[i] < secondMax) return true;
+            else {
+                while (!stack.isEmpty() && nums[i] > stack.peek()) {
+                    secondMax = Math.max(secondMax, stack.pop());
+                }
+                stack.push(nums[i]);
+            }
+        }
+
+        return false;
+    }
+
+    public int distributeCandies(int[] candies) {
+        int n = candies.length;
+        Arrays.sort(candies);
+        int cnt = 0;
+        for (int i = 1; i < n && cnt < n / 2; i++) {
+            if (candies[i] > candies[i - 1]) cnt++;
+        }
+        return cnt;
+    }
+
+
+    public int[] fairCandySwap(int[] A, int[] B) {
+        int sumA = 0, sumB = 0;
+        for (int a : A) sumA += a;
+        for (int b : B) sumB += b;
+        int delta = (sumB - sumA) / 2;
+        Set<Integer> set = new HashSet<>();
+        for (int b : B) set.add(b);
+        for (int a : A) {
+            if (set.contains(a + delta)) {
+                return new int[]{a, a + delta};
+            }
+        }
+        return null;
+    }
+
+
+    public int movesToMakeZigzag(int[] nums) {
+        int[] nums1 = Arrays.copyOf(nums, nums.length);
+        int odd = 0;
+        int n = nums.length;
+        for (int i = 1; i < n; i += 2) {
+            if (nums[i] <= nums[i - 1]) {
+                int delta = nums[i - 1] - nums[i] + 1;
+                nums[i - 1] -= delta;
+                odd += delta;
+            }
+            if (i != (n - 1) && nums[i] <= nums[i + 1]) {
+                int delta = nums[i + 1] - nums[i] + 1;
+                nums[i + 1] -= delta;
+                odd += delta;
+            }
+        }
+        int even = 0;
+        for (int i = 0; i < n; i += 2) {
+            if (i != 0 && nums1[i] <= nums1[i - 1]) {
+                int delta = nums1[i - 1] - nums1[i] + 1;
+                nums1[i - 1] -= delta;
+                even += delta;
+            }
+            if (i != (n - 1) && nums1[i] <= nums1[i + 1]) {
+                int delta = nums1[i + 1] - nums1[i] + 1;
+                nums1[i + 1] -= delta;
+                even += delta;
+            }
+        }
+        return Math.min(odd, even);
+    }
+
+
+    public int movesToMakeZigzag1st(int[] nums) {
+        int n = nums.length;
+        int odd = 0, even = 0;
+        for (int i = 0; i < n; i++) {
+            if (i % 2 == 0) {
+                int delta1 = (i > 0 && nums[i] >= nums[i - 1]) ? (nums[i] - nums[i - 1] + 1) : 0;
+                int delta2 = (i < n - 1 && nums[i] >= nums[i + 1]) ? (nums[i] - nums[i + 1] + 1) : 0;
+                even += Math.max(delta1, delta2);
+            } else {
+                int delta1 = (nums[i] >= nums[i - 1]) ? (nums[i] - nums[i - 1] + 1) : 0;
+                int delta2 = (i < n - 1 && nums[i] >= nums[i + 1]) ? (nums[i] - nums[i + 1] + 1) : 0;
+                odd += Math.max(delta1, delta2);
+            }
+        }
+        return Math.min(even, odd);
+    }
+
+    public boolean btreeGameWinningMove(TreeNode root, int n, int x) {
+        TreeNode node = dfs(root, x);
+        int leftCnt = countNode(node.left);
+        int rightCnt = countNode(node.right);
+        if (Math.max(leftCnt, rightCnt) > n / 2 || (n - leftCnt - rightCnt - 1) > n / 2)
+            return true;
+        return false;
+    }
+
+    public TreeNode dfs(TreeNode root, int target) {
+        if (root == null) return null;
+        if (root.val == target) return root;//找到第一个着色点
+        TreeNode left = dfs(root.left, target);//左子树
+        TreeNode right = dfs(root.right, target);//右子树
+        if (left != null) return left;
+        else if (right != null) return right;
+        return null;
+    }
+
+    //计算当前节点的左子树节点和右子树节点的数量
+    public int countNode(TreeNode root) {
+        if (root == null) return 0;
+        return countNode(root.left) + countNode(root.right) + 1;
     }
 
 
@@ -2073,8 +2256,13 @@ public class RepeativeCaseII {
 //        handler.canFinish(2, prerequisites);
 //        handler.dayOfYear("2016-02-29");
 //        handler.numRollsToTarget(30, 30, 500);
-        handler.maxRepOpt1("aaabaaa");
-
+//        handler.maxRepOpt1("aaabaaa");
+//        handler.find132pattern(new int[]{3, 6, 1, 4, 5, 2});
+//        handler.movesToMakeZigzag(new int[]{2, 7, 10, 9, 8, 9});
+//        handler.movesToMakeZigzag(new int[]{2, 1, 2});
+//        handler.movesToMakeZigzag(new int[]{7, 4, 8, 9, 7, 7, 5});
+//        handler.movesToMakeZigzag(new int[]{10, 1, 1, 6, 6, 6, 1, 8, 8, 5, 1, 2, 6, 6, 6, 4, 4, 8, 7, 1});
+        handler.movesToMakeZigzag1st(new int[]{9, 6, 1, 6, 2});
     }
 
 
@@ -2125,6 +2313,27 @@ public class RepeativeCaseII {
 
         public int sumRange(int i, int j) {
             return sum[j + 1] - sum[i];
+        }
+    }
+
+
+    class SnapshotArray {
+
+        public SnapshotArray(int length) {
+
+        }
+
+        public void set(int index, int val) {
+
+        }
+
+        public int snap() {
+            return 0;
+        }
+
+        public int get(int index, int snap_id) {
+
+            return 0;
         }
     }
 
