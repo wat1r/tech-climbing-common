@@ -2203,6 +2203,81 @@ public class RepeativeCaseII {
         return countNode(root.left) + countNode(root.right) + 1;
     }
 
+    SnapshotArray snapshotArray = new SnapshotArray(3);
+
+    public String solveEquation(String equation) {
+        String[] arr = equation.split("=");
+        int[] left = parse(arr[0]);
+        int[] right = parse(arr[1]);
+        int x = left[0] - right[0];
+        int n = right[1] - left[1];
+        if (x == 0 && n == 0) return "Infinite solutions";
+        else if (x == 0 && n != 0) return "No solution";
+        return "x=" + n / x;
+    }
+
+    public int[] parse(String segment) {
+        if (segment.charAt(0) == 'x') segment = "1" + segment;
+        segment = segment.replace("+x", "+1x").replace("-x", "-1x");
+        segment = segment.replace("-", "+-");
+        String[] arr = segment.split("\\+");
+        int xCnt = 0;
+        int cCnt = 0;
+        for (String a : arr) {
+            if (a.endsWith("x")) xCnt += Integer.valueOf(a.substring(0, a.length() - 1));
+            if (!a.endsWith("x") && !a.equals("")) cCnt += Integer.valueOf(a);
+        }
+        return new int[]{xCnt, cCnt};
+    }
+
+
+    public int tribonacci(int n) {
+        int[] dp = new int[n + 1];
+        if (n == 0) return 0;
+        if (n == 1 || n == 2) return 1;
+        dp[0] = 0;
+        dp[1] = 1;
+        dp[2] = 1;
+        for (int i = 3; i <= n; i++) {
+            dp[i] = dp[i - 1] + dp[i - 2] + dp[i - 3];
+        }
+        return dp[n];
+    }
+
+
+    public String alphabetBoardPath(String target) {
+        Map<Character, int[]> maps = new HashMap<>();
+        for (int i = 0; i < 26; i++) {
+            maps.put((char) (i + 97), new int[]{i / 5, i % 5});
+        }
+        StringBuilder sb = new StringBuilder();
+        int preX = 0, preY = 0;
+        for (int i = 0; i < target.length(); i++) {
+            int[] cur = maps.get(target.charAt(i));
+            int curX = cur[0], curY = cur[1];
+            int deltaX = curX - preX;
+            int deltaY = curY - preY;
+            if (deltaX < 0) append(sb, "U", deltaX);
+            if (deltaY < 0) append(sb, "L", deltaY);
+            if (deltaX > 0) append(sb, "D", deltaX);
+            if (deltaY > 0) append(sb, "R", deltaY);
+            sb.append("!");
+            preX = curX;
+            preY = curY;
+        }
+        System.out.println(sb.toString());
+        return sb.toString();
+    }
+
+    public StringBuilder append(StringBuilder sb, String move, int delta) {
+        if (delta < 0) delta = -delta;
+        while (delta > 0) {
+            sb.append(move);
+            delta--;
+        }
+        return sb;
+    }
+
 
     public static void main(String[] args) {
 //        int[] nums = {1, 2, 3};
@@ -2262,7 +2337,13 @@ public class RepeativeCaseII {
 //        handler.movesToMakeZigzag(new int[]{2, 1, 2});
 //        handler.movesToMakeZigzag(new int[]{7, 4, 8, 9, 7, 7, 5});
 //        handler.movesToMakeZigzag(new int[]{10, 1, 1, 6, 6, 6, 1, 8, 8, 5, 1, 2, 6, 6, 6, 4, 4, 8, 7, 1});
-        handler.movesToMakeZigzag1st(new int[]{9, 6, 1, 6, 2});
+//        handler.movesToMakeZigzag1st(new int[]{9, 6, 1, 6, 2});
+//        handler.solveEquation("x+5-3+x=6+x-2");
+//        handler.solveEquation("-x=-1");
+//        handler.tribonacci(4);
+//            handler.alphabetBoardPath("leet");
+        handler.alphabetBoardPath("zdz");
+
     }
 
 
@@ -2318,24 +2399,36 @@ public class RepeativeCaseII {
 
 
     class SnapshotArray {
+        private Map<Integer, Map<Integer, Integer>> map = null;
+        private int snapId = 0;
+
 
         public SnapshotArray(int length) {
-
+            map = new HashMap<>(length);
+            while (length-- > 0) {
+                map.put(length, new HashMap<>());
+            }
         }
 
         public void set(int index, int val) {
-
+            map.get(index).put(snapId, val);
         }
 
         public int snap() {
-            return 0;
+            return snapId++;
         }
 
         public int get(int index, int snap_id) {
-
+            while (snap_id >= 0) {
+                if (map.get(index).get(snap_id) != null) {
+                    return map.get(index).get(snap_id);
+                }
+                snap_id--;
+            }
             return 0;
         }
     }
+
 
 }
 
