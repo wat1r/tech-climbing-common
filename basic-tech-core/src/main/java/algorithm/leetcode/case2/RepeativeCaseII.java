@@ -2283,7 +2283,7 @@ public class RepeativeCaseII {
         if (nums == null || nums.length == 0) return 0;
         int n = nums.length;
         int[] dp = new int[n];
-        Arrays.fill(dp,1);
+        Arrays.fill(dp, 1);
         int max = 1;
         for (int i = 1; i < n; i++) {
             if (nums[i] > nums[i - 1]) {
@@ -2292,6 +2292,158 @@ public class RepeativeCaseII {
             }
         }
         return max;
+    }
+
+    public int arrayPairSum(int[] nums) {
+        if (nums == null || nums.length == 0) return 0;
+        Arrays.sort(nums);
+        int sum = 0;
+        for (int i = 0; i < nums.length; i += 2) {
+            sum += nums[i];
+        }
+        return sum;
+    }
+
+
+    public int pairMatch(int[] nums) {
+        int n = nums.length;
+        Arrays.sort(nums);
+        int max = 0, min = Integer.MAX_VALUE;
+        for (int i = 0, j = n - 1; i < n / 2; i++, j--) {
+            int temp = nums[i] + nums[j];
+            max = Math.max(max, temp);
+            min = Math.min(min, temp);
+        }
+        return max - min;
+    }
+
+    public int findNumberOfLIS(int[] nums) {
+        if (nums == null || nums.length == 0) return 0;
+        int n = nums.length;
+        int[] dp = new int[n];
+        int[] counter = new int[n];
+        Arrays.fill(counter, 1);
+        dp[0] = 1;
+        int maxLen = 0;
+        for (int i = 0; i < n; i++) {
+            dp[i] = 1;
+            for (int j = 0; j < i; j++) {
+                if (nums[i] > nums[j]) {
+                    if (dp[j] + 1 > dp[i]) {
+                        dp[i] = Math.max(dp[j] + 1, dp[i]);
+                        counter[i] = counter[j];
+                    } else if (dp[j] + 1 == dp[i]) {
+                        counter[i] += counter[j];
+                    }
+                }
+            }
+            maxLen = Math.max(maxLen, dp[i]);
+        }
+        int result = 0;
+        for (int i = 0; i < n; i++) {
+            if (dp[i] == maxLen) result += counter[i];
+        }
+        return result;
+    }
+
+    public int longestIncreasingContinuousSubsequence(int[] nums) {
+        if (nums == null || nums.length == 0) return 0;
+        int n = nums.length;
+        int[] start = new int[2];
+        Arrays.fill(start, 1);
+        int maxStart = 1;
+        for (int i = 1; i < n; i++) {
+            start[i % 2] = 1;
+            if (nums[i] > nums[i - 1]) {
+                start[i % 2] += start[(i - 1) % 2];
+            }
+            maxStart = Math.max(maxStart, start[i % 2]);
+        }
+        int[] end = new int[2];
+        int maxEnd = 1;
+        Arrays.fill(end, 1);
+        for (int i = n - 2; i >= 0; i--) {
+            end[i % 2] = 1;
+            if (nums[i] > nums[i + 1]) {
+                end[i % 2] += end[(i + 1) % 2];
+            }
+            maxEnd = Math.max(maxEnd, end[i % 2]);
+        }
+
+        return Math.max(maxStart, maxEnd);
+    }
+
+    public int longestConsecutive(int[] nums) {
+        Set<Integer> set = new HashSet<>();
+        for (int num : nums) set.add(num);
+        int longestCnt = 0;
+        for (int num : nums) {
+            if (!set.contains(num - 1)) {
+                int curNum = num;
+                int curCnt = 1;
+                while (set.contains(curNum + 1)) {
+                    curNum++;
+                    curCnt++;
+                }
+                longestCnt = Math.max(longestCnt, curCnt);
+            }
+        }
+        return longestCnt;
+    }
+
+    public int longestConsecutive2nd(int[] nums) {
+        if (nums == null || nums.length == 0) return 0;
+        Arrays.sort(nums);
+        int n = nums.length;
+        int longestCnt = 1;
+        int curCnt = 1;
+        for (int i = 1; i < n; i++) {
+            if (nums[i] != nums[i - 1]) {
+                if (nums[i - 1] + 1 == nums[i]) {
+                    curCnt++;
+                } else {
+                    longestCnt = Math.max(longestCnt, curCnt);
+                    curCnt = 1;
+                }
+            }
+        }
+        return Math.max(longestCnt, curCnt);
+    }
+
+
+    public int longestCommonSubsequence(String str1, String str2) {
+        if (str1 == null || str2 == null || "".equals(str1) || "".equals(str2)) return 0;
+        char[] chas1 = str1.toCharArray();
+        char[] chas2 = str2.toCharArray();
+        int m = chas1.length, n = chas2.length;
+        int[][] dp = new int[m][n];
+        dp[0][0] = (chas1[0] == chas2[0]) ? 1 : 0;
+        for (int i = 1; i < m; i++) dp[i][0] = (chas1[i] == chas2[0]) ? 1 : 0;
+        for (int j = 1; j < n; j++) dp[0][j] = (chas1[0] == chas2[j]) ? 1 : 0;
+        for (int i = 1; i < m; i++) {
+            for (int j = 1; j < n; j++) {
+                dp[i][j] = Math.max(dp[i - 1][j], dp[i][j - 1]);
+                if (chas1[i] == chas2[j]) dp[i][j] = Math.max(dp[i][j], dp[i - 1][j - 1] + 1);
+            }
+        }
+        return dp[m - 1][n - 1];
+    }
+
+    public int findLength(int[] A, int[] B) {
+        if (A == null || B == null || A.length == 0 || B.length == 0) return 0;
+        int m = A.length, n = B.length;
+        int[][] dp = new int[m][n];
+        int result =0;
+        dp[0][0] = (A[0] == B[0]) ? 1 : 0;
+        for (int i = 1; i < m; i++) dp[i][0] = (A[i] == B[0]) ? 1 : 0;
+        for (int j = 1; j < n; j++) dp[0][j] = (A[0] == B[j]) ? 1 : 0;
+        for (int i = 1; i < m; i++) {
+            for (int j = 1; j < n; j++) {
+                if (A[i] == B[j]) dp[i][j] = Math.max(0, dp[i - 1][j - 1] + 1);
+                result = Math.max(result,dp[i][j]);
+            }
+        }
+        return result;
     }
 
 
@@ -2358,8 +2510,19 @@ public class RepeativeCaseII {
 //        handler.solveEquation("-x=-1");
 //        handler.tribonacci(4);
 //            handler.alphabetBoardPath("leet");
-        handler.alphabetBoardPath("zdz");
-
+//        handler.alphabetBoardPath("zdz");
+//        handler.findNumberOfLIS(new int[]{1, 3, 5, 4, 7});
+//        handler.findNumberOfLIS(new int[]{2, 2, 2, 2, 2});
+//        handler.findNumberOfLIS(new int[]{1, 2, 4, 3, 5, 4, 7, 2});
+//        handler.findNumberOfLIS(new int[]{1});
+//        handler.longestIncreasingContinuousSubsequence(new int[]{5, 4, 2, 1, 3});
+//        handler.longestIncreasingContinuousSubsequence(new int[]{8, 4, 2, 1});
+//        nums = new int[10009];
+//        for (int i = 10010; i >= 2; i--) {
+//            nums[i - 2] = i;
+//        }
+//        handler.longestIncreasingContinuousSubsequence(nums);
+        handler.longestConsecutive2nd(new int[]{0, -1});
     }
 
 
