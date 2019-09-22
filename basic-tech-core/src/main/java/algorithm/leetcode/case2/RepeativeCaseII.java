@@ -2433,17 +2433,129 @@ public class RepeativeCaseII {
         if (A == null || B == null || A.length == 0 || B.length == 0) return 0;
         int m = A.length, n = B.length;
         int[][] dp = new int[m][n];
-        int result =0;
+        int result = 0;
         dp[0][0] = (A[0] == B[0]) ? 1 : 0;
         for (int i = 1; i < m; i++) dp[i][0] = (A[i] == B[0]) ? 1 : 0;
         for (int j = 1; j < n; j++) dp[0][j] = (A[0] == B[j]) ? 1 : 0;
         for (int i = 1; i < m; i++) {
             for (int j = 1; j < n; j++) {
                 if (A[i] == B[j]) dp[i][j] = Math.max(0, dp[i - 1][j - 1] + 1);
-                result = Math.max(result,dp[i][j]);
+                result = Math.max(result, dp[i][j]);
             }
         }
         return result;
+    }
+
+
+    public String shiftingLetters(String S, int[] shifts) {
+        if (S == null || S.length() == 0 || shifts == null || shifts.length == 0) return null;
+        char[] chas = S.toCharArray();
+        for (int i = 0; i < shifts.length; i++) {
+            for (int j = 0; j <= i; j++) {
+                int t = (int) chas[j] + shifts[i];
+                char c = t >= 123 ? (char) ((t - 97) % 26 + 97) : (char) t;
+                chas[j] = c;
+            }
+        }
+        System.out.println(String.valueOf(chas));
+        return String.valueOf(chas);
+    }
+
+    private int guess(int num) {
+        return 0;
+    }
+
+    public int guessNumber(int n) {
+        int l = 1, r = n, mid = 0;
+        while (l < r) {
+            mid = l + (r - l) / 2;
+            int res = guess(mid);
+            if (res == 0) return mid;
+            else if (res == 1) l = mid + 1;
+            else if (res == -1) r = mid - 1;
+        }
+        return l;
+    }
+
+
+    public int getMoneyAmount1st(int n) {
+        return calculate1st(1, n);
+    }
+
+    public int calculate1st(int low, int high) {
+        if (low >= high) return 0;
+        int res = Integer.MAX_VALUE;
+        for (int i = low; i <= high; i++) {
+            int temp = i + Math.max(calculate1st(low, i - 1), calculate1st(i + 1, high));
+            res = Math.min(res, temp);
+        }
+        return res;
+    }
+
+    public int getMoneyAmount2nd(int n) {
+        return calculate2nd(1, n);
+    }
+
+    private int calculate2nd(int low, int high) {
+        if (low >= high) return 0;
+        int mid = (low + high) / 2;
+        int res = Integer.MAX_VALUE;
+        for (int i = mid; i <= high; i++) {
+            int temp = i + Math.max(calculate2nd(low, i - 1), calculate2nd(i + 1, high));
+            res = Math.min(res, temp);
+        }
+        return res;
+    }
+
+
+    public boolean PredictTheWinner(int[] nums) {
+        if (nums == null || nums.length == 0) return false;
+        int n = nums.length;
+        int[][] dp = new int[n][n];
+        for (int i = 0; i < n; i++) dp[i][i] = nums[i];
+        for (int i = n - 1; i >= 0; i--) {
+            for (int j = i + 1; j < n; j++) {
+                dp[i][j] = Math.max(nums[i] - dp[i + 1][j], nums[j] - dp[i][j - 1]);
+            }
+        }
+        return dp[0][n - 1] >= 0;
+    }
+
+
+    public boolean PredictTheWinner2nd(int[] nums) {
+        if (nums == null || nums.length == 0) return false;
+        int n = nums.length;
+        int[][] dp = new int[n][n];
+        for (int i = 0; i < n; i++) dp[i][i] = nums[i];
+        for (int step = 2; step <= n; step++) {
+            for (int i = 0; i < n - step + 1; i++) {
+                int j = i + step - 1;
+                dp[i][j] = Math.max(nums[i] - dp[i + 1][j], nums[j] - dp[i][j - 1]);
+            }
+        }
+        return dp[0][n - 1] >= 0;
+    }
+
+
+    public boolean PredictTheWinner3rd(int[] nums) {
+        if (nums == null || nums.length == 0) return false;
+        int n = nums.length;
+        int[][] dp = new int[n][n];
+        int turn = n & 1;
+        int sum = 0;
+        for (int i = 0; i < n; i++) {
+            if (turn == 1) dp[i][i] = nums[i];
+            sum += nums[i];
+        }
+        for (int step = 2; step <= n; step++) {
+            turn ^= 1;
+            for (int i = 0; i < n - step + 1; i++) {
+                int j = i + step - 1;
+                if (turn == 1) dp[i][j] = Math.max(nums[i] + dp[i + 1][j], nums[j] + dp[i][j - 1]);
+                else dp[i][j] = Math.min(dp[i + 1][j], dp[i][j - 1]);
+            }
+        }
+        return 2 * dp[0][n - 1] >= sum;
     }
 
 
@@ -2522,9 +2634,18 @@ public class RepeativeCaseII {
 //            nums[i - 2] = i;
 //        }
 //        handler.longestIncreasingContinuousSubsequence(nums);
-        handler.longestConsecutive2nd(new int[]{0, -1});
-    }
+//        handler.longestConsecutive2nd(new int[]{0, -1});
+//        handler.shiftingLetters("abc", new int[]{3, 5, 9});
+//        handler.shiftingLetters("bad", new int[]{10, 20, 30});
+//        handler.shiftingLetters("gdhbjaph", new int[]{74, 34, 65, 30, 43, 91, 14, 10});
+//        handler.shiftingLetters2nd("gdhbjaph", new int[]{74, 34, 65, 30, 43, 91, 14, 10});
+//        handler.PredictTheWinner(new int[]{1, 5, 233, 7});
+//        handler.PredictTheWinner2nd(new int[]{1, 5, 233, 7});
+        handler.PredictTheWinner3rd(new int[]{1, 233, 5, 7, 230});
 
+
+    }
+    //winter
 
     class TreeNode {
         int val;
