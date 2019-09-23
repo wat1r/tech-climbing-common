@@ -2559,6 +2559,62 @@ public class RepeativeCaseII {
     }
 
 
+    public String getHint(String secret, String guess) {
+        int bullsCnt = 0, cowsCnt = 0;
+        int[] dp1 = new int[10];
+        int[] dp2 = new int[10];
+        for (int i = 0; i < secret.length(); i++) {
+            if (secret.charAt(i) == guess.charAt(i)) bullsCnt++;
+            else {
+                dp1[secret.charAt(i) - '0']++;
+                dp2[guess.charAt(i) - '0']++;
+            }
+        }
+        for (int i = 0; i < dp1.length; i++) {
+            cowsCnt += Math.min(dp1[i], dp2[i]);
+        }
+        return String.format("%dA%dB", bullsCnt, cowsCnt);
+    }
+
+    public List<String> generatePossibleNextMoves(String s) {
+        List<String> resList = new ArrayList<>();
+        for (int i = 0; i < s.length() - 1; i++) {
+            if (s.charAt(i) == '+' && s.charAt(i + 1) == '+')
+                resList.add(s.substring(0, i) + "--" + s.substring(i + 2, s.length()));
+        }
+        return resList;
+    }
+
+
+    public boolean canWin(String s) {
+        for (int i = 0; i < s.length() - 1; i++) {
+            if (s.substring(i, i + 2).equals("++")) {
+                String next = s.substring(0, i) + "--" + s.substring(i + 2, s.length());
+                if (!canWin(next)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private Map<String, Boolean> cacheMap = new HashMap<>();
+
+    public boolean canWin1st(String s) {
+        if (cacheMap.containsKey(s)) return cacheMap.get(s);
+        for (int i = 0; i < s.length() - 1; i++) {
+            if (s.substring(i, i + 2).equals("++")) {
+                String next = s.substring(0, i) + "--" + s.substring(i + 2, s.length());
+                if (!canWin1st(next)) {
+                    cacheMap.put(next,false);
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+
     public static void main(String[] args) {
 //        int[] nums = {1, 2, 3};
 //        handler.subsets(nums);
@@ -2641,7 +2697,8 @@ public class RepeativeCaseII {
 //        handler.shiftingLetters2nd("gdhbjaph", new int[]{74, 34, 65, 30, 43, 91, 14, 10});
 //        handler.PredictTheWinner(new int[]{1, 5, 233, 7});
 //        handler.PredictTheWinner2nd(new int[]{1, 5, 233, 7});
-        handler.PredictTheWinner3rd(new int[]{1, 233, 5, 7, 230});
+//        handler.PredictTheWinner3rd(new int[]{1, 233, 5, 7, 230});
+        handler.canWin("++++");
 
 
     }
