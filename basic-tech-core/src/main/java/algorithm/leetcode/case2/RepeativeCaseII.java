@@ -2606,9 +2606,132 @@ public class RepeativeCaseII {
             if (s.substring(i, i + 2).equals("++")) {
                 String next = s.substring(0, i) + "--" + s.substring(i + 2, s.length());
                 if (!canWin1st(next)) {
-                    cacheMap.put(next,false);
+                    cacheMap.put(next, false);
                     return true;
                 }
+            }
+        }
+        return false;
+    }
+
+
+    public boolean stoneGame(int[] piles) {
+        int n = piles.length;
+        int[][][] dp = new int[n][n][2];
+        for (int i = 0; i < n; i++) {
+            dp[i][i][0] = piles[i];
+            dp[i][i][1] = 0;
+        }
+        for (int step = 0; step <= n; step++) {
+            for (int i = 0; i <= n - 1; i++) {
+                int j = i + step - 1;
+                int left = piles[i] + dp[i + 1][j][1];
+                int right = piles[j] + dp[i][j - 1][1];
+                if (left > right) {
+                    dp[i][j][0] = left;
+                    dp[i][j][1] = dp[i + 1][j][0];
+                } else {
+                    dp[i][j][0] = right;
+                    dp[i][j][1] = dp[i][j - 1][0];
+                }
+            }
+        }
+        return dp[0][n - 1][0] - dp[0][n - 1][1] >= 0;
+    }
+
+
+    public String findContestMatch(int n) {
+        List<String> list = new ArrayList<>();
+        for (int i = 1; i <= n; i++) list.add(String.valueOf(i));
+        while (list.size() != 1) {
+            List<String> tempList = new ArrayList<>();
+            for (int i = 0; i < list.size() / 2; i++) {
+                tempList.add("(" + list.get(i) + "," + list.get(list.size() - 1 - i) + ")");
+            }
+            list = tempList;
+        }
+        return list.get(0);
+    }
+
+
+    public String minWindow(String s, String t) {
+        if (s == null || t == null || s.length() < t.length()) return "";
+        int left = 0, right = 0, len = Integer.MAX_VALUE;
+        String res = "";
+        int[] source = new int[256];
+        int[] target = new int[256];
+        for (char c : t.toCharArray()) target[c]++;
+        while (right < s.length()) {
+            if (!valid(source, target)) {
+                source[s.charAt(right)]++;
+                right++;
+            }
+            while (valid(source, target)) {
+                if (right - left < len) {
+                    len = Math.min(len, right - left);
+                    res = s.substring(left, right);
+                }
+                source[s.charAt(left)]--;
+                left++;
+            }
+
+        }
+        return res;
+    }
+
+
+    public List<Integer> findAnagrams(String s, String p) {
+        List<Integer> resList = new ArrayList<>();
+        if (s == null || p == null || s.length() < p.length()) return resList;
+        int[] source = new int[256];
+        int[] target = new int[256];
+        for (char c : p.toCharArray()) target[c]++;
+        int left = 0, right = 0;
+        while (right < s.length()) {
+            if (!valid1(source, target)) {
+                source[s.charAt(right)]++;
+                right++;
+            }
+            while (valid1(source, target) || (right - left) > p.length()) {
+                if (valid1(source, target)) {
+                    resList.add(left);
+                }
+                source[s.charAt(left)]--;
+                left++;
+            }
+
+        }
+        return resList;
+    }
+
+    private boolean valid1(int[] source, int[] target) {
+        for (int i = 0; i < source.length; i++) {
+            if (source[i] != target[i]) return false;
+        }
+        return true;
+    }
+
+
+    //判断source是否都包含target，包含的话true，不包含的话false
+    private boolean valid(int[] source, int[] target) {
+        for (int i = 0; i < source.length; i++) {
+            if (source[i] < target[i]) return false;
+        }
+        return true;
+    }
+
+
+    public boolean checkInclusion(String s1, String s2) {
+        if (s1 == null || s2 == null || s1.length() > s2.length()) return false;
+        int[] source = new int[256];
+        int[] target = new int[256];
+        for (char c : s1.toCharArray()) target[c]++;
+        int left = 0, right = 0;
+        while (right < s2.length()) {
+            if (!valid1(source, target)) source[s2.charAt(right++)]++;
+            while (valid1(source, target) || (right - left) > s1.length()) {
+                if (valid1(source, target)) return true;
+                source[s2.charAt(left++)]--;
             }
         }
         return false;
@@ -2698,9 +2821,11 @@ public class RepeativeCaseII {
 //        handler.PredictTheWinner(new int[]{1, 5, 233, 7});
 //        handler.PredictTheWinner2nd(new int[]{1, 5, 233, 7});
 //        handler.PredictTheWinner3rd(new int[]{1, 233, 5, 7, 230});
-        handler.canWin("++++");
-
-
+//        handler.canWin("++++");
+//        handler.findContestMatch(8);
+//        handler.minWindow("ADOBECODEBANC", "ABC");
+//        handler.findAnagrams("cbaebabacd", "abc");
+        handler.findAnagrams("baa", "aa");
     }
     //winter
 
