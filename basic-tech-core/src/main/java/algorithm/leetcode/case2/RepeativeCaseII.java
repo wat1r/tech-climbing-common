@@ -1,5 +1,7 @@
 package algorithm.leetcode.case2;
 
+import com.sun.xml.internal.ws.util.HandlerAnnotationInfo;
+
 import java.util.ArrayList;
 import java.util.*;
 import java.util.List;
@@ -2738,6 +2740,61 @@ public class RepeativeCaseII {
     }
 
 
+    public int characterReplacement(String s, int k) {
+        if (s == null || s.length() == 0) return 0;
+        int l = 0, r = 0, res = 0;
+        int[] dict = new int[256];
+        int maxLen = 0;
+        while (r < s.length()) {
+            dict[s.charAt(r)]++;
+            maxLen = Math.max(maxLen, dict[s.charAt(r)]);
+            while ((r - l + 1 - maxLen) > k) {
+                dict[s.charAt(l++)]--;
+            }
+            res = Math.max(res, r - l + 1);
+            r++;
+        }
+        return res;
+    }
+
+
+    public boolean duplicate(int numbers[], int length, int[] duplication) {
+
+
+        return false;
+    }
+
+
+    public int findDuplicate(int[] nums) {
+        if (nums == null || nums.length == 0) return 0;
+        int l = 0, r = nums.length - 1;
+        while (l < r) {
+            int mid = l + (r - l) / 2;
+            int count = 0;
+            for (int num : nums) {
+                if (num <= mid) count++;
+            }
+            if (count <= mid) l = mid + 1;
+            else r = mid;
+
+        }
+        return r;
+    }
+
+    public int findDuplicate1st(int[] nums) {
+        if (nums == null || nums.length == 0) return -1;
+        for (int i = 0; i < nums.length; i++) {
+            while (nums[i] != nums[nums[i] - 1]) {
+                swap(nums, i, nums[i] - 1);
+            }
+        }
+        for (int i = 0; i < nums.length; i++) {
+            if (nums[i] != (i + 1)) return nums[i];
+        }
+        return -1;
+    }
+
+
     public static void main(String[] args) {
 //        int[] nums = {1, 2, 3};
 //        handler.subsets(nums);
@@ -2825,7 +2882,12 @@ public class RepeativeCaseII {
 //        handler.findContestMatch(8);
 //        handler.minWindow("ADOBECODEBANC", "ABC");
 //        handler.findAnagrams("cbaebabacd", "abc");
-        handler.findAnagrams("baa", "aa");
+//        handler.findAnagrams("baa", "aa");
+//        handler.characterReplacement("ABAB", 2);
+//        handler.characterReplacement("AABABBA", 1);
+//        handler.findDuplicate(new int[]{1, 3, 4, 2, 2});
+        handler.findDuplicate1st(new int[]{1, 3, 4, 2, 2});
+
     }
     //winter
 
