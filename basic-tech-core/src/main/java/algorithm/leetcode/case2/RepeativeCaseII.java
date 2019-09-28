@@ -2794,6 +2794,16 @@ public class RepeativeCaseII {
         return -1;
     }
 
+    public int majorityElement(int[] nums) {
+        if (nums == null || nums.length == 0) return -1;
+        Stack<Integer> stack = new Stack<>();
+        for (int i = 0; i < nums.length; i++) {
+            if (stack.isEmpty() || stack.peek() == nums[i]) stack.push(nums[i]);
+            else stack.pop();
+        }
+        return stack.peek();
+    }
+
 
     public static void main(String[] args) {
 //        int[] nums = {1, 2, 3};
@@ -2886,8 +2896,8 @@ public class RepeativeCaseII {
 //        handler.characterReplacement("ABAB", 2);
 //        handler.characterReplacement("AABABBA", 1);
 //        handler.findDuplicate(new int[]{1, 3, 4, 2, 2});
-        handler.findDuplicate1st(new int[]{1, 3, 4, 2, 2});
-
+//        handler.findDuplicate1st(new int[]{1, 3, 4, 2, 2});
+            handler.majorityElement(new int[]{1,2,3,2,2,2,5,4});
     }
     //winter
 
