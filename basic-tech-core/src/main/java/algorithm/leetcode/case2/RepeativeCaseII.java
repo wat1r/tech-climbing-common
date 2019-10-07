@@ -2805,6 +2805,476 @@ public class RepeativeCaseII {
     }
 
 
+    public boolean searchMatrix(int[][] matrix, int target) {
+        if (matrix == null || matrix.length == 0 || matrix[0].length == 0) return false;
+        int row = 0, col = matrix[0].length - 1;
+        while (row < matrix.length && col >= 0) {
+            if (matrix[row][col] == target) return true;
+            else if (matrix[row][col] > target) col--;
+            else if (matrix[row][col] < target) row++;
+        }
+        return false;
+    }
+
+
+    public boolean searchMatrixI(int[][] matrix, int target) {
+        if (matrix == null || matrix.length == 0 || matrix[0].length == 0) return false;
+        int row = 0, col = matrix[0].length - 1;
+        while (row < matrix.length && col >= 0) {
+            if (matrix[row][col] == target) return true;
+            else if (matrix[row][col] > target) col--;
+            else if (matrix[row][col] < target) row++;
+        }
+        return false;
+    }
+
+    public double[] medianSlidingWindow(int[] nums, int k) {
+        if (nums == null || nums.length == 0 || nums.length < k) return null;
+        double[] result = new double[nums.length - k + 1];
+        PriorityQueue<Long> maxheap = new PriorityQueue<>(Comparator.reverseOrder());
+        PriorityQueue<Long> minheap = new PriorityQueue<>();
+        int index = 0;
+        boolean isEven = ((k & 1) == 0);
+        for (int i = 0; i < nums.length; i++) {
+            maxheap.offer((long) nums[i]);
+            int total = minheap.size() + maxheap.size();
+            if (total > k) {
+                boolean b = maxheap.contains((long) nums[i - k]) ? maxheap.remove((long) nums[i - k]) : minheap.remove((long) nums[i - k]);
+            }
+            if (maxheap.size() > 0 && minheap.size() > 0 && maxheap.peek() > minheap.peek()) {
+                minheap.offer(maxheap.poll());
+            }
+            if (minheap.size() > maxheap.size()) maxheap.offer(minheap.poll());
+            if (maxheap.size() > (minheap.size() + 1)) minheap.offer(maxheap.poll());
+            total = minheap.size() + maxheap.size();
+            if (total == k) {
+                if (isEven) {
+                    result[index++] = ((double) (maxheap.peek() + minheap.peek())) / 2;
+                } else {
+                    result[index++] = (double) (maxheap.peek());
+                }
+            }
+        }
+        return result;
+    }
+
+
+    public boolean hasPathSumI(TreeNode root, int sum) {
+        if (root == null) return false;
+        if (root.left == null && root.right == null && root.val == sum) return true;
+        return hasPathSumI(root.left, sum - root.val) || hasPathSumI(root.right, sum - root.val);
+    }
+
+
+    public boolean hasPathSumI1st(TreeNode root, int sum) {
+        if (root == null) return false;
+        Stack<TreeNode> nodeStack = new Stack<>();
+        Stack<Integer> sumStack = new Stack<>();
+        nodeStack.push(root);
+        sumStack.push(sum - root.val);
+        while (!nodeStack.isEmpty()) {
+            TreeNode curNode = nodeStack.pop();
+            Integer curSum = sumStack.pop();
+            if (curNode.left == null && curNode.right == null && curSum == 0) return true;
+            if (curNode.right != null) {
+                nodeStack.push(curNode.right);
+                sumStack.push(curSum - curNode.right.val);
+            }
+            if (curNode.left != null) {
+                nodeStack.push(curNode.left);
+                sumStack.push(curSum - curNode.left.val);
+            }
+        }
+
+        return false;
+    }
+
+
+    public int pathSumIII(TreeNode root, int sum) {
+        if (root == null) return 0;
+        return pathSumIIIHelper(root, sum)
+                + pathSumIII(root.left, sum)
+                + pathSumIII(root.right, sum);
+    }
+
+
+    public int pathSumIIIHelper(TreeNode root, int sum) {
+        if (root == null) return 0;
+        int res = 0;
+        if (root.val == sum) res++;
+        res += pathSumIIIHelper(root.left, sum - root.val);
+        res += pathSumIIIHelper(root.right, sum - root.val);
+        return res;
+    }
+
+
+    int maxSum = Integer.MIN_VALUE;
+
+    public int maxPathSum(TreeNode root) {
+        maxPathSumHelper(root);
+        return maxSum;
+    }
+
+    private int maxPathSumHelper(TreeNode root) {
+        if (root == null) return 0;
+        int leftGain = Math.max(maxPathSumHelper(root.left), 0);
+        int rightGain = Math.max(maxPathSumHelper(root.right), 0);
+        maxSum = Math.max(maxSum, root.val + leftGain + rightGain);
+        return root.val + Math.max(leftGain, rightGain);
+    }
+
+
+    public List<String> summaryRanges(int[] nums) {
+        List<String> result = new ArrayList<>();
+        if (nums == null || nums.length == 0) return result;
+        int start = nums[0];
+        int end = 0;
+        boolean isContinue = false;
+        for (int i = 1; i < nums.length; i++) {
+            if (nums[i] == (nums[i - 1] + 1)) {
+                end = nums[i];
+                isContinue = true;
+            } else {
+                if (isContinue) {
+                    result.add(start + "->" + end);
+                    isContinue = false;
+                } else {
+                    result.add(String.valueOf(start));
+                }
+                start = nums[i];
+            }
+        }
+        if (isContinue) {
+            result.add(start + "->" + end);
+        } else {
+            result.add(String.valueOf(start));
+        }
+        return result;
+    }
+
+
+    public List<String> summaryRanges1st(int[] nums) {
+        List<String> result = new ArrayList<>();
+        if (nums == null || nums.length == 0) return result;
+        int start = 0, i = 0;
+        while (i < nums.length) {
+            while (i < nums.length - 1 && nums[i] + 1 == nums[i + 1]) {
+                i++;
+            }
+            if (start == i) {
+                result.add(nums[start] + "");
+            } else {
+                result.add(nums[start] + "->" + nums[i]);
+            }
+            i++;
+            start = i;
+        }
+        return result;
+    }
+
+    Map<Integer, Integer> rootMap = new HashMap<>();
+
+    public TreeNode buildTree(int[] preorder, int[] inorder) {
+        if (preorder == null || inorder == null || preorder.length != inorder.length) {
+            return null;
+        }
+        for (int i = 0; i < inorder.length; i++) rootMap.put(inorder[i], i);
+
+        return buildTreeDFS(preorder, 0, preorder.length - 1
+                , inorder, 0, inorder.length);
+    }
+
+    /**
+     * @param preorder 前序序列
+     * @param preStart 前序序列开始索引
+     * @param preEnd   前序序列结束索引
+     * @param inorder  后序序列
+     * @param inStart  后序序列开始索引
+     * @param inEnd    后序序列结束索引
+     * @return
+     */
+    public TreeNode buildTreeDFS(int[] preorder, int preStart, int preEnd,
+                                 int[] inorder, int inStart, int inEnd) {
+        if (preStart > preEnd) return null;
+        TreeNode root = new TreeNode(preorder[preStart]);
+        int mid = rootMap.get(preorder[preStart]);
+        if (mid < 0) return null;
+        root.left = buildTreeDFS(preorder, preStart + 1, preStart + (mid - inStart)
+                , inorder, inStart, mid - 1);
+        root.right = buildTreeDFS(preorder, preStart + (mid - inStart) + 1, preEnd
+                , inorder, mid + 1, inEnd);
+        return root;
+    }
+
+    public String convert(String s, int numRows) {
+
+
+        return null;
+    }
+
+
+    public int minDistance(String word1, String word2) {
+        if (word1 == null || word2 == null) {
+            return 0;
+        }
+        char[] chas1 = word1.toCharArray();
+        char[] chas2 = word2.toCharArray();
+        int row = chas1.length + 1;
+        int col = chas2.length + 1;
+        int[][] dp = new int[row][col];
+        //init first col
+        for (int i = 0; i < row; i++) {
+            dp[i][0] = i;
+        }
+        //init first row
+        for (int j = 0; j < col; j++) {
+            dp[0][j] = j;
+        }
+        //general case
+        for (int i = 1; i < row; i++) {
+            for (int j = 1; j < col; j++) {
+                if (chas1[i - 1] == chas2[j - 1]) {
+                    dp[i][j] = dp[i - 1][j - 1];
+                } else {
+                    dp[i][j] = dp[i - 1][j - 1] + 2;
+                }
+                dp[i][j] = Math.min(dp[i][j], dp[i - 1][j] + 1);
+                dp[i][j] = Math.min(dp[i][j], dp[i][j - 1] + 1);
+            }
+        }
+        return dp[row - 1][col - 1];
+    }
+
+    public ListNode reverseList(ListNode head) {
+        if (head == null) return null;
+        ListNode pre = null, cur = head, next = null;
+        while (cur != null) {
+            next = cur.next;
+            cur.next = pre;
+            pre = cur;
+            cur = next;
+        }
+        return pre;
+    }
+
+
+    public ListNode reverseList1st(ListNode head) {
+        if (head == null || head.next == null) return head;
+        ListNode p = reverseList1st(head.next);
+        head.next.next = head;
+        head.next = null;
+        return p;
+    }
+
+
+    public ListNode reverseBetween(ListNode head, int m, int n) {
+        ListNode dummy = new ListNode(0);
+        dummy.next = head;
+        ListNode pre = dummy;
+        ListNode cur = pre.next;
+        for (int i = 1; i < m; i++) {
+            pre = pre.next;
+            cur = cur.next;
+        }
+        for (int i = 0; i < n - m; i++) {
+            ListNode tmp = cur.next;
+            cur.next = tmp.next;
+            tmp.next = pre.next;
+            pre.next = tmp;
+        }
+        return dummy.next;
+    }
+
+    public List<List<Integer>> permute(int[] nums) {
+        List<List<Integer>> results = new ArrayList<>();
+        if (nums == null || nums.length == 0) return results;
+        boolean[] visited = new boolean[nums.length];
+        permuteDFS(nums, results, new ArrayList<>(), visited);
+        return results;
+    }
+
+    private void permuteDFS(int[] nums, List<List<Integer>> results, ArrayList<Integer> levelList, boolean[] visited) {
+        if (levelList.size() == nums.length) {
+            results.add(new ArrayList<>(levelList));
+            return;
+        }
+        for (int i = 0; i < nums.length; i++) {
+            if (visited[i]) continue;
+            visited[i] = true;
+            levelList.add(nums[i]);
+            permuteDFS(nums, results, levelList, visited);
+            levelList.remove(levelList.size() - 1);
+            visited[i] = false;
+        }
+    }
+
+
+    public List<List<Integer>> permuteUnique(int[] nums) {
+        List<List<Integer>> results = new ArrayList<>();
+        if (nums == null || nums.length == 0) return results;
+        Arrays.sort(nums);
+        boolean[] visited = new boolean[nums.length];
+        permuteUniqueDFS(nums, results, new ArrayList<>(), visited);
+        return results;
+    }
+
+    private void permuteUniqueDFS(int[] nums, List<List<Integer>> results, ArrayList<Integer> levelList, boolean[] visited) {
+        if (levelList.size() == nums.length) {
+            results.add(new ArrayList<>(levelList));
+            return;
+        }
+        for (int i = 0; i < nums.length; i++) {
+            if (visited[i] || ((i - 1) >= 0 && visited[i - 1] && nums[i] == nums[i - 1])) {
+                continue;
+            }
+            visited[i] = true;
+            levelList.add(nums[i]);
+            permuteUniqueDFS(nums, results, levelList, visited);
+            levelList.remove(levelList.size() - 1);
+            visited[i] = false;
+        }
+    }
+
+    //翻转一个链表，返回翻转后的头节点
+    public ListNode reverse(ListNode head) {
+        ListNode pre = null, cur = head;
+        while (cur != null) {
+            ListNode next = cur.next;
+            cur.next = pre;
+            pre = cur;
+            cur = next;
+        }
+        return pre;
+    }
+
+    public ListNode reverseKGroup(ListNode head, int k) {
+        ListNode dummy = new ListNode(0);
+        dummy.next = head;
+        //要翻转节点的部分的前一个节点，end为要翻转节点部分的最后一个节点
+        ListNode pre = dummy, end = dummy;
+        while (end != null) {
+            //找到end,如果end指向null，说明不够一组，break掉
+            for (int i = 0; i < k && end != null; i++) {
+                end = end.next;
+            }
+            if (end == null) break;
+            //start是要翻转节点部分的第1个节点，next是要翻转节点部分的后一个节点
+            ListNode start = pre.next;
+            ListNode next = end.next;
+            end.next = null;
+            pre.next = reverse(start);
+            //这时的start节点已经翻转了
+            start.next = next;
+            pre = start;
+            end = start;
+        }
+        return dummy.next;
+    }
+
+
+    public List<List<Integer>> combine(int n, int k) {
+        List<List<Integer>> results = new ArrayList<>();
+        combineDFS(results, new ArrayList<>(), 1, n, k);
+        return results;
+    }
+
+    private void combineDFS(List<List<Integer>> results, ArrayList<Integer> levelList, int index, int n, int k) {
+        for (int i = index; i <= n; i++) {
+            levelList.add(i);
+            if (levelList.size() == k) {
+                results.add(new ArrayList<>(levelList));
+                levelList.remove(levelList.size() - 1);
+                continue;
+            }
+            combineDFS(results, levelList, i + 1, n, k);
+            levelList.remove(levelList.size() - 1);
+        }
+    }
+
+
+    public void nextPermutation(int[] nums) {
+        if (nums == null || nums.length == 0) return;
+        int len = nums.length;
+        int firstIndex = -1;
+        for (int i = len - 2; i >= 0; i--) {
+            if (nums[i] < nums[i + 1]) {
+                firstIndex = i;
+                break;
+            }
+        }
+        if (firstIndex == -1) {
+            reverse(nums, 0, len - 1);
+            return;
+        }
+        int secondIndex = -1;
+        for (int i = len - 1; i >= 0; i--) {
+            if (nums[i] > nums[firstIndex]) {
+                secondIndex = i;
+                break;
+            }
+        }
+        swap(nums, firstIndex, secondIndex);
+        reverse(nums, firstIndex + 1, len - 1);
+    }
+
+
+    public void reverse(int[] nums, int i, int j) {
+        while (i < j) {
+            swap(nums, i++, j--);
+        }
+    }
+
+
+    public String getPermutation(int n, int k) {
+        int[] nums = new int[n];
+        boolean[] used = new boolean[n];
+        for (int i = 0; i < n; i++) {
+            nums[i] = i + 1;
+        }
+        return getPermutationDFS(nums, new ArrayList<String>(), used, 0, n, k);
+    }
+
+    private String getPermutationDFS(int[] nums, ArrayList<String> levelList, boolean[] used, int depth, int n, int k) {
+        if (depth == n) {
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < levelList.size(); i++) {
+                sb.append(levelList.get(i));
+            }
+            return sb.toString();
+        }
+        int cur = factorial(n - 1 - depth);
+        for (int i = 0; i < n; i++) {
+            if (used[i]) continue;
+            if (cur < k) {
+                k -= cur;
+                continue;
+            }
+            levelList.add(nums[i] + "");
+            used[i] = true;
+            return getPermutationDFS(nums, levelList, used, depth + 1, n, k);
+        }
+        return null;
+    }
+
+
+    public int factorial(int n) {
+        int res = 1;
+        while (n > 0) {
+            res *= n;
+            n--;
+        }
+        return res;
+    }
+
+    public ListNode swapPairs1st(ListNode head) {
+        if (head == null || head.next == null) return head;
+        ListNode next = head.next;
+        head.next = swapPairs1st(head);
+        next.next =head;
+        return next;
+    }
+
+
     public static void main(String[] args) {
 //        int[] nums = {1, 2, 3};
 //        handler.subsets(nums);
@@ -2897,11 +3367,38 @@ public class RepeativeCaseII {
 //        handler.characterReplacement("AABABBA", 1);
 //        handler.findDuplicate(new int[]{1, 3, 4, 2, 2});
 //        handler.findDuplicate1st(new int[]{1, 3, 4, 2, 2});
-            handler.majorityElement(new int[]{1,2,3,2,2,2,5,4});
-    }
-    //winter
+//        handler.majorityElement(new int[]{1, 2, 3, 2, 2, 2, 5, 4});
+//        MedianFinder finder = new MedianFinder();
+//        finder.addNum(1);
+//        finder.addNum(2);
+//        finder.findMedian();
+//        finder.addNum(3);
+//        finder.findMedian();
+//        handler.medianSlidingWindow(new int[]{1, 3, -1, -3, 5, 3, 6, 7}, 3);
+//        handler.medianSlidingWindow(new int[]{2147483647, 2147483647}, 2);
+//        TreeNode node5 = new TreeNode(5);
+//        TreeNode node4 = new TreeNode(4);
+//        node4.right = node5;
+//
+//        TreeNode node3 = new TreeNode(3);
+//        node3.right = node4;
+//
+//        TreeNode node2 = new TreeNode(2);
+//        node2.right = node3;
+//
+//        TreeNode node1 = new TreeNode(1);
+//        node1.right = node2;
+//
+//
+//        System.out.println(handler.pathSumIII(node1, 3));
+//        handler.summaryRanges1st(new int[]{0, 2, 3, 4, 6, 8, 9});
+        handler.nextPermutation(new int[]{1, 2, 7, 4, 3, 1});
 
-    class TreeNode {
+
+    }
+//winter
+
+    static class TreeNode {
         int val;
         TreeNode left;
         TreeNode right;
@@ -2982,6 +3479,44 @@ public class RepeativeCaseII {
             return 0;
         }
     }
+
+    class MedianFinder {
+
+
+        private PriorityQueue<Integer> maxheap = null;
+        private PriorityQueue<Integer> minheap = null;
+        private int count = 0;
+
+
+        /**
+         * initialize your data structure here.
+         */
+        public MedianFinder() {
+            count = 0;
+            maxheap = new PriorityQueue<Integer>(Comparator.reverseOrder());
+            minheap = new PriorityQueue<>();
+        }
+
+        public void addNum(int num) {
+            count++;
+            maxheap.offer(num);
+            minheap.offer(maxheap.poll());
+            if ((count & 1) != 0) maxheap.offer(minheap.poll());
+        }
+
+        public double findMedian() {
+            if ((count & 1) == 0) return ((double) (maxheap.peek() + minheap.peek())) / 2;
+            else return (double) maxheap.peek();
+        }
+    }
+
+
+/**
+ * Your MedianFinder object will be instantiated and called as such:
+ * MedianFinder obj = new MedianFinder();
+ * obj.addNum(num);
+ * double param_2 = obj.findMedian();
+ */
 
 
 }
