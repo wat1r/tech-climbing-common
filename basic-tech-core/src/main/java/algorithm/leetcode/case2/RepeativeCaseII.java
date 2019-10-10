@@ -3356,7 +3356,7 @@ public class RepeativeCaseII {
     public int lengthOfLastWord(String s) {
         if (s == null || s.length() == 0) return 0;
         s = s.trim();
-        int res =0;
+        int res = 0;
         for (int i = s.length() - 1; i >= 0; i--) {
             if (s.charAt(i) == ' ') {
                 break;
@@ -3364,6 +3364,68 @@ public class RepeativeCaseII {
             res++;
         }
         return res;
+    }
+
+
+    public int[] numsSameConsecDiff(int N, int K) {
+        if (N == 1) return new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
+        List<Integer> resultList = new ArrayList<>();
+        for (int i = 1; i <= 9; i++) {
+            helper(resultList, i, 0, N, K, 0);
+        }
+        int[] resArr = new int[resultList.size()];
+        for (int i = 0; i < resultList.size(); i++) {
+            resArr[i] = resultList.get(i);
+        }
+        return resArr;
+    }
+
+    private void helper(List<Integer> resultList, int temp, int count, int N, int K, int levelAns) {
+        levelAns += temp;
+        count++;
+        if (count == N) {
+            resultList.add(levelAns);
+            return;
+        }
+        if (temp - K >= 0) {
+            helper(resultList, temp - K, count, N, K, levelAns * 10);
+        }
+        if (temp + K < 10 && K != 0) {
+            helper(resultList, temp + K, count, N, K, levelAns * 10);
+        }
+    }
+
+    public ListNode middleNode(ListNode head) {
+        ListNode slow = head, fast = head.next;
+        if (fast == null) return slow;
+        while (fast.next != null && fast.next.next != null) {
+            slow = slow.next;
+            fast = fast.next.next;
+        }
+        ListNode node = slow.next;
+        slow.next = null;
+        return node;
+    }
+
+    public ListNode partition(ListNode head, int x) {
+        if (head == null) return head;
+        ListNode dummyBefore = new ListNode(0);
+        ListNode before = dummyBefore;
+        ListNode dummyAfter = new ListNode(0);
+        ListNode after = dummyAfter;
+        while (head != null) {
+            if (head.val < x) {
+                before.next = head;
+                before = before.next;
+            } else {
+                after.next = head;
+                after = after.next;
+            }
+            head = head.next;
+        }
+        before.next = dummyAfter.next;
+        after.next = null;
+        return dummyBefore.next;
     }
 
 
@@ -3488,7 +3550,23 @@ public class RepeativeCaseII {
 //
 //        handler.largestRectangleArea(new int[]{2, 1, 5, 6, 2, 3});
 //        handler.maximalRectangle1st(new char[][]{{'1', '0', '1', '0', '0'}, {'1', '0', '1', '1', '1'}, {'1', '1', '1', '1', '1'}, {'1', '0', '0', '1', '0'}});
-        handler.lengthOfLastWord("a ");
+//        handler.lengthOfLastWord("a ");
+//        handler.numsSameConsecDiff(3, 7);
+        ListNode i1 = new ListNode(1);
+        ListNode i2 = new ListNode(2);
+        ListNode i3 = new ListNode(3);
+        ListNode i4 = new ListNode(4);
+        ListNode i5 = new ListNode(5);
+        ListNode i6 = new ListNode(6);
+        i1.next = i2;
+        i2.next = i3;
+        i3.next = i4;
+        i4.next = i5;
+        i5.next = i6;
+        i6.next = null;
+//        handler.reverseList1st(i1);
+        handler.middleNode(i1);
+
     }
 //winter
 
@@ -3502,7 +3580,7 @@ public class RepeativeCaseII {
         }
     }
 
-    class ListNode {
+    static class ListNode {
         int val;
         ListNode next;
 
