@@ -3191,6 +3191,32 @@ public class RepeativeCaseII {
         }
     }
 
+    public String originalDigits(String s) {
+        char[] chas = s.toCharArray();
+        int[] count = new int[256];
+        for (char c : chas) {
+            count[c]++;
+        }
+        int[] sign = new int[10];
+        sign[0] = count['z'];
+        sign[2] = count['w'];
+        sign[4] = count['u'];
+        sign[6] = count['x'];
+        sign[8] = count['g'];
+        sign[3] = count['h'] - sign[8];
+        sign[5] = count['f'] - sign[4];
+        sign[7] = count['s'] - sign[6];
+        sign[9] = count['i'] - sign[5] - sign[6] - sign[8];
+        sign[1] = count['n'] - sign[7] - 2 * sign[9];
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < 10; i++) {
+            for (int j = 0; j < sign[i]; j++) {
+                sb.append(i);
+            }
+        }
+        return sb.toString();
+    }
+
 
     public void nextPermutation(int[] nums) {
         if (nums == null || nums.length == 0) return;
@@ -3270,8 +3296,74 @@ public class RepeativeCaseII {
         if (head == null || head.next == null) return head;
         ListNode next = head.next;
         head.next = swapPairs1st(head);
-        next.next =head;
+        next.next = head;
         return next;
+    }
+
+
+    public int maximalRectangle(char[][] matrix) {
+        if (matrix == null || matrix.length == 0 || matrix[0].length == 0) return 0;
+        int m = matrix.length, n = matrix[0].length;
+        int[][] dp = new int[m][n];
+        int res = 0;
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                if (matrix[i][j] == '1') {
+                    dp[i][j] = (j == 0) ? 1 : dp[i][j - 1] + 1;
+                    int width = dp[i][j];
+                    for (int k = i; k >= 0; k--) {
+                        width = Math.min(width, dp[k][j]);
+                        res = Math.max(res, width * (i - k + 1));
+                    }
+                }
+            }
+        }
+        return res;
+    }
+
+    public int largestRectangleArea(int[] heights) {
+        if (heights == null || heights.length == 0) return 0;
+        Stack<Integer> stack = new Stack<>();
+        int n = heights.length;
+        int maxArea = 0;
+        for (int i = 0; i <= n; i++) {
+            int curHeight = (i == n) ? -1 : heights[i];
+            while (!stack.isEmpty() && curHeight <= heights[stack.peek()]) {
+                int stackHeight = heights[stack.pop()];
+                int width = stack.isEmpty() ? i : (i - stack.peek() - 1);
+                maxArea = Math.max(maxArea, width * stackHeight);
+            }
+            stack.push(i);
+        }
+        return maxArea;
+    }
+
+    public int maximalRectangle1st(char[][] matrix) {
+        if (matrix == null || matrix.length == 0 || matrix[0].length == 0) return 0;
+        int m = matrix.length, n = matrix[0].length;
+        int maxArea = 0;
+        int[] dp = new int[n];
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                dp[j] = (matrix[i][j] == '1') ? dp[j] + 1 : 0;
+            }
+            maxArea = Math.max(maxArea, largestRectangleArea(dp));
+        }
+        return maxArea;
+    }
+
+
+    public int lengthOfLastWord(String s) {
+        if (s == null || s.length() == 0) return 0;
+        s = s.trim();
+        int res =0;
+        for (int i = s.length() - 1; i >= 0; i--) {
+            if (s.charAt(i) == ' ') {
+                break;
+            }
+            res++;
+        }
+        return res;
     }
 
 
@@ -3392,9 +3484,11 @@ public class RepeativeCaseII {
 //
 //        System.out.println(handler.pathSumIII(node1, 3));
 //        handler.summaryRanges1st(new int[]{0, 2, 3, 4, 6, 8, 9});
-        handler.nextPermutation(new int[]{1, 2, 7, 4, 3, 1});
-
-
+//        handler.nextPermutation(new int[]{1, 2, 7, 4, 3, 1});
+//
+//        handler.largestRectangleArea(new int[]{2, 1, 5, 6, 2, 3});
+//        handler.maximalRectangle1st(new char[][]{{'1', '0', '1', '0', '0'}, {'1', '0', '1', '1', '1'}, {'1', '1', '1', '1', '1'}, {'1', '0', '0', '1', '0'}});
+        handler.lengthOfLastWord("a ");
     }
 //winter
 
