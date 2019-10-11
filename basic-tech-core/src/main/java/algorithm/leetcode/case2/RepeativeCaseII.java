@@ -3429,6 +3429,62 @@ public class RepeativeCaseII {
     }
 
 
+    public ListNode reverseKGroup1st(ListNode head, int k) {
+        if (head == null) return null;
+        ListNode dummy = new ListNode(0);
+        dummy.next = head;
+
+        ListNode pre = dummy;
+        ListNode end = dummy;
+
+        while (head.next != null) {
+            for (int i = 0; i < k && end != null; i++) {
+                end = end.next;
+            }
+            if (end == null) break;
+            ListNode start = pre.next;
+            ListNode next = end.next;
+            end.next = null;
+            pre.next = reverseList1st(start);
+            start.next = next;
+            pre = start;
+            end = pre;
+        }
+        return dummy.next;
+    }
+
+
+    public List<String> binaryTreePaths(TreeNode root) {
+        List<String> resultList = new ArrayList<>();
+        if (root == null) return resultList;
+        binaryTreePathsDFS(resultList, new ArrayList<>(), root);
+        return resultList;
+    }
+
+    private void binaryTreePathsDFS(List<String> resultList, List<Integer> levelList, TreeNode node) {
+        if (node == null) return;
+        levelList.add(node.val);
+        if (node.left == null && node.right == null) {
+            resultList.add(convertList2Str(levelList));
+            levelList.remove(levelList.size() - 1);
+            return;
+        }
+
+        binaryTreePathsDFS(resultList, levelList, node.left);
+        binaryTreePathsDFS(resultList, levelList, node.right);
+        levelList.remove(levelList.size() - 1);
+    }
+
+    private String convertList2Str(List<Integer> levelList) {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < levelList.size() - 1; i++) {
+            sb.append(levelList.get(i)).append("->");
+        }
+        sb.append(levelList.get(levelList.size() - 1));
+        return sb.toString();
+    }
+
+
     public static void main(String[] args) {
 //        int[] nums = {1, 2, 3};
 //        handler.subsets(nums);
