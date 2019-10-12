@@ -3485,6 +3485,89 @@ public class RepeativeCaseII {
     }
 
 
+    public int search1st(int[] nums, int target) {
+        if (nums == null || nums.length == 0) return -1;
+        int left = 0, right = nums.length - 1;
+        while (left < right) {
+            int mid = left + (right - left) / 2;
+            if (nums[mid] == target) return mid;
+            else if (nums[mid] >= nums[left]) {
+                if (nums[left] <= target && target < nums[mid]) {
+                    right = mid - 1;
+                } else {
+                    left = mid + 1;
+                }
+            } else {
+                if (nums[mid] < target && target <= nums[right]) {
+                    left = mid + 1;
+                } else {
+                    right = mid - 1;
+                }
+            }
+        }
+        return nums[left] == target ? left : -1;
+    }
+
+    public int findMin1st(int[] nums) {
+        if (nums == null || nums.length == 0) return -1;
+        int l = 0, r = nums.length - 1;
+        while (l < r) {
+            int mid = l + (r - l) / 2;
+            if (nums[mid] <= nums[r]) {
+                r = mid;
+            } else {
+                l = mid + 1;
+            }
+        }
+        return nums[l];
+    }
+
+
+    public boolean searchII1st(int[] nums, int target) {
+        if (nums == null || nums.length == 0) return false;
+        int left = 0, right = nums.length - 1;
+        while (left <= right) {
+            int mid = left + (right - left) / 2;
+            if (nums[mid] == target) return true;
+            if (nums[left] == nums[mid] && nums[mid] == nums[right]) {
+                left++;
+                right--;
+            } else if (nums[left] <= nums[mid]) {
+                if (nums[left] <= target && target < nums[mid]) {
+                    right = mid - 1;
+                } else {
+                    left = mid + 1;
+                }
+            } else {
+                if (nums[mid] < target && target <= nums[right]) {
+                    left = mid + 1;
+                } else {
+                    right = mid - 1;
+                }
+            }
+        }
+        return false;
+    }
+
+
+    public int mySqrt(int x) {
+        if (x == 0) return 0;
+        long left = 1, right = x / 2;
+        while (left < right) {
+            long mid = left + (right - left + 1) / 2;
+            long tmp = mid * mid;
+            if (tmp == x) {
+                return (int) mid;
+            } else if (tmp > x) {
+                right = mid - 1;
+            } else {
+                left = mid;
+            }
+        }
+        return (int) left;
+    }
+
+
     public static void main(String[] args) {
 //        int[] nums = {1, 2, 3};
 //        handler.subsets(nums);
@@ -3621,8 +3704,10 @@ public class RepeativeCaseII {
         i5.next = i6;
         i6.next = null;
 //        handler.reverseList1st(i1);
-        handler.middleNode(i1);
-
+//        handler.middleNode(i1);
+//        handler.findMin1st(new int[]{4, 5, 6, 7, 0, 1, 2});
+//        handler.search1st(new int[]{4, 5, 6, 7, 0, 1, 2}, 4);
+        handler.mySqrt(8);
     }
 //winter
 
