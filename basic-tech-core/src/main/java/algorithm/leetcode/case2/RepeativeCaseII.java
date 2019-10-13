@@ -3567,6 +3567,83 @@ public class RepeativeCaseII {
         return (int) left;
     }
 
+    public int balancedStringSplit(String s) {
+        int res = 0;
+        if (s == null || s.length() == 0) return res;
+        int cntR = 0, cntL = 0;
+        for (int i = 0; i < s.length(); i++) {
+            if (s.charAt(i) == 'R') cntR++;
+            else cntL++;
+            if (cntR == cntL) {
+                res++;
+                cntR = 0;
+                cntL = 0;
+            }
+        }
+        return res;
+    }
+
+    int index = 0;
+
+    public String reverseParentheses(String s) {
+        return reverseParenthesesDFS(s.toCharArray()).toString();
+    }
+
+
+    private StringBuilder reverseParenthesesDFS(char[] chas) {
+        StringBuilder sb = new StringBuilder();
+        while (index < chas.length && chas[index] != '(' && chas[index] != ')') {
+            sb.append(chas[index]);
+            index++;
+        }
+        if (index == chas.length) {
+            return sb;
+        } else if (chas[index] == ')') {
+            index++;
+            return sb;
+        } else if (chas[index] == '(') {
+            index++;
+            StringBuilder cur = reverseParenthesesDFS(chas);
+            StringBuilder next = reverseParenthesesDFS(chas);
+            sb.append(cur.reverse().toString()).append(next.toString());
+            return sb;
+        }
+        return null;
+    }
+
+
+    private void reverseArr(char[] src, int start, int end) {
+        while (start < end) {
+            swap(src, start++, end--);
+        }
+    }
+
+    private void swap(char[] arr, int x, int y) {
+        char tmp = arr[x];
+        arr[x] = arr[y];
+        arr[y] = tmp;
+    }
+
+    public String reverseParentheses1st(String s) {
+        StringBuilder res = new StringBuilder();
+        char[] chas = s.toCharArray();
+        Stack<Integer> stack = new Stack<>();
+        for (int i = 0; i < chas.length; i++) {
+            if (chas[i] == '(') {
+                stack.push(i);
+            } else if (chas[i] == ')') {
+                reverseArr(chas, stack.pop() + 1, i - 1);
+            }
+        }
+        for (int i = 0; i < chas.length; i++) {
+            if (chas[i] == '(' || chas[i] == ')') {
+                continue;
+            }
+            res.append(chas[i]);
+        }
+        return res.toString();
+    }
+
 
     public static void main(String[] args) {
 //        int[] nums = {1, 2, 3};
@@ -3707,7 +3784,10 @@ public class RepeativeCaseII {
 //        handler.middleNode(i1);
 //        handler.findMin1st(new int[]{4, 5, 6, 7, 0, 1, 2});
 //        handler.search1st(new int[]{4, 5, 6, 7, 0, 1, 2}, 4);
-        handler.mySqrt(8);
+//        handler.mySqrt(8);
+//        handler.balancedStringSplit("RLRRLLRLRL");
+//        handler.reverseParentheses("(u(love)i)");
+        handler.reverseParentheses1st("(u(love)i)");
     }
 //winter
 
