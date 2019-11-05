@@ -3645,6 +3645,26 @@ public class RepeativeCaseII {
     }
 
 
+    //快慢指针
+    public int findDuplicate2nd(int[] nums) {
+        int fast = nums[nums[0]];
+        int slow = nums[0];
+
+        while (fast != slow) {
+            fast = nums[nums[fast]];
+            slow = nums[slow];
+        }
+
+        slow = 0;
+        while (fast != slow) {
+            fast = nums[fast];
+            slow = nums[slow];
+        }
+
+        return slow;
+    }
+
+
     public static void main(String[] args) {
 //        int[] nums = {1, 2, 3};
 //        handler.subsets(nums);
@@ -3787,7 +3807,8 @@ public class RepeativeCaseII {
 //        handler.mySqrt(8);
 //        handler.balancedStringSplit("RLRRLLRLRL");
 //        handler.reverseParentheses("(u(love)i)");
-        handler.reverseParentheses1st("(u(love)i)");
+//        handler.reverseParentheses1st("(u(love)i)");
+        handler.findDuplicate2nd(new int[]{3,1,3,4,2});
     }
 //winter
 
