@@ -3664,6 +3664,23 @@ public class RepeativeCaseII {
         return slow;
     }
 
+    ListNode successor = null;
+
+    // 将链表的前 n 个节点反转（n <= 链表长度）
+    ListNode reverseN(ListNode head, int n) {
+        if(n==1){
+            //记录第n+1个节点
+            successor = head.next;
+            return head;
+        }
+        //head.next为起点，需要反转前n-1个节点
+        ListNode last = reverseN(head.next, n - 1);
+        head.next.next =head;
+        //反转后的head节点和后面的节点连起来
+        head.next =successor;
+        return last;
+    }
+
 
     public static void main(String[] args) {
 //        int[] nums = {1, 2, 3};
@@ -3808,7 +3825,7 @@ public class RepeativeCaseII {
 //        handler.balancedStringSplit("RLRRLLRLRL");
 //        handler.reverseParentheses("(u(love)i)");
 //        handler.reverseParentheses1st("(u(love)i)");
-        handler.findDuplicate2nd(new int[]{3,1,3,4,2});
+        handler.findDuplicate2nd(new int[]{3, 1, 3, 4, 2});
     }
 //winter
 

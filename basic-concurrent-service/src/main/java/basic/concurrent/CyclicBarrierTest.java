@@ -20,7 +20,14 @@ public class CyclicBarrierTest {
         for(int i=0;i<5;i++){
             new Thread(new CyclicBarrierTest().new Worker()).start();
         }
+
     }
+
+
+
+
+
+
     class Worker implements Runnable{
         public void run(){
             try {
