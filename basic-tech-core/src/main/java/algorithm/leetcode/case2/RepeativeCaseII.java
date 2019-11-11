@@ -3668,17 +3668,29 @@ public class RepeativeCaseII {
 
     // 将链表的前 n 个节点反转（n <= 链表长度）
     ListNode reverseN(ListNode head, int n) {
-        if(n==1){
+        if (n == 1) {
             //记录第n+1个节点
             successor = head.next;
             return head;
         }
         //head.next为起点，需要反转前n-1个节点
         ListNode last = reverseN(head.next, n - 1);
-        head.next.next =head;
+        head.next.next = head;
         //反转后的head节点和后面的节点连起来
-        head.next =successor;
+        head.next = successor;
         return last;
+    }
+
+
+    public ListNode mergeTwoLists(ListNode l1, ListNode l2) {
+        if (l1 == null || l2 == null) return l1 == null ? l2 : l1;
+        if (l1.val > l2.val) {
+            l2.next = mergeTwoLists(l1, l2.next);
+            return l2;
+        } else {
+            l1.next = mergeTwoLists(l1.next, l2);
+            return l1;
+        }
     }
 
 
