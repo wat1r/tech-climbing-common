@@ -3694,6 +3694,38 @@ public class RepeativeCaseII {
     }
 
 
+    public int subarraySum(int[] nums, int k) {
+        int n = nums.length;
+        int[] sum = new int[n + 1];
+        for (int i = 0; i < n; i++) {
+            sum[i + 1] = sum[i] + nums[i];
+        }
+        int res = 0;
+        for (int i = 1; i <= n; i++) {
+            for (int j = 0; j < i; j++) {
+                if (sum[i] - sum[j] == k) res++;
+            }
+        }
+        return res;
+    }
+
+
+    public int subarraySum2nd(int[] nums, int k) {
+        int n = nums.length;
+        Map<Integer, Integer> preSum = new HashMap<>();
+        preSum.put(0, 1);
+        int sumEnd = 0, res = 0;
+        for (int i = 0; i < n; i++) {
+            sumEnd += nums[i];
+            int remain = sumEnd - k;
+            if (preSum.containsKey(remain)) res += preSum.get(remain);
+            preSum.put(sumEnd, preSum.getOrDefault(sumEnd, 0) + 1);
+
+        }
+        return res;
+    }
+
+
     public static void main(String[] args) {
 //        int[] nums = {1, 2, 3};
 //        handler.subsets(nums);
@@ -3837,7 +3869,9 @@ public class RepeativeCaseII {
 //        handler.balancedStringSplit("RLRRLLRLRL");
 //        handler.reverseParentheses("(u(love)i)");
 //        handler.reverseParentheses1st("(u(love)i)");
-        handler.findDuplicate2nd(new int[]{3, 1, 3, 4, 2});
+//        handler.findDuplicate2nd(new int[]{3, 1, 3, 4, 2});
+//        handler.subarraySum(new int[]{1, 1, 1}, 2);
+        handler.subarraySum2nd(new int[]{1, 1, 1}, 2);
     }
 //winter
 
