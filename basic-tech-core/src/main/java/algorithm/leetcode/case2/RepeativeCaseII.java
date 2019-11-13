@@ -3726,6 +3726,29 @@ public class RepeativeCaseII {
     }
 
 
+    private int intervalSchedule(int[][] intervals) {
+        if (intervals == null || intervals.length == 0) return 0;
+        Arrays.sort(intervals, Comparator.comparingInt(o -> o[1]));
+        int count = 1;
+        int baseEnd = intervals[0][1];
+        int len = intervals.length;
+        for (int i = 1; i < len; i++) {
+            int start = intervals[i][0];
+            if (start >= baseEnd) {
+                count++;
+                baseEnd = intervals[i][1];
+            }
+        }
+        return count;
+    }
+
+
+    public int eraseOverlapIntervals(int[][] intervals) {
+        int len = intervals.length;
+        return len-intervalSchedule(intervals);
+    }
+
+
     public static void main(String[] args) {
 //        int[] nums = {1, 2, 3};
 //        handler.subsets(nums);
