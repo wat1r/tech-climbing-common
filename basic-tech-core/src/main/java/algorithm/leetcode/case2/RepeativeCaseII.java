@@ -3745,7 +3745,22 @@ public class RepeativeCaseII {
 
     public int eraseOverlapIntervals(int[][] intervals) {
         int len = intervals.length;
-        return len-intervalSchedule(intervals);
+        return len - intervalSchedule(intervals);
+    }
+
+
+    public int firstMissingPositive(int[] nums) {
+        BitSet bitSet = new BitSet();
+        int n = nums.length;
+        for (int i = 0; i < n; i++) {
+            if (nums[i] >= 1 && nums[i] <= n + 1) {
+                bitSet.set(nums[i]);
+            }
+        }
+        for (int i = 1; i <= n; i++) {
+            if (!bitSet.get(i)) return i;
+        }
+        return n + 1;
     }
 
 
