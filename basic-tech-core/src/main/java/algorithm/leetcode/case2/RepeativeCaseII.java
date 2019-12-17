@@ -1,7 +1,5 @@
 package algorithm.leetcode.case2;
 
-import com.sun.xml.internal.ws.util.HandlerAnnotationInfo;
-
 import java.util.ArrayList;
 import java.util.*;
 import java.util.List;
@@ -3891,6 +3889,92 @@ public class RepeativeCaseII {
     }
 
 
+    public List<String> generateParenthesis(int n) {
+        List<String> resList = new ArrayList<>();
+        if (n == 0) return resList;
+        generateParenthesisDFS("", n, n, resList);
+        return resList;
+    }
+
+    /**
+     * @param curStr  当前层的当前字符
+     * @param left    左括号剩余个数
+     * @param right   右括号剩余个数
+     * @param resList 结果集
+     */
+    private void generateParenthesisDFS(String curStr, int left, int right, List<String> resList) {
+        //返回条件:当左括号剩余的个数与右括号剩余的个数都为0时
+        if (left == 0 && right == 0) {
+            resList.add(curStr);
+            return;
+        }
+        //左边括号还有剩余时，一直减少，每次left-=1，给curStr带上一个"("
+        if (left > 0) {
+            generateParenthesisDFS(curStr + "(", left - 1, right, resList);
+        }
+        //右边括号还有剩余时，一直减少，每次right-=1，给curStr带上一个")",但是右边括号剩余的个数一定要大于左边括号剩余的个数
+        if (right > 0 && right > left) {
+            generateParenthesisDFS(curStr + ")", left, right - 1, resList);
+        }
+    }
+
+
+    public List<String> generateParenthesis2nd(int n) {
+        List<String> resList = new ArrayList<>();
+        if (n == 0) return resList;
+        generateParenthesis2ndDFS("", 0, 0, n, resList);
+        return resList;
+    }
+
+    /**
+     * @param curStr  当前层的当前字符
+     * @param left    左括号使用的个数
+     * @param right   右括号使用的个数
+     * @param limit   左右括号的上限
+     * @param resList 结果集
+     */
+    private void generateParenthesis2ndDFS(String curStr, int left, int right, int limit, List<String> resList) {
+        //当左括号使用的个数与右括号使用的个数同到达上限时，收集结果集，返回
+        if (left == limit && right == limit) {
+            resList.add(curStr);
+            return;
+        }
+        //当左括号使用的个数小于上限值，left+=1,然后curStr组装"(",再次进行回溯
+        if (left < limit) {
+            generateParenthesis2ndDFS(curStr + "(", left + 1, right, limit, resList);
+        }
+        //当右括号使用的个数小于上限值并且左括号使用个数要大于右括号使用个数，right+=1,然后curStr组装")",再次进行回溯
+        if (right < limit && left > right) {
+            generateParenthesis2ndDFS(curStr + ")", left, right + 1, limit, resList);
+        }
+    }
+
+    public List<String> generateParenthesisII(int n) {
+        List<String> resList = new ArrayList<>();
+        if(n==0) return resList;
+        LinkedList<Node> queue = new LinkedList<>();
+        queue.offer(new Node("", n, n));
+        int limit = 2 * n;
+        while (limit > 0) {
+            int size = queue.size();
+            for (int i = 0; i < size; i++) {
+                Node curNode = queue.poll();
+                if (curNode.left > 0) {
+                    queue.offer(new Node(curNode.curStr + "(", curNode.left - 1, curNode.right));
+                }
+                if (curNode.right > 0 && curNode.right > curNode.left) {
+                    queue.offer(new Node(curNode.curStr + ")", curNode.left, curNode.right - 1));
+                }
+            }
+            limit--;
+        }
+        while (!queue.isEmpty()){
+            resList.add(queue.poll().curStr);
+        }
+        return resList;
+    }
+
+
     public static void main(String[] args) {
 //        int[] nums = {1, 2, 3};
 //        handler.subsets(nums);
@@ -4153,6 +4237,20 @@ public class RepeativeCaseII {
         public double findMedian() {
             if ((count & 1) == 0) return ((double) (maxheap.peek() + minheap.peek())) / 2;
             else return (double) maxheap.peek();
+        }
+    }
+
+
+    class Node {
+        private String curStr;
+        private int left;
+        private int right;
+
+
+        public Node(String curStr, int left, int right) {
+            this.curStr = curStr;
+            this.left = left;
+            this.right = right;
         }
     }
 
