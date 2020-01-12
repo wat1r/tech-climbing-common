@@ -4011,10 +4011,9 @@ public class RepeativeCaseII {
     }
 
     /**
-     *
-     * @param s 字符串
+     * @param s         字符串
      * @param levelList 符合条件的这一层的结果集
-     * @param start 字符的起始位置的index
+     * @param start     字符的起始位置的index
      */
     private void partitionDFS(String s, List<String> levelList, int start) {
         //当start的位置走到字符串的末尾时，开始返回
@@ -4026,9 +4025,9 @@ public class RepeativeCaseII {
         for (int end = start; end < s.length(); end++) {
             //判断是否为回问，不是回文的话，开始剪枝
             if (isPalindrome(s, start, end)) {
-                levelList.add(s.substring(start,end+1));
-                partitionDFS(s,levelList,end+1);
-                levelList.remove(levelList.size()-1);
+                levelList.add(s.substring(start, end + 1));
+                partitionDFS(s, levelList, end + 1);
+                levelList.remove(levelList.size() - 1);
             }
         }
     }
@@ -4042,6 +4041,117 @@ public class RepeativeCaseII {
         return true;
     }
 
+
+    public List<List<Integer>> generate1st(int numRows) {
+        List<List<Integer>> resList = new ArrayList<>();
+        if (numRows == 0) return resList;
+        resList.add(new ArrayList<>());
+        resList.get(0).add(1);
+        for (int i = 1; i < numRows; i++) {
+            List<Integer> pre = resList.get(i - 1);
+            List<Integer> cur = new ArrayList<>();
+            cur.add(1);
+            for (int j = 0; j < pre.size() - 1; j++) {
+                cur.add(pre.get(j) + pre.get(j + 1));
+            }
+            cur.add(1);
+            resList.add(cur);
+        }
+        return resList;
+    }
+
+
+    public List<List<Integer>> generate2nd(int numRows) {
+        List<List<Integer>> resList = new ArrayList<>();
+        if (numRows == 0) return resList;
+        for (int i = 0; i < numRows; i++) {
+            List<Integer> res = generate2ndHelper(i);
+            resList.add(res);
+        }
+
+        return resList;
+    }
+
+    private List<Integer> generate2ndHelper(int row) {
+        List<Integer> cur = new ArrayList<>();
+        if (row == 0) {
+            cur.add(1);
+            return cur;
+        }
+
+        List<Integer> pre = generate2ndHelper(row - 1);
+        cur.add(1);
+        for (int i = 0; i < pre.size() - 1; i++) {
+            cur.add(pre.get(i) + pre.get(i + 1));
+        }
+        cur.add(1);
+        return cur;
+    }
+
+
+    public List<Integer> getRow(int rowIndex) {
+        List<Integer> pre = new ArrayList<>();
+        List<Integer> cur = new ArrayList<>();
+        for (int i = 0; i <= rowIndex; i++) {
+            cur = new ArrayList<>();
+            for (int j = 0; j <= i; j++) {
+                //记录每一行的第一个与最末尾的1
+                if (j == 0 || j == i) {
+                    cur.add(1);
+                } else {
+                    cur.add(pre.get(j - 1) + pre.get(j));
+                }
+            }
+            pre = cur;
+        }
+        return cur;
+    }
+
+
+    public List<Integer> getRow1st(int rowIndex) {
+        List<Integer> cur = new ArrayList<>();
+        int preValue = 1;
+        cur.add(1);
+        for (int i = 1; i <= rowIndex; i++) {
+            //起始的坐标跳过第一个数，并且在结尾时跳过最后一个数(j<i)
+            for (int j = 1; j < i; j++) {
+                int tmp = cur.get(j);
+                cur.set(j, preValue + cur.get(j));
+                preValue = tmp;
+            }
+            //最后一个数是1
+            cur.add(1);
+        }
+        return cur;
+    }
+
+
+    public List<Integer> getRow2nd(int rowIndex) {
+        List<Integer> cur = new ArrayList<>();
+        cur.add(1);
+        for (int i = 1; i <= rowIndex; i++) {
+            for (int j = i - 1; j >= 1; j--) {
+                cur.set(j, cur.get(j - 1) + cur.get(j));
+            }
+            cur.add(1);
+        }
+        return cur;
+    }
+
+    public ListNode reverseList3rd(ListNode head) {
+        if (head == null || head.next == null) return head;
+        ListNode curNode = reverseList3rd(head.next);
+        head.next.next = head;
+        head.next = null;
+        return curNode;
+    }
+
+
+    public int fib(int N) {
+        if (N == 0) return 0;
+        if (N == 1) return 1;
+        return fib(N - 1) + fib(N - 2);
+    }
 
     public static void main(String[] args) {
 //        int[] nums = {1, 2, 3};
@@ -4192,7 +4302,11 @@ public class RepeativeCaseII {
 
 //        handler.setZeroes(new int[][]{{1, 1, 2, 0}, {3, 4, 5, 2}, {1, 3, 1, 5}});
 //        handler.romanToInt("MCMXCIV");
-        handler.partition("aab");
+//        handler.partition("aab");
+//        handler.generate2nd(5);
+//        handler.getRow(3);
+//        handler.getRow1st(3);
+        handler.getRow2nd(3);
     }
 //winter
 
