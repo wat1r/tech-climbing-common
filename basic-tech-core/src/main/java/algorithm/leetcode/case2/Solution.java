@@ -41,6 +41,18 @@ public class Solution {
     }
 
 
+    public void moveZeroes(int[] nums) {
+        if (nums == null || nums.length == 0) return;
+        int index = 0;
+        for (int i = 0; i < nums.length; i++) {
+            if (nums[i] != 0) nums[index++] = nums[i];
+        }
+        for (int i = index; i < nums.length; i++) {
+            nums[i] = 0;
+        }
+    }
+
+
     public static void main(String[] args) {
         TreeNode t1 = new TreeNode(1);
         TreeNode t2 = new TreeNode(2);
@@ -63,9 +75,9 @@ public class Solution {
 //        handler.rightSideView(t1);
 
 
+
+
     }
-
-
 
 
 //    public int fib(int N) {
@@ -89,7 +101,7 @@ public class Solution {
     private int helper(int i, int n) {
         if (i > n) return 0;
         if (i == n) return 1;
-        if(memo.get(i)!=null) return  memo.get(i);
+        if (memo.get(i) != null) return memo.get(i);
         memo.put(i, helper(i + 1, n) + helper(i + 2, n));
         return memo.get(i);
     }

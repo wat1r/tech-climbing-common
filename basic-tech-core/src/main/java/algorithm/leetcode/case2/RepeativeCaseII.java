@@ -926,6 +926,17 @@ public class RepeativeCaseII {
 //        arr[m] = arr[m] ^ arr[n];
     }
 
+
+    public int removeDuplicates(int[] nums) {
+        if (nums == null || nums.length == 0) return 0;
+        int slow = 0, fast = 1;
+        while (fast < nums.length) {
+            if (nums[fast] == nums[slow]) fast++;
+            else swap(nums, ++slow, fast++);
+        }
+        return slow + 1;
+    }
+
     public int numDecodings(String s) {
         char[] chas = s.toCharArray();
         int n = chas.length;
@@ -4153,6 +4164,50 @@ public class RepeativeCaseII {
         return fib(N - 1) + fib(N - 2);
     }
 
+
+    public void moveZeroes(int[] nums) {
+        if (nums == null || nums.length == 0) return;
+        int index = 0;
+        for (int i = 0; i < nums.length; i++) {
+            if (nums[i] != 0) nums[index++] = nums[i];
+        }
+        for (int i = index; i < nums.length; i++) {
+            nums[i] = 0;
+        }
+    }
+
+    public void moveZeroes1st(int[] nums) {
+        if (nums == null || nums.length == 0) return;
+        for (int index = 0, i = 0; i < nums.length; i++) {
+            if (nums[i] != 0) swap(nums, nums[index++], nums[i]);
+        }
+    }
+
+
+    public int removeElement(int[] nums, int val) {
+        int slow = 0;
+        for (int fast = 0; fast < nums.length; fast++) {
+            if (nums[fast] != val) {
+                swap(nums, slow++, fast);
+            }
+        }
+        return slow + 1;
+    }
+
+
+    public int removeDuplicatesII(int[] nums) {
+        if (nums == null || nums.length == 0) return 0;
+        int slow = 1;
+        //第一个条件是fast对应的值与slow（慢指针最后一个停留的值）不相等，进逻辑
+        //第二个条件是fast对应的值与slow（慢指针最后一个停留的值）相等，但是和slow前一个值不相等，即满足同一个元素只有最多两个
+        for (int fast = 2; fast < nums.length; fast++) {
+            if (nums[slow] != nums[fast] || (nums[slow] == nums[fast] && nums[slow - 1] != nums[fast])) {
+                nums[++slow] = nums[fast];
+            }
+        }
+        return slow + 1;
+    }
+
     public static void main(String[] args) {
 //        int[] nums = {1, 2, 3};
 //        handler.subsets(nums);
@@ -4306,7 +4361,8 @@ public class RepeativeCaseII {
 //        handler.generate2nd(5);
 //        handler.getRow(3);
 //        handler.getRow1st(3);
-        handler.getRow2nd(3);
+//        handler.getRow2nd(3);
+//        handler.moveZeroes(new int[]{0,1,0,3,12});
     }
 //winter
 
