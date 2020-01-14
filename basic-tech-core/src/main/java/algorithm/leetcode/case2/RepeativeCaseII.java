@@ -4208,6 +4208,20 @@ public class RepeativeCaseII {
         return slow + 1;
     }
 
+    public int findKthLargest(int[] nums, int k) {
+        Queue<Integer> queue = new PriorityQueue<>();
+        for (int i = 0; i < nums.length; i++) {
+            if (i < k || nums[i] > queue.peek()) {
+                queue.offer(nums[i]);
+            }
+            if (queue.size() > k) {
+                queue.poll();
+            }
+        }
+        return queue.peek();
+    }
+
+
     public static void main(String[] args) {
 //        int[] nums = {1, 2, 3};
 //        handler.subsets(nums);
