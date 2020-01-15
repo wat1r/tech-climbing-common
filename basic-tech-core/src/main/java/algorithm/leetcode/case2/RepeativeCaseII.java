@@ -4083,6 +4083,24 @@ public class RepeativeCaseII {
         return resList;
     }
 
+
+    public String reverseVowels(String s) {
+        List<Character> vowel = Arrays.asList('a', 'e', 'i', 'o', 'u','A', 'E', 'I', 'O', 'U');
+        char[] chas = s.toCharArray();
+        int left = 0, right = chas.length - 1;
+        while (left < right) {
+            if (vowel.contains(chas[left]) && vowel.contains(chas[right])) {
+                swap(chas, left++, right--);
+            } else if (!vowel.contains(chas[left])) {
+                left++;
+            } else if (!vowel.contains(chas[right])) {
+                right--;
+            }
+        }
+        return String.valueOf(chas);
+    }
+
+
     private List<Integer> generate2ndHelper(int row) {
         List<Integer> cur = new ArrayList<>();
         if (row == 0) {
@@ -4219,6 +4237,74 @@ public class RepeativeCaseII {
             }
         }
         return queue.peek();
+    }
+
+    public int findKthLargest2nd(int[] nums, int k) {
+        int len = nums.length, left = 0, right = len - 1;
+        int target = len - k;//这是目标值的位置
+        while (true) {
+            int index = partition(nums, left, right);
+            if (index == target) {
+                return nums[index];
+            } else if (index > target) {//当index值在target值右边，说明right的范围大了
+                right = index - 1;
+            } else if (index < target) {
+                left = index + 1;
+            }
+        }
+    }
+
+
+    /**
+     * 这个方法是排序中的partition方法，达到一个目的
+     * [left,j-1]都是小于nums[left]的数
+     * [j] 是nums[left]
+     * [j+1,right]是大于等于nums[left]的数
+     *
+     * @param nums
+     * @param left
+     * @param right
+     * @return 划分好partition后的pivot值的下标
+     */
+    public int partition(int[] nums, int left, int right) {
+        if (left < right) {
+            int ranIndex = left + new Random().nextInt(right - left);
+            swap(nums, left, ranIndex);
+        }
+        int pivot = nums[left];//选择此值作为基准值
+        int j = left;//j
+        for (int i = left + 1; i <= right; i++) {
+            if (nums[i] < pivot) {//当比pivot的值小，交换j的下一个位置的数，使得大体完成小于pivot的值在左边
+                swap(nums, ++j, i);
+            }
+        }
+        swap(nums, j, left);//这一步是为了将pivot值替换到中间，一开始它在第一个位置
+        return j;
+    }
+
+    public void merge(int[] nums1, int m, int[] nums2, int n) {
+        int t = m-- + n-- - 1;
+        while (m >= 0 && n >= 0) {
+            nums1[t--] = nums1[m] > nums2[n] ? nums1[m--] : nums2[n--];
+        }
+        while (n >= 0) {
+            nums1[t--] = nums2[n--];
+        }
+    }
+
+    public int[] twoSum(int[] numbers, int target) {
+        int start = 0, end = numbers.length - 1;
+        while (start < end) {
+            int tmp = numbers[start] + numbers[end];
+            if (tmp == target) {
+                return new int[]{start, end};
+            } else if (tmp > target) {
+                end--;
+            } else if (tmp < target) {
+                start++;
+            }
+        }
+        return new int[]{-1, -1};
     }
 
 
@@ -4377,6 +4463,8 @@ public class RepeativeCaseII {
 //        handler.getRow1st(3);
 //        handler.getRow2nd(3);
 //        handler.moveZeroes(new int[]{0,1,0,3,12});
+//        handler.merge(new int[]{1, 2, 3, 0, 0, 0}, 3, new int[]{2, 5, 6}, 3);
+        handler.reverseVowels("leetcode");
     }
 //winter
 
