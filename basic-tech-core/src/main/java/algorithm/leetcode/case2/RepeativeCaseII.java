@@ -3563,7 +3563,8 @@ public class RepeativeCaseII {
         if (x == 0) return 0;
         long left = 1, right = x / 2;
         while (left < right) {
-            long mid = left + (right - left + 1) / 2;
+            long mid = left + (right - left) / 2;
+            System.out.println(String.format("left:%d,mid:%d,right:%d", left, mid, right));
             long tmp = mid * mid;
             if (tmp == x) {
                 return (int) mid;
@@ -4085,7 +4086,7 @@ public class RepeativeCaseII {
 
 
     public String reverseVowels(String s) {
-        List<Character> vowel = Arrays.asList('a', 'e', 'i', 'o', 'u','A', 'E', 'I', 'O', 'U');
+        List<Character> vowel = Arrays.asList('a', 'e', 'i', 'o', 'u', 'A', 'E', 'I', 'O', 'U');
         char[] chas = s.toCharArray();
         int left = 0, right = chas.length - 1;
         while (left < right) {
@@ -4308,6 +4309,21 @@ public class RepeativeCaseII {
     }
 
 
+    public int searchInsert(int[] nums, int target) {
+        if (nums[nums.length - 1] < target) return nums.length;
+        int left = 0, right = nums.length - 1;
+        while (left < right) {
+            int mid = (left + right) >>> 1;
+            mid = left + (right - left) / 2;
+            if (nums[mid] < target) {
+                left = mid + 1;
+            } else if (nums[mid] >= target) {
+                right = mid;
+            }
+        }
+        return left;
+    }
+
     public static void main(String[] args) {
 //        int[] nums = {1, 2, 3};
 //        handler.subsets(nums);
@@ -4464,7 +4480,9 @@ public class RepeativeCaseII {
 //        handler.getRow2nd(3);
 //        handler.moveZeroes(new int[]{0,1,0,3,12});
 //        handler.merge(new int[]{1, 2, 3, 0, 0, 0}, 3, new int[]{2, 5, 6}, 3);
-        handler.reverseVowels("leetcode");
+//        handler.reverseVowels("leetcode");
+//        handler.searchInsert(new int[]{1, 3, 5, 6}, 5);
+        handler.mySqrt(4);
     }
 //winter
 
