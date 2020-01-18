@@ -1,45 +1,69 @@
 package algorithm.nowcoder.company;
 
-import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
 
-/**
- * Created by FrankCooper
- * Date 2019/4/6 21:27
- * Description
- */
 public class Main {
+    static class CPU {
+        int time;
 
+        CPU() {
+            time = 0;
+        }
+    }
 
-    public static void main(String[] args) throws IOException {
-
-        Main handler = new Main();
-//        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-//        Scanner sc = new Scanner(System.in);
-//        BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
-
-        Scanner sc = new Scanner(System.in);
-        int n = sc.nextInt();
-        int[] a = new int[n];
+    public static void main(String[] args) {
+        Scanner in = new Scanner(System.in);
+        int m = in.nextInt();
+        int n = in.nextInt();
+        int[] task = new int[n];
         for (int i = 0; i < n; i++) {
-            a[i] = sc.nextInt();
+            task[i] = in.nextInt();
         }
-        System.out.println(handler.pairMatch(a));
-
+        in.close();
+        ArrayList<CPU> cpu = new ArrayList<>();
+        for (int i = 0; i < m; i++) {
+            cpu.add(new CPU());
+        }
+        Arrays.sort(task);
+        int total = 0;
+        int index = 0;
+        while (true) {
+            int i = getZero(cpu);
+            if (i == 101) {
+                break;
+            }
+            if (i >= 0) {
+                if (index == n) {
+                    cpu.remove(i);
+                } else {
+                    cpu.get(i).time = task[index];
+                    index++;
+                }
+            } else {
+                total -= i;
+            }
+        }
+        System.out.print(total);
     }
 
-    public int pairMatch(int[] nums) {
-        int n = nums.length;
-        Arrays.sort(nums);
-        int max = 0, min = Integer.MAX_VALUE;
-        for (int i = 0, j = n - 1; i < n / 2; i++, j--) {
-            int temp = nums[i] + nums[j];
-            max = Math.max(max, temp);
-            min = Math.min(min, temp);
+    static int getZero(ArrayList<CPU> cpu) {
+        if (cpu.size() == 0) {
+            return 101;
         }
-        return max - min;
+        int min = 100;
+        for (int i = 0; i < cpu.size(); i++) {
+            if (cpu.get(i).time == 0) {
+                return i;
+            }
+            min = min > cpu.get(i).time ? cpu.get(i).time : min;
+        }
+        for (int i = 0; i < cpu.size(); i++) {
+            cpu.get(i).time -= min;
+        }
+        return -min;
     }
-
-
 }
+
+

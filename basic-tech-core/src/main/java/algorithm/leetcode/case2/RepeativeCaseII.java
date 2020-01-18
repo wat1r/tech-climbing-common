@@ -4324,6 +4324,128 @@ public class RepeativeCaseII {
         return left;
     }
 
+
+    public int search9th(int[] nums, int target) {
+        int left = 0, right = nums.length - 1;
+        while (left <= right) {
+            int mid = left + (right - left) / 2;
+//            System.out.println(String.format("left:%d,mid:%d,right:%d", left, mid, right));
+            if (nums[mid] == target) {
+                return mid;
+            } else if (nums[mid] > target) {
+                right = mid - 1;
+            } else if (nums[mid] < target) {
+                left = mid + 1;
+            }
+        }
+        return -1;
+    }
+
+    public int searchA(int[] nums, int target) {
+        if (nums == null || nums.length == 0) return -1;
+        int left = 0, right = nums.length - 1;
+        while (left < right) {
+//            int mid = left + (right - left + 1) / 2;
+            int mid = left + (right - left) / 2;
+//            int mid = (left + right + 1) >>> 1;
+            System.out.println(String.format("left:%d,mid:%d,right:%d", left, mid, right));
+            if (nums[mid] < nums[right]) {//这种情况说明[mid,right]区间上是严格递增的
+                if (nums[mid] <= target && target <= nums[right]) {
+                    left = mid;
+                } else {
+                    right = mid - 1;
+                }
+            } else if (nums[mid] >= nums[right]) {//这种情况说明[left,mid]区间上是严格递增的
+                if (nums[left] <= target && target <= nums[mid - 1]) {
+                    right = mid - 1;
+                } else {
+                    left = mid;
+                }
+            }
+        }
+        return nums[left] == target ? left : -1;
+    }
+
+
+    public int searchB(int[] nums, int target) {
+        int len = nums.length;
+        if (len == 0) {
+            return -1;
+        }
+
+        int left = 0;
+        int right = len - 1;
+        while (left < right) {
+
+            int mid = (left + right + 1) >>> 1;
+            System.out.println(String.format("left:%d,mid:%d,right:%d", left, mid, right));
+            if (nums[mid] < nums[right]) {
+
+                // 使用上取整的中间数，必须在上面的 mid 表达式的括号里 + 1
+                if (nums[mid] <= target && target <= nums[right]) {
+                    // 下一轮搜索区间是 [mid, right]
+                    left = mid;
+                } else {
+                    // 只要上面对了，这里不用思考，可以一下子写出来
+                    right = mid - 1;
+                }
+
+            } else {
+
+                // [left, mid] 有序，但是为了和上一个 if 有同样的收缩行为，
+                // 我们故意只认为 [left, mid - 1] 有序
+                // 当区间只有 2 个元素的时候 int mid = (left + right + 1) >>> 1; 一定会取到右边
+                // 此时 mid - 1 不会越界，就是这么刚刚好
+
+                if (nums[left] <= target && target <= nums[mid - 1]) {
+                    // 下一轮搜索区间是 [left, mid - 1]
+                    right = mid - 1;
+                } else {
+                    left = mid;
+                }
+            }
+        }
+
+        // 有可能区间内不存在目标元素，因此还需做一次判断
+        if (nums[left] == target) {
+            return left;
+        }
+        return -1;
+    }
+
+
+    public int searchC(int[] nums, int target) {
+        if (nums == null || nums.length == 0) return -1;
+        int left = 0, right = nums.length;
+        while (left < right) {
+            int mid = left + (right - left) / 2;
+            System.out.println(String.format("left:%d,mid:%d,right:%d", left, mid, right));
+//            int mid = left + (right - left) / 2;
+//            int mid = (left + right + 1) >>> 1;
+
+            if (nums[mid] == target) return mid;
+            else if (nums[mid] >= nums[left]) {
+                if (nums[mid] >= target && target >= nums[left]) {
+                    right = mid;
+                } else {
+                    left = mid + 1;
+                }
+            } else if (nums[mid] < nums[left]) {
+                if (nums[mid] < target && target <= nums[right]) {
+                    left = mid + 1;
+                } else {
+                    right = mid;
+                }
+            }
+
+
+        }
+        return nums[left] == target ? left : -1;
+    }
+
+
+
+
     public static void main(String[] args) {
 //        int[] nums = {1, 2, 3};
 //        handler.subsets(nums);
@@ -4482,7 +4604,12 @@ public class RepeativeCaseII {
 //        handler.merge(new int[]{1, 2, 3, 0, 0, 0}, 3, new int[]{2, 5, 6}, 3);
 //        handler.reverseVowels("leetcode");
 //        handler.searchInsert(new int[]{1, 3, 5, 6}, 5);
-        handler.mySqrt(4);
+//        handler.mySqrt(4);
+//        handler.search9th(new int[]{-1, 0, 3, 5, 9, 12}, 9);
+//        handler.search9th(new int[]{5}, 5);
+//        handler.searchA(new int[]{4, 5, 6, 7, 0, 1, 2}, 0);
+        handler.searchA(new int[]{1, 3}, 1);
+//        handler.searchB(new int[]{1, 3}, 1);
     }
 //winter
 
