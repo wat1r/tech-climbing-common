@@ -4443,7 +4443,34 @@ public class RepeativeCaseII {
         return nums[left] == target ? left : -1;
     }
 
+    public int[] searchRange(int[] nums, int target) {
+        int start = helper(nums, target);
+        int end = helper(nums, target + 1) - 1;
 
+        return new int[]{start, end};
+
+    }
+
+    /**
+     * 此方法返回nums中的等于target的最左边的一个数的index
+     *
+     * @param nums
+     * @param target
+     * @return
+     */
+    public int helper(int[] nums, int target) {
+        int left = 0, right = nums.length - 1;
+        while (left < right) {
+            int mid = left + (right - left) / 2;
+            System.out.println(String.format("left:%d,mid:%d,right:%d", left, mid, right));
+            if (nums[mid] >= target) {//说明[mid,right]之间都是大于等于target的，数组是排序递增
+                right = mid;
+            } else {
+                left = mid + 1;
+            }
+        }
+        return left;
+    }
 
 
     public static void main(String[] args) {
@@ -4608,8 +4635,9 @@ public class RepeativeCaseII {
 //        handler.search9th(new int[]{-1, 0, 3, 5, 9, 12}, 9);
 //        handler.search9th(new int[]{5}, 5);
 //        handler.searchA(new int[]{4, 5, 6, 7, 0, 1, 2}, 0);
-        handler.searchA(new int[]{1, 3}, 1);
+//        handler.searchA(new int[]{1, 3}, 1);
 //        handler.searchB(new int[]{1, 3}, 1);
+        handler.searchRange(new int[]{5, 7, 7, 8, 8, 10}, 8);
     }
 //winter
 
