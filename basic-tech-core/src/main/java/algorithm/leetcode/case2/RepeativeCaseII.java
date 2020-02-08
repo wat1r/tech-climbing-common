@@ -1,5 +1,7 @@
 package algorithm.leetcode.case2;
 
+import com.alibaba.fastjson.JSON;
+
 import java.util.ArrayList;
 import java.util.*;
 import java.util.List;
@@ -4473,6 +4475,134 @@ public class RepeativeCaseII {
     }
 
 
+    public List<Integer> findClosestElements(int[] arr, int k, int x) {
+        int left = 0, right = arr.length - k;
+        while (left < right) {
+            int mid = left + (right - left) / 2;
+            if (x - arr[mid] <= arr[mid + k] - x) {
+                right = mid;
+            } else if (x - arr[mid] > arr[mid + k] - x) {
+                left = mid + 1;
+            }
+        }
+        List<Integer> res = new ArrayList<>();
+        for (int i = left; i < left + k; i++) {
+            res.add(arr[i]);
+        }
+        return res;
+    }
+
+
+    public int longestStrChain(String[] words) {
+        Arrays.sort(words, new Comparator<String>() {
+            @Override
+            public int compare(String o1, String o2) {
+                return o1.length() - o2.length();
+            }
+        });
+        int n = words.length;
+        int[] dp = new int[n];
+        int res = 0;
+        for (int i = 0; i < n; i++) {
+            String a = words[i];
+            for (int j = i + 1; j < n; j++) {
+                String b = words[j];
+                if (isPredecessor(a, b)) {
+                    dp[j] = Math.max(dp[j], dp[i] + 1);
+                    res = Math.max(dp[j], res);
+                }
+            }
+        }
+        return res + 1;
+    }
+
+    /**
+     * 判断a是否是b的前身 是返回true 如 "bda" 是"bdca"的前身
+     *
+     * @param a
+     * @param b
+     * @return
+     */
+    private boolean isPredecessor(String a, String b) {
+        int i = 0, j = 0;
+        int m = a.length(), n = b.length();
+        if ((m + 1) != n) return false;
+        while (i < m && j < n) {
+            if (a.charAt(i) == b.charAt(j)) i++;
+            j++;
+        }
+        return i == m;
+    }
+
+
+    public int longestStrChain1st(String[] words) {
+        Arrays.sort(words, Comparator.comparingInt(String::length));
+        int[] arr = new int[17];
+        Arrays.fill(arr, -1);
+        int n = words.length;
+        for (int i = 0; i < n; i++) {
+            arr[words[i].length()] = i;
+        }
+        int[] dp = new int[n];
+        Arrays.fill(dp, 1);
+        int res = 0;
+        for (int i = 0; i < n; i++) {
+            int target = words[i].length() - 1;
+            int index = arr[target];
+            while (index >= 0 && words[index].length() == target) {
+                if (isPredecessor(words[index], words[i])) {
+                    dp[i] = Math.max(dp[i], dp[index] + 1);
+                }
+                index--;
+            }
+            res = Math.max(dp[i], res);
+        }
+        return res;
+    }
+
+    int res = 0;
+
+    public int longestStrChain2nd(String[] words) {
+        int min = 0, max = 16;//最小字符长度，最大字符长度
+        //K为字符长度，Set为该字符长度的word集合
+        Map<Integer, Set<String>> map = new HashMap<>();
+        for (String word : words) {
+            map.putIfAbsent(word.length(), new HashSet<>());
+            map.get(word.length()).add(word);
+            min = Math.min(min, word.length());
+            max = Math.max(max, word.length());
+        }
+        for (int len = min; len <= max; len++) {
+            Set<String> curSet = map.get(len);
+            if (curSet == null) continue;//当set没有值时，无需遍历
+            if ((max + 1 - len <= res)) continue;//最大长度+1-当前的长度<=res，res更加符合题意
+            for (String cur : curSet) {
+                findNext(map, len, cur);
+            }
+        }
+        return res;
+    }
+
+    /**
+     * @param map
+     * @param len 当前字符的长度
+     * @param levelStr 当前字符
+     */
+    private void findNext(Map<Integer, Set<String>> map, int len, String levelStr) {
+        res = Math.max(res, levelStr.length() + 1 - len);//记录结果集
+        Set<String> curSet = map.get(levelStr.length() + 1);//
+        if (curSet == null) return;//退出条件
+        Iterator<String> it = curSet.iterator();
+        while (it.hasNext()) {
+            String next = it.next();
+            if (isPredecessor(levelStr, next)) {
+                findNext(map, len, next);
+                it.remove();
+            }
+        }
+    }
+
+
     public static void main(String[] args) {
 //        int[] nums = {1, 2, 3};
 //        handler.subsets(nums);
@@ -4637,9 +4767,13 @@ public class RepeativeCaseII {
 //        handler.searchA(new int[]{4, 5, 6, 7, 0, 1, 2}, 0);
 //        handler.searchA(new int[]{1, 3}, 1);
 //        handler.searchB(new int[]{1, 3}, 1);
-        handler.searchRange(new int[]{5, 7, 7, 8, 8, 10}, 8);
+//        handler.searchRange(new int[]{5, 7, 7, 8, 8, 10}, 8);
+//        handler.longestStrChain(new String[]{"a", "b", "ba", "bca", "bda", "bdca"});
+//        handler.longestStrChain1st(new String[]{"a", "b", "ba", "bca", "bda", "bdca"});
+        handler.longestStrChain2nd(new String[]{"a", "b", "ba", "bca", "bda", "bdca"});
     }
 //winter
+
 
     static class TreeNode {
         int val;
