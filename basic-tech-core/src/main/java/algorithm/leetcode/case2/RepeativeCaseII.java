@@ -1,6 +1,7 @@
 package algorithm.leetcode.case2;
 
 import com.alibaba.fastjson.JSON;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
 import java.util.*;
@@ -4585,7 +4586,7 @@ public class RepeativeCaseII {
 
     /**
      * @param map
-     * @param len 当前字符的长度
+     * @param len      当前字符的长度
      * @param levelStr 当前字符
      */
     private void findNext(Map<Integer, Set<String>> map, int len, String levelStr) {
@@ -4602,6 +4603,38 @@ public class RepeativeCaseII {
         }
     }
 
+
+    public List<String> letterCasePermutation(String S) {
+        int n = S.length();
+        List<String> resList = new ArrayList<>();
+        if (n == 0) return resList;
+        char[] chas = new char[n];
+        letterCasePermutationDFS(S, 0, n, chas, resList);
+        return resList;
+    }
+
+
+    /**
+     *
+     * @param s 源字符串
+     * @param index 当前的char的位置
+     * @param n len(s)
+     * @param chas 组装的char arr
+     * @param resList 结果集
+     */
+    private void letterCasePermutationDFS(String s, int index, int n, char[] chas, List<String> resList) {
+        if (index == n) {//出口条件
+            resList.add(new String(chas));
+            return;
+        }
+        //字符串本身
+        chas[index] = s.charAt(index);
+        letterCasePermutationDFS(s, index + 1, n, chas, resList);
+        if (Character.isLetter(s.charAt(index))) {//当前字符是否是字母
+            chas[index] = (char) (s.charAt(index) ^ (32));
+            letterCasePermutationDFS(s, index + 1, n, chas, resList);
+        }
+    }
 
     public static void main(String[] args) {
 //        int[] nums = {1, 2, 3};
