@@ -2207,40 +2207,56 @@ class NetherlandsFlag {
 
 class MyStack {
 
+    private Queue<Integer> queue;
+
     /**
      * Initialize your data structure here.
      */
     public MyStack() {
-
+        queue = new LinkedList<>();
     }
 
     /**
      * Push element x onto stack.
      */
     public void push(int x) {
-
+        queue.offer(x);
     }
 
     /**
      * Removes the element on top of the stack and returns that element.
      */
     public int pop() {
-        return 0;
+        shift();
+        int res = queue.poll();
+        return res;
     }
 
     /**
      * Get the top element.
      */
     public int top() {
-
-        return 0;
+        shift();
+        int res = queue.poll();
+        queue.offer(res);
+        return res;
     }
+
+
+    public void shift() {
+        int size = queue.size();
+        for (int i = 0; i < size - 1; i++) {
+            queue.offer(queue.poll());
+        }
+
+    }
+
 
     /**
      * Returns whether the stack is empty.
      */
     public boolean empty() {
-        return false;
+        return queue.isEmpty();
     }
 }
 
@@ -2277,6 +2293,65 @@ class ArrayStack {
         return arr[--index];
     }
 }
+
+class MyQueue {
+
+    private Stack<Integer> data;
+    private Stack<Integer> help;
+
+    /**
+     * Initialize your data structure here.
+     */
+    public MyQueue() {
+        data = new Stack<>();
+        help = new Stack<>();
+    }
+
+    /**
+     * Push element x to the back of queue.
+     */
+    public void push(int x) {
+        help.push(x);
+    }
+
+    /**
+     * Removes the element from in front of queue and returns that element.
+     */
+    public int pop() {
+        if (data.isEmpty() && help.isEmpty()) {
+            throw new RuntimeException("Queue is empty!");
+        }
+        if (data.isEmpty()) {
+            while (!help.isEmpty()) {
+                data.push(help.pop());
+            }
+        }
+        return data.pop();
+    }
+
+    /**
+     * Get the front element.
+     */
+    public int peek() {
+        if (data.isEmpty() && help.isEmpty()) {
+            throw new RuntimeException("Queue is empty!");
+        }
+        if (data.isEmpty()) {
+            while (!help.isEmpty()) {
+                data.push(help.pop());
+            }
+        }
+        return data.peek();
+    }
+
+    /**
+     * Returns whether the queue is empty.
+     */
+    public boolean empty() {
+        return data.isEmpty() && help.isEmpty();
+    }
+}
+
 
 /**
  * start变量:拿取数的时候，end变量：添加数的时候，

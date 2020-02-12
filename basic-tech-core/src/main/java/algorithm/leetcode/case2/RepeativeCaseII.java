@@ -4615,11 +4615,10 @@ public class RepeativeCaseII {
 
 
     /**
-     *
-     * @param s 源字符串
-     * @param index 当前的char的位置
-     * @param n len(s)
-     * @param chas 组装的char arr
+     * @param s       源字符串
+     * @param index   当前的char的位置
+     * @param n       len(s)
+     * @param chas    组装的char arr
      * @param resList 结果集
      */
     private void letterCasePermutationDFS(String s, int index, int n, char[] chas, List<String> resList) {
@@ -4636,6 +4635,52 @@ public class RepeativeCaseII {
         }
     }
 
+
+    public int findRepeatNumber(int[] nums) {
+        if (nums == null || nums.length == 0) return -1;
+        int n = nums.length;
+        for (int i = 0; i < n; i++) {
+            while (nums[i] != i) {
+                if (nums[i] == nums[nums[i]]) {
+                    return nums[i];
+                }
+                swap(nums, nums[i], i);
+            }
+        }
+        return -1;
+    }
+
+    public boolean findNumberIn2DArray(int[][] matrix, int target) {
+        if (matrix == null || matrix.length == 0 || matrix[0].length == 0) return false;
+        int row = matrix.length;
+        int col = matrix[0].length;
+        int x = 0, y = col - 1;
+        while (x < row && y >= 0) {
+            if (x < row && y >= 0 && matrix[x][y] == target) {
+                return true;
+            }
+            while (x < row && y >= 0 && matrix[x][y] > target) {
+                y--;
+            }
+            while (x < row && y >= 0 && matrix[x][y] < target) {
+                x++;
+            }
+        }
+        return false;
+    }
+
+    public String replaceSpace(String s) {
+        if (s == null || s.length() == 0) return "";
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < s.length(); i++) {
+            if (s.charAt(i) == ' ') sb.append("%20");
+            else sb.append(s.charAt(i));
+        }
+        return sb.toString();
+    }
+
+
+    //spring
     public static void main(String[] args) {
 //        int[] nums = {1, 2, 3};
 //        handler.subsets(nums);
@@ -4803,7 +4848,11 @@ public class RepeativeCaseII {
 //        handler.searchRange(new int[]{5, 7, 7, 8, 8, 10}, 8);
 //        handler.longestStrChain(new String[]{"a", "b", "ba", "bca", "bda", "bdca"});
 //        handler.longestStrChain1st(new String[]{"a", "b", "ba", "bca", "bda", "bdca"});
-        handler.longestStrChain2nd(new String[]{"a", "b", "ba", "bca", "bda", "bdca"});
+//        handler.longestStrChain2nd(new String[]{"a", "b", "ba", "bca", "bda", "bdca"});
+        int[][] matrix = {{1, 4, 7, 11, 15}, {2, 5, 8, 12, 19}, {3, 6, 9, 16, 22}, {10, 13, 14, 17, 24}, {18, 21, 23, 26, 30}};
+//        handler.findNumberIn2DArray(matrix, 20);
+        matrix = new int[][]{{-5}};
+        handler.findNumberIn2DArray(matrix, -10);
     }
 //winter
 
