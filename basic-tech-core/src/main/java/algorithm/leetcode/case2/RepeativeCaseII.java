@@ -1,7 +1,5 @@
 package algorithm.leetcode.case2;
 
-import com.alibaba.fastjson.JSON;
-import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
 import java.util.*;
@@ -4741,9 +4739,6 @@ public class RepeativeCaseII {
     }
 
 
-
-
-
 //    public int[] levelOrder(TreeNode root) {
 //        if (root == null) return new int[0];
 //        List<Integer> results = new ArrayList<>();
@@ -4758,14 +4753,39 @@ public class RepeativeCaseII {
 //        return results.stream().mapToInt(Integer::intValue).toArray();
 //    }
 
+    public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+        int parentVal = root.val;
+        if (p.val > parentVal && q.val > parentVal) {
+            return lowestCommonAncestor(root.right, p, q);
+        } else if (p.val < parentVal && q.val < parentVal) {
+            return lowestCommonAncestor(root.left, p, q);
+        } else {
+            return root;
+        }
+    }
 
 
-
+    public int[] constructArr(int[] a) {
+        if (a == null || a.length == 0) return new int[]{};
+        int n = a.length;
+        int[] b = new int[n];
+        b[0] = 1;
+        for (int i = 1; i < n; i++) {
+            b[i] = a[i - 1] * b[i - 1];
+        }
+        int tmp = 1;
+        for (int i = n - 2; i >= 0; i--) {
+            tmp *= a[i + 1];
+            b[i] *= tmp;
+        }
+        return b;
+    }
 
 
     //spring
     public static void main(String[] args) {
-        handler.hammingDistance(1, 4);
+//        handler.hammingDistance(1, 4);
+        handler.constructArr(new int[]{1, 2, 3, 4, 5});
 //        int[] nums = {1, 2, 3};
 //        handler.subsets(nums);
 //        handler.maxSubArray(new int[]{-2, 1, -3, 4, -1, 2, 1, -5, 4});

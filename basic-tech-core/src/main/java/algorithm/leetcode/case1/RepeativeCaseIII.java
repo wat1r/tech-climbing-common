@@ -187,11 +187,79 @@ public class RepeativeCaseIII {
     private void dfs(TreeNode root, int sum, List<List<Integer>> resluts, ArrayList<Integer> list) {
         if (root == null) return;
         list.add(root.val);
-        if(root.left==null&&root.right==null&&root.val==sum) resluts.add(new ArrayList<>(list));
+        if (root.left == null && root.right == null && root.val == sum) resluts.add(new ArrayList<>(list));
         dfs(root.left, sum - root.val, resluts, list);
         dfs(root.right, sum - root.val, resluts, list);
         list.remove(list.size() - 1);
     }
+
+
+    public int kthLargest(TreeNode root, int k) {
+        if (root == null) return 0;
+        List<Integer> list = new ArrayList<>();
+        Stack<TreeNode> stack = new Stack<>();
+        TreeNode cur = root;
+        while (!stack.isEmpty() || cur != null) {
+            while (cur != null) {
+                stack.push(cur);
+                cur = cur.right;
+            }
+            cur = stack.pop();
+            if (cur != null) {
+                list.add(cur.val);
+                cur = cur.left;
+            }
+
+        }
+        return list.get(k - 1);
+    }
+
+    public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+        if (root == null || p == root || q == root) return root;
+        TreeNode left = lowestCommonAncestor(root.left, p, q);
+        TreeNode right = lowestCommonAncestor(root.right, p, q);
+        if (left != null && right != null) return root;
+        return left != null ? left : right;
+    }
+
+    public void swap(int[] arr, int m, int n) {
+        int temp = arr[m];
+        arr[m] = arr[n];
+        arr[n] = temp;
+    }
+
+    public int[] exchange(int[] nums) {
+        int left = 0, right = nums.length - 1;
+        while (left < right) {
+            if (nums[left] % 2 == 1) {
+                left++;
+                continue;
+            }
+            if (nums[right] % 2 == 0) {
+                right--;
+                continue;
+            }
+            swap(nums, left, right);
+        }
+        return nums;
+    }
+
+    public int majorityElement(int[] nums) {
+        Arrays.sort(nums);
+        return nums[nums.length / 2];
+    }
+
+    public int maxSubArray(int[] nums) {
+        int curSum = nums[0], maxSum = curSum;
+        for (int i = 1; i < nums.length; i++) {
+            curSum = Math.max(nums[i], curSum + nums[i]);
+            maxSum = Math.max(maxSum, curSum);
+        }
+        return maxSum;
+    }
+
+
+
 
 
     //spring
@@ -206,6 +274,21 @@ public class RepeativeCaseIII {
 //                {0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0},
 //                {0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0}};
 //        handler.maxAreaOfIsland(grid);
+
+        TreeNode t5 = new TreeNode(5);
+        TreeNode t3 = new TreeNode(3);
+        TreeNode t6 = new TreeNode(6);
+        TreeNode t2 = new TreeNode(2);
+        TreeNode t4 = new TreeNode(4);
+        TreeNode t1 = new TreeNode(1);
+        t5.left = t3;
+        t5.right = t6;
+        t3.left = t2;
+        t3.right = t4;
+        t2.left = t1;
+        handler.kthLargest(t5, 3);
+
+
     }
     //winter
 
