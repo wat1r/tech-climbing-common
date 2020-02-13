@@ -1,8 +1,6 @@
 package algorithm.leetcode.case1;
 
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created by FrankCooper
@@ -51,16 +49,16 @@ public class RepeativeCaseIII {
     }
 
     private int dfsA(int[][] grid, int x, int y) {
-        if (x < 0 || x >= rows || y < 0 || y >= cols ) {
+        if (x < 0 || x >= rows || y < 0 || y >= cols) {
             return 0;
         }
-        if(grid[x][y] == 1) return 1;
+        if (grid[x][y] == 1) return 1;
         int res = 1;
         grid[x][y] = 1;
         for (int i = 0; i < 4; i++) {
             int nextX = x + directions[i][0];
             int nextY = y + directions[i][1];
-            res =Math.min(res,dfsA(grid,nextX,nextY));
+            res = Math.min(res, dfsA(grid, nextX, nextY));
         }
         return res;
     }
@@ -140,8 +138,63 @@ public class RepeativeCaseIII {
         }
     }
 
+    public List<List<Integer>> permute(int[] nums) {
+        List<List<Integer>> results = new ArrayList<>();
+        dfs(nums, results, new ArrayList<Integer>());
+        return results;
+    }
 
-    //winter
+    private void dfs(int[] nums, List<List<Integer>> results, List<Integer> sub) {
+        if (sub.size() == nums.length) {
+            results.add(new ArrayList<>(sub));
+            return;
+        }
+        for (int i = 0; i < nums.length; i++) {
+            if (sub.contains(nums[i])) continue;
+            sub.add(nums[i]);
+            dfs(nums, results, sub);
+            sub.remove(sub.size() - 1);
+        }
+    }
+
+    public List<List<Integer>> levelOrder(TreeNode root) {
+        List<List<Integer>> results = new ArrayList<>();
+        if (root == null) return results;
+        Queue<TreeNode> queue = new LinkedList<>();
+        int level = 0;
+        queue.offer(root);
+        while (!queue.isEmpty()) {
+            int size = queue.size();
+            results.add(new ArrayList<>());
+            for (int i = 0; i < size; i++) {
+                TreeNode cur = queue.poll();
+                results.get(level).add(cur.val);
+                if (cur.left != null) queue.offer(cur.left);
+                if (cur.right != null) queue.offer(cur.right);
+            }
+            ++level;
+        }
+        return results;
+    }
+
+    public List<List<Integer>> pathSum(TreeNode root, int sum) {
+        List<List<Integer>> resluts = new ArrayList<>();
+        if (root == null) return resluts;
+        dfs(root, sum, resluts, new ArrayList<Integer>());
+        return resluts;
+    }
+
+    private void dfs(TreeNode root, int sum, List<List<Integer>> resluts, ArrayList<Integer> list) {
+        if (root == null) return;
+        list.add(root.val);
+        if(root.left==null&&root.right==null&&root.val==sum) resluts.add(new ArrayList<>(list));
+        dfs(root.left, sum - root.val, resluts, list);
+        dfs(root.right, sum - root.val, resluts, list);
+        list.remove(list.size() - 1);
+    }
+
+
+    //spring
     public static void main(String[] args) {
 
 //        int[][] grid = {{0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0},
@@ -154,6 +207,7 @@ public class RepeativeCaseIII {
 //                {0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0}};
 //        handler.maxAreaOfIsland(grid);
     }
+    //winter
 
 
 }

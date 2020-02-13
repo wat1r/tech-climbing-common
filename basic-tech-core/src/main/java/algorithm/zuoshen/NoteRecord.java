@@ -13,9 +13,23 @@ public class NoteRecord {
     public static void main(String[] args) {
 
 //        handler.getNextGreaterNum(new int[]{2, 1, 2, 4, 3});
-        handler.getNextGreaterElements(new int[]{2, 1, 2, 4, 3});
+//        handler.getNextGreaterElements(new int[]{2, 1, 2, 4, 3});
 //        handler.cycle();
+        handler.bitOperation();
+
     }
+
+    private void bitOperation() {
+        System.out.println(String.valueOf('a' | ' '));
+        System.out.println('A' | ' ');
+        System.out.println('b' & '_');
+        System.out.println('B' & '_');
+        System.out.println('d' ^ ' ');
+        System.out.println('D' ^ ' ');
+
+
+    }
+
 
     private int[] getNextGreaterElements(int[] nums) {
         int n = nums.length;

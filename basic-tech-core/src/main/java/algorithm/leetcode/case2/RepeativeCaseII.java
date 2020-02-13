@@ -4680,8 +4680,92 @@ public class RepeativeCaseII {
     }
 
 
+    public int hammingDistance(int x, int y) {
+        int n = x ^ y;
+        int count = 0;
+        while (n != 0) {
+            if ((n & 1) == 1) {
+                count++;
+            }
+            n >>= 1;
+        }
+        return count;
+    }
+
+
+    public int totalHammingDistance(int[] nums) {
+        int res = 0;
+        for (int i = 0; i < nums.length; i++) {
+            for (int j = i + 1; j < nums.length; j++) {
+                res += hammingDistance(nums[i], nums[j]);
+            }
+        }
+        return res;
+    }
+
+
+    public ListNode getIntersectionNode(ListNode headA, ListNode headB) {
+
+        Stack<ListNode> stackA = new Stack<>();
+        Stack<ListNode> stackB = new Stack<>();
+        while (headA != null) {
+            stackA.push(headA);
+            headA = headA.next;
+        }
+        while (headB != null) {
+            stackB.push(headB);
+            headB = headB.next;
+        }
+        ListNode res = null;
+        while (!stackA.isEmpty() && !stackB.isEmpty() && stackA.peek() == stackB.peek()) {
+            res = stackA.pop();
+            stackB.pop();
+        }
+        return res;
+    }
+
+    public TreeNode mirrorTree(TreeNode root) {
+        if (root == null) return root;
+        if (root.left == null && root.right == null) return root;
+        TreeNode tmp = root.left;
+        root.left = root.right;
+        root.right = tmp;
+
+        if (root.left != null) {
+            mirrorTree(root.left);
+        }
+        if (root.right != null) {
+            mirrorTree(root.right);
+        }
+        return root;
+    }
+
+
+
+
+
+//    public int[] levelOrder(TreeNode root) {
+//        if (root == null) return new int[0];
+//        List<Integer> results = new ArrayList<>();
+//        Queue<TreeNode> queue = new LinkedList<>();
+//        queue.offer(root);
+//        while (!queue.isEmpty()) {
+//            TreeNode cur = queue.poll();
+//            results.add(cur.val);
+//            if (cur.left != null) queue.offer(cur.left);
+//            if (cur.right != null) queue.offer(cur.right);
+//        }
+//        return results.stream().mapToInt(Integer::intValue).toArray();
+//    }
+
+
+
+
+
+
     //spring
     public static void main(String[] args) {
+        handler.hammingDistance(1, 4);
 //        int[] nums = {1, 2, 3};
 //        handler.subsets(nums);
 //        handler.maxSubArray(new int[]{-2, 1, -3, 4, -1, 2, 1, -5, 4});
