@@ -4782,10 +4782,373 @@ public class RepeativeCaseII {
     }
 
 
+    public boolean validateStackSequences(int[] pushed, int[] popped) {
+        if (pushed.length != popped.length) return false;
+        int index = 0;
+        Stack<Integer> stack = new Stack<>();
+        for (int i = 0; i < pushed.length; i++) {
+            stack.push(pushed[i]);
+            while (!stack.isEmpty() && stack.peek() == popped[index]) {
+                stack.pop();
+                index++;
+            }
+        }
+        return stack.isEmpty();
+    }
+
+
+    public int[][] findContinuousSequence(int target) {
+        List<int[]> list = new ArrayList<>();
+        int l = 1, r = 2;
+        int sum = 0;
+        int[][] result = new int[0][];
+        while (l < r && r <= (target / 2 + 1)) {
+            if (sum == 0) sum = l + r;
+            if (sum < target) {
+                r++;
+                sum += r;
+            } else if (sum > target) {
+                sum -= l;
+                l++;
+            } else if (sum == target) {
+//                收集结果集
+                int[] sub = new int[r - l + 1];
+                for (int i = l; i <= r; i++) {
+                    sub[i - l] = i;
+                }
+                result = buildRes(result, sub);
+                sum -= l;
+                l++;
+            }
+        }
+
+        return result;
+    }
+
+
+    public int[][] buildRes(int[][] result, int[] sub) {
+        int[][] tmp = Arrays.copyOf(result, result.length + 1);
+        tmp[tmp.length - 1] = sub;
+        return tmp;
+    }
+
+
+    public int[] maxSlidingWindow(int[] nums, int k) {
+        if (nums == null || nums.length == 0) return new int[]{};
+        int n = nums.length;
+        int[] res = new int[n - k + 1];
+        int index = 0;
+        Deque<Integer> deque = new LinkedList<>();
+        for (int i = 0; i < n; i++) {
+            while (!deque.isEmpty() && nums[deque.peekLast()] < nums[i]) {
+                deque.pollLast();
+            }
+            deque.addLast(i);
+            if ((i - k) == deque.peekFirst()) {
+                deque.pollFirst();
+            }
+            if (i >= (k - 1)) {
+                res[index++] = nums[deque.peekFirst()];
+            }
+        }
+        return res;
+    }
+
+
+    public int missingNumber(int[] nums) {
+        int l = 0, r = nums.length - 1;
+        while (l < r) {
+            int mid = l + (r - l) / 2;
+            if (mid == nums[mid]) {
+                l = mid + 1;
+            } else {
+                r = mid;
+            }
+        }
+        return nums[l] == l ? nums[l] + 1 : l;
+    }
+
+    public int hammingWeight(int n) {
+
+        int count = 0;
+        while (n != 0) {
+            count++;
+            n &= (n - 1);
+        }
+        return count;
+    }
+
+    public int[] printNumbers(int n) {
+        int max = (int) Math.pow(10, n);
+        int[] res = new int[max - 1];
+        for (int i = 0; i < max - 1; i++) {
+            res[i] = i + 1;
+        }
+        return res;
+    }
+
+
+    public String freqAlphabets(String s) {
+        StringBuilder sb = new StringBuilder();
+        int n = s.length();
+        int i = 0;
+        while (i < n) {
+            if ((i + 2) < n && s.charAt(i + 2) == '#') {
+                sb.append((char) (Integer.valueOf(s.substring(i, i + 2)) + 96));
+                i += 2;
+            } else {
+                sb.append((char) (Integer.valueOf(s.substring(i, i + 1)) + 96));
+            }
+            i += 1;
+        }
+        return sb.toString();
+    }
+
+
+    public boolean isSubStructure(TreeNode A, TreeNode B) {
+        boolean res = false;
+        if (A != null && B != null) {
+            if (A.val == B.val) res = helper(A, B);
+            if (!res) res = isSubStructure(A.left, B);
+            if (!res) res = isSubStructure(A.right, B);
+        }
+        return res;
+    }
+
+
+    public boolean helper(TreeNode root1, TreeNode root2) {
+        if (root2 == null) return true;
+        if (root1 == null) return false;
+        if (root1.val != root2.val) return false;
+        return helper(root1.left, root2.left) && helper(root1.right, root2.right);
+    }
+
+
+    public int sumNums(int n) {
+        int res = 0;
+        boolean b = (n > 0) && (res = n + sumNums(n - 1)) > 0;
+        return res;
+    }
+
+    class One {
+        int[][] directions = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
+        boolean res = false;
+        int row, col;
+
+        public boolean exist(char[][] board, String word) {
+
+
+            row = board.length;
+            col = board[0].length;
+            boolean[][] visited = new boolean[row][col];
+            for (int i = 0; i < row; i++) {
+                for (int j = 0; j < col; j++) {
+                    dfs(board, i, j, visited, word, 0);
+                }
+            }
+            return res;
+        }
+
+        private void dfs(char[][] board, int i, int j, boolean[][] visited, String word, int index) {
+            if (i < 0 || i >= row || j < 0 || j >= col || visited[i][j] ||
+                    res || index >= word.length()) return;
+            if (board[i][j] == word.charAt(index)) {
+                if (index == word.length() - 1) {
+                    res = true;
+                    return;
+                }
+
+                for (int k = 0; k < directions.length; k++) {
+                    visited[i][j] = true;
+                    dfs(board, i + directions[k][0], j + directions[k][1], visited, word, index + 1);
+                    visited[i][j] = false;
+                }
+
+            }
+
+        }
+    }
+
+
+    class MaxQueue {
+
+        private Queue<Integer> queue;
+        private Deque<Integer> deque;
+
+
+        public MaxQueue() {
+            queue = new LinkedList<>();
+            deque = new LinkedList<>();
+        }
+
+        public int max_value() {
+            return deque.isEmpty() ? -1 : deque.peekFirst();
+        }
+
+        public void push_back(int value) {
+            while (!deque.isEmpty() && deque.peekLast() < value) {
+                deque.pollLast();
+            }
+            deque.offer(value);
+            queue.offer(value);
+        }
+
+        public int pop_front() {
+            if (queue.isEmpty()) return -1;
+            int res = queue.poll();
+            if (!deque.isEmpty() && res == deque.peekFirst()) {
+                deque.pollFirst();
+            }
+            return res;
+        }
+    }
+
+
+    class Two {
+        int index = 0;
+
+        public int[] spiralOrder(int[][] matrix) {
+            if (matrix == null || matrix.length == 0 || matrix[0].length == 0) {
+                return new int[]{};
+            }
+
+            int topR = 0, topC = 0;
+            int downR = matrix.length - 1, downC = matrix[0].length - 1;
+            int[] arr = new int[(downR + 1) * (downC + 1)];
+            while (topR <= downR && topC <= downC) {
+                helper(matrix, arr, topR++, topC++, downR--, downC--);
+            }
+            return arr;
+        }
+
+        private void helper(int[][] matrix, int[] arr, int topR, int topC, int downR, int downC) {
+            //只有一行
+            if (topR == downR) {
+                for (int i = topC; i <= downC; i++) {
+                    arr[index++] = matrix[topR][i];
+                }
+            } else if (topC == downC) {//只有一列
+                for (int i = topR; i <= downR; i++) {
+                    arr[index++] = matrix[i][topC];
+                }
+            } else {
+                int curR = topR, curC = topC;
+                while (curC != downC) arr[index++] = matrix[topR][curC++];
+                while (curR != downR) arr[index++] = matrix[curR++][downC];
+                while (curC != topC) arr[index++] = matrix[downR][curC--];
+                while (curR != topR) arr[index++] = matrix[curR--][topC];
+            }
+
+
+        }
+    }
+
+    public int singleNumberII(int[] nums) {
+        int ans = 0;
+        //考虑每一位
+        for (int i = 0; i < 32; i++) {
+            int count = 0;
+            //考虑每一个数
+            for (int j = 0; j < nums.length; j++) {
+                //当前位是否是 1
+                if ((nums[j] >>> i & 1) == 1) {
+                    count++;
+                }
+            }
+            //1 的个数是否是 3 的倍数
+            if (count % 3 != 0) {
+                ans = ans | 1 << i;
+            }
+        }
+        return ans;
+    }
+
+
+    public int numDecodings1st(String s) {
+        if (s == null || s.length() == 0 || s.charAt(0) == '0') return 0;
+        int n = s.length();
+        int[] dp = new int[n + 1];
+        dp[0] = 1;
+        dp[1] = 1;
+        for (int i = 2; i <= n; i++) {
+            if (s.charAt(i - 1) != '0') {
+                dp[i] += dp[i - 1];
+            }
+            if (s.charAt(i - 2) == '1' || (s.charAt(i - 2) == '2' && s.charAt(i - 1) <= '6')) {
+                dp[i] += dp[i - 2];
+            }
+        }
+        return dp[n];
+    }
+
+    public String decodeString(String s) {
+
+        LinkedList<Integer> numList = new LinkedList<>();
+        LinkedList<String> strList = new LinkedList<>();
+        int multi = 0;
+        StringBuilder res = new StringBuilder();
+        char[] chas = s.toCharArray();
+        for (int i = 0; i < chas.length; i++) {
+            char c = chas[i];
+            if (c == '[') {
+                numList.addLast(multi);
+                strList.addLast(res.toString());
+                multi = 0;
+                res = new StringBuilder();
+            } else if (c == ']') {
+                StringBuilder tmp = new StringBuilder();
+                int curMulti = numList.pollLast();
+                for (int j = 0; j < curMulti; j++) {
+                    tmp.append(res);
+                }
+                res = new StringBuilder(strList.pollLast() + tmp);
+            } else if (c >= '0' && c <= '9') {
+                multi = multi * 10 + Integer.valueOf(c + "");
+            } else {
+                res.append(c);
+            }
+        }
+        return res.toString();
+    }
+
+    public double myPow2nd(double x, int n) {
+        long N = n;
+        if (N < 0) {
+            x = 1 / x;
+            N = -N;
+        }
+        return fastPow1st(x,N);
+
+    }
+
+    public double fastPow1st(double x, long n) {
+        if (n == 0) {
+            return 1.0;
+        }
+        double half = fastPow1st(x, n / 2);
+        if (n % 2 == 0) {
+            return half * half;
+        } else {
+            return half * half * x;
+        }
+
+
+    }
+
+
     //spring
     public static void main(String[] args) {
 //        handler.hammingDistance(1, 4);
-        handler.constructArr(new int[]{1, 2, 3, 4, 5});
+//        handler.constructArr(new int[]{1, 2, 3, 4, 5});
+//        handler.missingNumber(new int[]{0, 1, 2, 3, 4, 5, 6, 7, 9});
+//        handler.missingNumber(new int[]{0});
+//        handler.freqAlphabets("10#11#12");
+//        handler.numDecodings1st("11204");
+//        handler.numDecodings1st("200");
+//        handler.numDecodings1st("170");
+        handler.decodeString("3[a]2[bc]");
+//        handler.singleNumberII(new int[]{1, 2, 6, 1, 1, 2, 2, 3, 3, 3});
+//        handler.nE
 //        int[] nums = {1, 2, 3};
 //        handler.subsets(nums);
 //        handler.maxSubArray(new int[]{-2, 1, -3, 4, -1, 2, 1, -5, 4});
@@ -4956,7 +5319,7 @@ public class RepeativeCaseII {
         int[][] matrix = {{1, 4, 7, 11, 15}, {2, 5, 8, 12, 19}, {3, 6, 9, 16, 22}, {10, 13, 14, 17, 24}, {18, 21, 23, 26, 30}};
 //        handler.findNumberIn2DArray(matrix, 20);
         matrix = new int[][]{{-5}};
-        handler.findNumberIn2DArray(matrix, -10);
+//        handler.findNumberIn2DArray(matrix, -10);
     }
 //winter
 

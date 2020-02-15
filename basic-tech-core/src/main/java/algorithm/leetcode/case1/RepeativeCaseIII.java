@@ -1,5 +1,7 @@
 package algorithm.leetcode.case1;
 
+import com.alibaba.fastjson.JSON;
+
 import java.util.*;
 
 /**
@@ -259,12 +261,312 @@ public class RepeativeCaseIII {
     }
 
 
+    class CQueue {
+
+        private Stack<Integer> data;
+        private Stack<Integer> help;
+
+
+        public CQueue() {
+            data = new Stack<>();
+            help = new Stack<>();
+        }
+
+        public void appendTail(int value) {
+            help.push(value);
+            if (data.isEmpty()) {
+                while (!help.isEmpty()) {
+                    data.push(help.pop());
+                }
+            }
+        }
+
+        public int deleteHead() {
+            if (data.isEmpty() && help.isEmpty()) return -1;
+            if (data.isEmpty()) {
+                while (!help.isEmpty()) {
+                    data.push(help.pop());
+                }
+            }
+            return data.pop();
+        }
+
+    }
+
+    class MinStack {
+        private Stack<Integer> data;
+        private Stack<Integer> help;
+
+
+        /**
+         * initialize your data structure here.
+         */
+        public MinStack() {
+            data = new Stack<>();
+            help = new Stack<>();
+        }
+
+        public void push(int x) {
+            //比help栈顶元素小的元素 收录进来
+            if (help.isEmpty() || help.peek() >= x) {
+                help.push(x);
+            }
+            data.push(x);
+        }
+
+        public void pop() {
+            if (data.isEmpty()) throw new RuntimeException("The stack is empty");
+            int pop = data.pop();
+            if (pop == help.peek()) help.pop();
+        }
+
+        public int top() {
+            if (data.isEmpty()) throw new RuntimeException("The stack is empty");
+            return data.peek();
+        }
+
+        public int min() {
+            if (help.isEmpty()) throw new RuntimeException("The stack is empty");
+            return help.peek();
+        }
+    }
+
+
+    Map<Integer, Integer> map = new HashMap<>();
+
+    public TreeNode buildTree(int[] preorder, int[] inorder) {
+        if (preorder == null || inorder == null || preorder.length != inorder.length) {
+            return null;
+        }
+        for (int i = 0; i < inorder.length; i++) {
+            map.put(inorder[i], i);
+        }
+        return dfs(preorder, 0, preorder.length - 1, inorder, 0, inorder.length - 1);
+    }
+
+    private TreeNode dfs(int[] preorder, int preStart, int preEnd, int[] inorder, int inStart, int inEnd) {
+        if (preStart > preEnd) {
+            return null;
+        }
+        TreeNode root = new TreeNode(preorder[preStart]);
+        int mid = map.get(preorder[preStart]);
+        if (mid < 0) return null;
+        root.left = dfs(preorder, preStart + 1, preStart + (mid - inStart), inorder, inStart, mid - 1);
+        root.right = dfs(preorder, preStart + (mid - inStart) + 1, preEnd, inorder, mid + 1, inEnd);
+        return root;
+    }
+
+    public int fib(int n) {
+        if (n <= 1) return n;
+        int[] dp = new int[n + 1];
+        dp[0] = 0;
+        dp[1] = 1;
+        for (int i = 2; i <= n; i++) {
+            dp[i] = (dp[i - 1] + dp[i - 2]) % 1000000007;
+        }
+        return dp[n];
+    }
+
+    public int numWays(int n) {
+        if (n == 0 || n == 1) return 1;
+        int[] dp = new int[n + 1];
+        dp[0] = 1;
+        dp[1] = 1;
+        for (int i = 2; i <= n; i++) {
+            dp[i] = (dp[i - 1] + dp[i - 2]) % 1000000007;
+        }
+        return dp[n];
+    }
+
+    public int search(int[] nums, int target) {
+        Map<Integer, Integer> map = new HashMap<>();
+        for (int num : nums) {
+            map.put(num, map.getOrDefault(num, 0) + 1);
+        }
+        return map.get(target) == null ? 0 : map.get(target);
+    }
+
+
+    public int nthUglyNumber(int n) {
+        if (n <= 0) return 0;
+        int[] dp = new int[n];
+        dp[0] = 1;
+        int a = 0, b = 0, c = 0;
+        int aFactor = 2, bFactor = 3, cFactor = 5;
+        for (int i = 1; i < n; i++) {
+            int min = Math.min(Math.min(aFactor, bFactor), cFactor);
+            dp[i] = min;
+            if (min == aFactor) aFactor = dp[++a] * 2;
+            if (min == bFactor) bFactor = dp[++b] * 3;
+            if (min == cFactor) cFactor = dp[++c] * 5;
+        }
+        return dp[n - 1];
+    }
+
+
+    public int lengthOfLongestSubstring(String s) {
+        if (s == null || s.length() == 0) return 0;
+        Set<Character> set = new HashSet<>();
+        char[] chas = s.toCharArray();
+        int slow = 0, fast = 0;
+        int n = chas.length;
+        int res = 1;
+        while (slow < n && fast < n) {
+            if (!set.contains(chas[fast])) {
+                res = Math.max(res, fast - slow + 1);
+                set.add(chas[fast++]);
+            } else {
+                set.remove(chas[slow++]);
+            }
+        }
+        return res;
+    }
+
+    public String[] permutation(String s) {
+
+        char[] chas = s.toCharArray();
+        int n = chas.length;
+        Set<String> resultList = new HashSet<>();
+        boolean[] visited = new boolean[n];
+        dfs(s, visited, resultList, new StringBuilder());
+        String[] arr = new String[resultList.size()];
+        int index = 0;
+        for (String ss : resultList) {
+            arr[index++] = ss;
+        }
+        return arr;
+    }
+
+    private void dfs(String s, boolean[] visited, Set<String> resultList, StringBuilder sb) {
+        if (sb.length() == s.length()) {
+            resultList.add(sb.toString());
+            return;
+        }
+        for (int i = 0; i < s.length(); i++) {
+            if (visited[i]) continue;
+            visited[i] = true;
+            sb.append(s.charAt(i));
+            dfs(s, visited, resultList, sb);
+            sb.deleteCharAt(sb.length() - 1);
+            visited[i] = false;
+        }
+    }
+
+
+    public String[] permutation1st(String s) {
+        char[] chas = s.toCharArray();
+        Arrays.sort(chas);
+        int len = chas.length;
+        boolean[] visited = new boolean[len];
+        List<String> resultList = new LinkedList<>();
+        dfs(chas, 0, visited, resultList, new StringBuilder());
+        String[] res = new String[resultList.size()];
+        return resultList.toArray(res);
+    }
+
+    private void dfs(char[] chas, int index, boolean[] visited, List<String> resultList, StringBuilder sb) {
+        if (index == chas.length) {
+            resultList.add(sb.toString());
+            return;
+        }
+
+        for (int i = 0; i < chas.length; i++) {
+            if (visited[i] || (i > 0 && visited[i - 1] && chas[i] == chas[i - 1])) {
+                continue;
+            }
+            visited[i] = true;
+            sb.append(chas[i]);
+            dfs(chas, index + 1, visited, resultList, sb);
+            sb.deleteCharAt(sb.length() - 1);
+            visited[i] = false;
+        }
+    }
+
+    public char firstUniqChar(String s) {
+        if (s == null || s.length() == 0) return ' ';
+        char[] chas = s.toCharArray();
+        int[] count = new int[256];
+        for (int i = 0; i < chas.length; i++) {
+            count[chas[i]]++;
+        }
+        for (int i = 0; i < chas.length; i++) {
+            if (count[chas[i]] == 1) return chas[i];
+        }
+        return ' ';
+    }
+
+
+    public String reverseLeftWords(String s, int n) {
+        StringBuilder sb = new StringBuilder();
+        for (int i = n; i < s.length(); i++) {
+            sb.append(s.charAt(i));
+        }
+        int index = 0;
+        while (n != 0) {
+            sb.append(s.charAt(index++));
+            n--;
+        }
+        return sb.toString();
+    }
+
+    public String reverseWords(String s) {
+        char[] chas = s.trim().toCharArray();
+        reverse(chas, 0, chas.length - 1);
+        String tmpStr = String.valueOf(chas);
+        String[] arr = tmpStr.split("\\s+");
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < arr.length; i++) {
+            char[] tmpChar = arr[i].toCharArray();
+            reverse(tmpChar, 0, tmpChar.length - 1);
+            sb.append(String.valueOf(tmpChar));
+            if (i != arr.length - 1) {
+                sb.append(" ");
+            }
+        }
+        return sb.toString();
+    }
+
+
+    private void reverse(char[] chas, int from, int to) {
+        while (from < to) {
+            char tmp = chas[from];
+            chas[from++] = chas[to];
+            chas[to--] = tmp;
+        }
+    }
+
+
+    public int singleNumber(int[] nums) {
+        int res = 0;
+        for (int i = 0; i < 32; i++) {
+            int count = 0;
+            for (int j = 0; j < nums.length; j++) {
+                if ((nums[j] >>> i & 1) == 1) {
+                    count++;
+                }
+
+            }
+            if (count % 3 != 0) {
+                res |= 1 << i;
+            }
+        }
+        return res;
+    }
+
+
+
+
 
 
 
     //spring
     public static void main(String[] args) {
-
+//        handler.fib(48);
+//        handler.nthUglyNumber(10);
+//        handler.lengthOfLongestSubstring("abcabcbb");
+//        handler.permutation("abc");
+//        handler.permutation1st("abc");
+        handler.reverseWords("the sky is blue");
 //        int[][] grid = {{0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0},
 //                {0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0},
 //                {0, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0},
