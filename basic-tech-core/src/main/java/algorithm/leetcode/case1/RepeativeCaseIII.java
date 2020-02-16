@@ -1,7 +1,5 @@
 package algorithm.leetcode.case1;
 
-import com.alibaba.fastjson.JSON;
-
 import java.util.*;
 
 /**
@@ -554,7 +552,63 @@ public class RepeativeCaseIII {
     }
 
 
+    class MedianFinder {
 
+        private PriorityQueue<Integer> maxHeap;
+        private PriorityQueue<Integer> minHeap;
+        int count;
+
+        /**
+         * initialize your data structure here.
+         */
+        public MedianFinder() {
+            count = 0;
+            maxHeap = new PriorityQueue<>(((o1, o2) -> o2 - o1));
+            minHeap = new PriorityQueue<>();
+        }
+
+        public void addNum(int num) {
+            count++;
+            maxHeap.offer(num);
+            minHeap.offer(maxHeap.poll());
+            if (count % 2 == 1) {
+                maxHeap.offer(minHeap.poll());
+            }
+        }
+
+        public double findMedian() {
+            if (count % 2 == 1) {
+                return (double) maxHeap.peek();
+            } else {
+                return (double) (maxHeap.peek() + minHeap.peek()) / 2;
+            }
+
+        }
+    }
+
+    class ProductOfNumbers {
+
+        private List<Integer> list;
+
+
+        public ProductOfNumbers() {
+            list = new ArrayList<>();
+        }
+
+        public void add(int num) {
+            list.add(num);
+        }
+
+        public int getProduct(int k) {
+            if (list.isEmpty()) return 0;
+            int sum = 1;
+            int start = list.size()  - k;
+            for (int i = start; i < list.size() ; i++) {
+                sum *= list.get(i);
+            }
+            return sum;
+        }
+    }
 
 
 

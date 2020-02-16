@@ -1,9 +1,7 @@
 package algorithm.leetcode.case2;
 
 
-import java.util.ArrayList;
 import java.util.*;
-import java.util.List;
 
 /**
  * Created by FrankCooper
@@ -5117,7 +5115,7 @@ public class RepeativeCaseII {
             x = 1 / x;
             N = -N;
         }
-        return fastPow1st(x,N);
+        return fastPow1st(x, N);
 
     }
 
@@ -5131,15 +5129,120 @@ public class RepeativeCaseII {
         } else {
             return half * half * x;
         }
+    }
 
+    class Week176 {
+        public int countNegatives(int[][] grid) {
+            int count = 0;
+            if (grid == null || grid.length == 0 || grid[0].length == 0) return count;
+            int row = grid.length;
+            int col = grid[0].length;
+            for (int i = 0; i < row; i++) {
+                for (int j = 0; j < col; j++) {
+                    if (grid[i][j] < 0) count++;
+                }
+            }
+            return count;
+        }
+    }
 
+    static class Three {
+        public int[][] merge(int[][] intervals) {
+            List<int[]> result = new ArrayList<>();
+            if (intervals == null || intervals.length == 0) return result.toArray(new int[0][]);
+            Arrays.sort(intervals, Comparator.comparingInt(a -> a[0]));
+            int len = intervals.length;
+            int i = 0;
+            while (i < len) {
+                int curStart = intervals[i][0];
+                int curEnd = intervals[i][1];
+                while (i < len - 1 && curEnd >= intervals[i + 1][0]) {
+                    curEnd = Math.max(curEnd, intervals[i + 1][1]);
+                    i++;
+                }
+                result.add(new int[]{curStart, curEnd});
+                i++;
+            }
+            return result.toArray(new int[0][]);
+        }
+
+        public List<String> summaryRanges(int[] nums) {
+            List<String> result = new ArrayList<>();
+            if (nums == null || nums.length == 0) return result;
+            int len = nums.length;
+            int start = 0, i = 0;
+            while (i < len) {
+                while (i < len - 1 && nums[i] + 1 == nums[i + 1]) {
+                    i++;
+                }
+                if (i == start) result.add(nums[start] + "");
+                else result.add(nums[start] + "->" + nums[i]);
+                i++;
+                start = i;
+            }
+
+            return result;
+        }
+    }
+
+    public int maxEvents(int[][] events) {
+
+        Arrays.sort(events, Comparator.comparingInt(o -> o[0]));
+        PriorityQueue<int[]> queue = new PriorityQueue<>(Comparator.comparingInt(o -> o[1]));
+        int i = 0;
+        int count = 0;
+        int n = events.length;
+        int curD = 1;
+        while (i < n || !queue.isEmpty()) {
+            while (i < n && events[i][0] <= curD) {
+                queue.offer(events[i]);
+                i++;
+            }
+
+            while (!queue.isEmpty()) {
+                int[] curEvent = queue.poll();
+                if (curEvent[1] >= curD) {
+                    count++;
+                    break;
+                }
+            }
+            curD++;
+        }
+        return count;
+    }
+
+    public int[][] intervalIntersection(int[][] A, int[][] B) {
+        List<int[]> list = new ArrayList<>();
+        int lenA = A.length, lenB = B.length;
+        int i = 0, j = 0;
+        while (i < lenA && j < lenB) {
+            int a1 = A[i][0], a2 = A[i][1];
+            int b1 = B[j][0], b2 = B[j][1];
+            if (a2 >= b1 && a1 <= b2) {
+                list.add(new int[]{Math.max(a1, b1), Math.min(a2, b2)});
+            }
+            if (b2 < a2) j++;
+            else i++;
+        }
+        return list.toArray(new int[0][]);
     }
 
 
     //spring
     public static void main(String[] args) {
+        Three three = new Three();
+//        int[][] intervals = {{1, 3}, {8, 10}, {15, 18}, {2, 6}};
+//        three.merge(intervals);
+//        three.summaryRanges(new int[]{0, 1, 2, 4, 5, 7});
+
+
+//        handler.eraseOverlapIntervals(new int[][]{{1, 2}, {2, 3}, {3, 4}, {1, 3}});
+//        handler.maxEvents(new int[][]{{1, 2}, {2, 3}, {3, 4}});
+        int[][] A = {{0, 2}, {5, 10}, {13, 23}, {24, 25}}, B = {{1, 5}, {8, 12}, {15, 24}, {25, 26}};
+        handler.intervalIntersection(A, B);
 //        handler.hammingDistance(1, 4);
-//        handler.constructArr(new int[]{1, 2, 3, 4, 5});
+//
+// handler.constructArr(new int[]{1, 2, 3, 4, 5});
 //        handler.missingNumber(new int[]{0, 1, 2, 3, 4, 5, 6, 7, 9});
 //        handler.missingNumber(new int[]{0});
 //        handler.freqAlphabets("10#11#12");
