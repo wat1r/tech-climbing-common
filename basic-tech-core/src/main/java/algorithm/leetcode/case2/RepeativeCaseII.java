@@ -5360,7 +5360,7 @@ public class RepeativeCaseII {
     public boolean isValidBST2nd(TreeNode root) {
         Stack<TreeNode> stack = new Stack<>();
         //Double.MIN_VALUE是一个非零非负的常量，不是最小的
-        double MIN =- Double.MAX_VALUE;
+        double MIN = -Double.MAX_VALUE;
         while (!stack.isEmpty() || root != null) {
             while (root != null) {
                 stack.push(root);
@@ -5368,13 +5368,50 @@ public class RepeativeCaseII {
             }
             root = stack.pop();
             int val = root.val;
-            if(val<=MIN){
+            if (val <= MIN) {
                 return false;
             }
-            MIN =val;
-            root =root.right;
+            MIN = val;
+            root = root.right;
         }
         return true;
+    }
+
+
+    public List<String> restoreIpAddresses(String s) {
+        List<String> resList = new ArrayList<>();
+        if (s.length() < 4 || s.length() > 12) return resList;
+        backtracing(s, 0, new ArrayList<>(), resList);
+        return resList;
+    }
+
+
+    /**
+     * @param s       原始字符串
+     * @param curPos  当前的字符索引的位置
+     * @param tmpList 当前收集到的结果集
+     * @param resList 最终的结果集
+     */
+    public void backtracing(String s, int curPos, List<String> tmpList, List<String> resList) {
+        //当当前收集的结果集是4段时，表示ip段已经收集完成，且当前的位置curPos到达了字符s的末尾
+        if (tmpList.size() == 4 && curPos == s.length()) {
+            resList.add(String.join(".", tmpList));
+            return;
+        }
+        for (int i = 1; i <= 3; i++) {
+            //当结束位置(curPos + i)超过字符串的位置或者当前的结果集大于4的时候(ip段至多有4段)
+            if (curPos + i > s.length() || tmpList.size() > 4) break;
+            String tmp = s.substring(curPos, curPos + i);
+            //当当前的ip段长度大于1，以0开头，如012，01这样的，不合法，单独的0是合法的
+            //当当前的加的长度为3，ip段的值大于255，不合法，如312
+            if ((tmp.startsWith("0") && tmp.length() > 1) || (i == 3 && Integer.valueOf(tmp) > 255)) {
+                continue;
+            }
+            tmpList.add(tmp);
+            backtracing(s, curPos + i, tmpList, resList);
+            tmpList.remove(tmpList.size() - 1);
+        }
+
     }
 
 
@@ -5391,8 +5428,9 @@ public class RepeativeCaseII {
         int[][] A = {{0, 2}, {5, 10}, {13, 23}, {24, 25}}, B = {{1, 5}, {8, 12}, {15, 24}, {25, 26}};
 //        handler.intervalIntersection(A, B);
 //        handler.hammingDistance(1, 4);
-        handler.testTreeMap();
+//        handler.testTreeMap();
 //
+        handler.restoreIpAddresses("25525511135");
 // handler.constructArr(new int[]{1, 2, 3, 4, 5});
 //        handler.missingNumber(new int[]{0, 1, 2, 3, 4, 5, 6, 7, 9});
 //        handler.missingNumber(new int[]{0});
