@@ -5228,6 +5228,156 @@ public class RepeativeCaseII {
     }
 
 
+    public int minArray(int[] numbers) {
+        int left = 0, right = numbers.length - 1;
+        while (left < right) {
+            int mid = left + (right - left) / 2;
+            if (numbers[mid] < numbers[right]) {
+                right = mid;
+            } else if (numbers[mid] > numbers[right]) {
+                left = mid + 1;
+            } else {
+                while (mid < right && numbers[mid] == numbers[right]) {
+                    right--;
+                }
+            }
+        }
+        return numbers[left];
+    }
+
+
+    public void testTreeMap() {
+        // creating tree map
+        NavigableMap<Integer, String> treemap = new TreeMap<Integer, String>();
+
+        // populating tree map
+        treemap.put(2, "two");
+        treemap.put(1, "one");
+        treemap.put(3, "three");
+        treemap.put(6, "six");
+        treemap.put(5, "five");
+
+        System.out.println("Ceiling entry for 4: " + treemap.ceilingEntry(1));
+        System.out.println("Ceiling entry for 4: " + treemap.ceilingEntry(4));
+        System.out.println("Ceiling entry for 5: " + treemap.ceilingEntry(5));
+
+
+    }
+
+
+    public boolean checkIfExist(int[] arr) {
+        Set<Integer> set = new HashSet<>();
+        for (int num : arr) {
+            if (set.contains(num)) return true;
+            set.add(num);
+            if (num % 2 == 0) set.add(num / 2);
+        }
+        return false;
+    }
+
+
+    public boolean isValid(String s) {
+        Map<Character, Character> map = new HashMap<>();
+        map.put(')', '(');
+        map.put(']', '[');
+        map.put('}', '{');
+        Stack<Character> stack = new Stack<>();
+        char[] chas = s.toCharArray();
+        for (char c : chas) {
+            if (c == '(' || c == '[' || c == '{') {
+                stack.push(c);
+            } else if (!stack.isEmpty() && stack.peek() == map.get(c)) {
+                stack.pop();
+            } else {
+                return false;
+            }
+        }
+        return stack.isEmpty();
+    }
+
+
+    class Twitter {
+        //<k,v> k是当前的用户id，v是关注了当前用户id的粉丝或者说关注者id的列表
+        Map<Integer, Set<Integer>> followeeMap;
+        //<k,v>k 表示当前的推特的id，v表示哪个用户发的这条推特
+        Map<Integer, Integer> tweetUserIdMap;
+        //
+        List<Integer> list;
+
+        /**
+         * Initialize your data structure here.
+         */
+        public Twitter() {
+            followeeMap = new HashMap<>();
+            tweetUserIdMap = new HashMap<>();
+            list = new ArrayList<>();
+        }
+
+        /**
+         * Compose a new tweet.
+         */
+        public void postTweet(int userId, int tweetId) {
+            tweetUserIdMap.put(tweetId, userId);
+            list.add(tweetId);
+        }
+
+        /**
+         * Retrieve the 10 most recent tweet ids in the user's news feed. Each item in the news feed must be posted by users who the user followed or by the user herself. Tweets must be ordered from most recent to least recent.
+         */
+        public List<Integer> getNewsFeed(int userId) {
+            List<Integer> result = new ArrayList<>();
+            for (int i = list.size() - 1; i >= 0 && result.size() < 10; i--) {
+                //获取到当前这条推特是哪位用户发的
+                int owner = tweetUserIdMap.get(list.get(i));
+                //如果这个推特的作者是和外部的userId是同一个人，这条推特有效
+                //或者这个userId在followeeMap中并且在其粉丝的列表中
+                if (owner == userId || (followeeMap.containsKey(userId) && followeeMap.get(userId).contains(owner))) {
+                    result.add(list.get(i));
+                }
+            }
+            return result;
+
+        }
+
+        /**
+         * Follower follows a followee. If the operation is invalid, it should be a no-op.
+         */
+        public void follow(int followerId, int followeeId) {
+            followeeMap.putIfAbsent(followerId, new HashSet<>());
+            followeeMap.get(followerId).add(followeeId);
+        }
+
+        /**
+         * Follower unfollows a followee. If the operation is invalid, it should be a no-op.
+         */
+        public void unfollow(int followerId, int followeeId) {
+            if (followeeMap.containsKey(followerId)) {
+                followeeMap.get(followerId).remove(followeeId);
+            }
+        }
+    }
+
+    public boolean isValidBST2nd(TreeNode root) {
+        Stack<TreeNode> stack = new Stack<>();
+        //Double.MIN_VALUE是一个非零非负的常量，不是最小的
+        double MIN =- Double.MAX_VALUE;
+        while (!stack.isEmpty() || root != null) {
+            while (root != null) {
+                stack.push(root);
+                root = root.left;
+            }
+            root = stack.pop();
+            int val = root.val;
+            if(val<=MIN){
+                return false;
+            }
+            MIN =val;
+            root =root.right;
+        }
+        return true;
+    }
+
+
     //spring
     public static void main(String[] args) {
         Three three = new Three();
@@ -5239,8 +5389,9 @@ public class RepeativeCaseII {
 //        handler.eraseOverlapIntervals(new int[][]{{1, 2}, {2, 3}, {3, 4}, {1, 3}});
 //        handler.maxEvents(new int[][]{{1, 2}, {2, 3}, {3, 4}});
         int[][] A = {{0, 2}, {5, 10}, {13, 23}, {24, 25}}, B = {{1, 5}, {8, 12}, {15, 24}, {25, 26}};
-        handler.intervalIntersection(A, B);
+//        handler.intervalIntersection(A, B);
 //        handler.hammingDistance(1, 4);
+        handler.testTreeMap();
 //
 // handler.constructArr(new int[]{1, 2, 3, 4, 5});
 //        handler.missingNumber(new int[]{0, 1, 2, 3, 4, 5, 6, 7, 9});

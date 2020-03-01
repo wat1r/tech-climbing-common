@@ -602,15 +602,39 @@ public class RepeativeCaseIII {
         public int getProduct(int k) {
             if (list.isEmpty()) return 0;
             int sum = 1;
-            int start = list.size()  - k;
-            for (int i = start; i < list.size() ; i++) {
+            int start = list.size() - k;
+            for (int i = start; i < list.size(); i++) {
                 sum *= list.get(i);
             }
             return sum;
         }
     }
 
+    public TreeNode sortedListToBST(ListNode head) {
+        if (head == null) return null;
+        return helper(head, null);
+    }
 
+    public TreeNode helper(ListNode head, ListNode tail) {
+        if (head == tail) return null;
+        ListNode slow = head;
+        ListNode fast = head;
+        while (fast != tail && fast.next != tail) {
+            slow = slow.next;
+            fast = fast.next.next;
+        }
+        TreeNode root = new TreeNode(slow.val);
+        root.left = helper(head, slow);
+        root.right = helper(slow.next, tail);
+        return root;
+    }
+
+    public boolean hasPathSum(TreeNode root, int sum) {
+        if (root == null) return false;
+        if (root.left == null && root.right == null && root.val == sum) return true;
+        return hasPathSum(root.left, sum - root.val) || hasPathSum(root.right, sum - root.val);
+
+    }
 
 
     //spring
