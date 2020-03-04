@@ -5415,6 +5415,40 @@ public class RepeativeCaseII {
     }
 
 
+    public int orangesRotting(int[][] grid) {
+        int[][] directions = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
+        int row = grid.length, col = grid[0].length;
+        Queue<int[]> queue = new LinkedList<>();
+        int fresh = 0;
+        for (int i = 0; i < row; i++) {
+            for (int j = 0; j < col; j++) {
+                if (grid[i][j] == 1) fresh++;
+                if (grid[i][j] == 2) queue.add(new int[]{i, j});
+            }
+        }
+
+        int round = 0;
+        while (!queue.isEmpty()) {
+            int n = queue.size();
+            round++;
+            for (int i = 0; i < n; i++) {
+                int[] cur = queue.poll();
+                for (int k = 0; k < directions.length; k++) {
+                    int curX = cur[0] + directions[k][0];
+                    int curY = cur[1] + directions[k][1];
+                    if (curX >= 0 && curX < row && curY >= 0 && curY < col && grid[curX][curY] == 1) {
+                        grid[curX][curY] = 2;
+                        fresh--;
+                        queue.add(new int[]{curX, curY});
+                    }
+                }
+            }
+
+        }
+        return fresh > 0 ? -1 : round;
+    }
+
+
     //spring
     public static void main(String[] args) {
         Three three = new Three();
