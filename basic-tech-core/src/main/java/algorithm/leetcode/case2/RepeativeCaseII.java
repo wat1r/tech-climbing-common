@@ -5448,6 +5448,23 @@ public class RepeativeCaseII {
         return fresh > 0 ? -1 : round;
     }
 
+    public int[] distributeCandies(int candies, int num_people) {
+        int[] res = new int[num_people];
+        int round = 1;
+        while (candies > 0) {
+            for (int i = 0; i < num_people; i++) {
+                if (candies < 0) break;
+                res[i] += (round < candies) ? round : candies;
+                candies -= round;
+                round++;
+            }
+        }
+        return res;
+    }
+
+
+
+
 
     //spring
     public static void main(String[] args) {
@@ -5464,7 +5481,8 @@ public class RepeativeCaseII {
 //        handler.hammingDistance(1, 4);
 //        handler.testTreeMap();
 //
-        handler.restoreIpAddresses("25525511135");
+//        handler.restoreIpAddresses("25525511135");
+        handler.distributeCandies(10, 3);
 // handler.constructArr(new int[]{1, 2, 3, 4, 5});
 //        handler.missingNumber(new int[]{0, 1, 2, 3, 4, 5, 6, 7, 9});
 //        handler.missingNumber(new int[]{0});
