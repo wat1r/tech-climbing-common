@@ -173,10 +173,12 @@ public class SortUtils {
 
 
     private static void mergeSort(int[] arr) {
+        System.out.println(JSON.toJSON(arr));
         if (arr == null || arr.length < 2) {
             return;
         }
         mergeSortProcess(arr, 0, arr.length - 1);
+        System.out.println(JSON.toJSON(arr));
     }
 
     private static void mergeSortProcess(int[] arr, int left, int right) {
@@ -507,7 +509,8 @@ public class SortUtils {
 
     public static void main(String[] args) {
 
-//        int[] numbers = {20, 40, 50, 10, 60,};
+        int[] numbers = {20, 40, 50, 10, 60,};
+        mergeSort(numbers);
 //        SortUtils.quickSort(numbers, 0, numbers.length - 1);
 //        SortUtils.bubbleSort(numbers);
 //        SortUtils.selectSort(numbers);
@@ -517,8 +520,8 @@ public class SortUtils {
 //        int[] numbers = {80, 30, 60, 40, 20, 10, 50, 70};
 //        SortUtils.shellSort(numbers);
 
-        int[] nums = {542, 3521, 13459, 852, 742, 46, 2, 1, 633, 32};
-        radixSort(nums);
+//        int[] nums = {542, 3521, 13459, 852, 742, 46, 2, 1, 633, 32};
+//        radixSort(nums);
 //        myRadixSort(nums);
 //        bucketSort(nums);
 
