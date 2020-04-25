@@ -636,6 +636,30 @@ public class RepeativeCaseIII {
 
     }
 
+    public int[][] findContinuousSequence(int target) {
+        List<int[]> res = new ArrayList<>();
+        int l = 1, r = 2;
+        int sum = 0;
+        while (l < r && r <= (target / 2 + 1)) {
+            if (sum == 0) sum = l + r;
+            if (sum < target) {
+                r++;
+                sum += r;
+            } else if (sum > target) {
+                sum -= l;
+                l++;
+            } else if (sum == target) {
+                int[] arr = new int[r - l + 1];
+                for (int i = l; i <= r; i++) {
+                    arr[i - l] = i;
+                }
+                res.add(arr);
+                sum -= l;
+                l++;
+            }
+        }
+        return res.toArray(new int[0][]);
+    }
 
     //spring
     public static void main(String[] args) {
@@ -644,7 +668,8 @@ public class RepeativeCaseIII {
 //        handler.lengthOfLongestSubstring("abcabcbb");
 //        handler.permutation("abc");
 //        handler.permutation1st("abc");
-        handler.reverseWords("the sky is blue");
+//        handler.reverseWords("the sky is blue");
+        handler.findContinuousSequence(9);
 //        int[][] grid = {{0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0},
 //                {0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0},
 //                {0, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0},
