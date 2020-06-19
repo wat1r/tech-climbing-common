@@ -13,7 +13,6 @@
         <module>basic-concurrent-service</module>
         <module>basic-tech-bigdata</module>
         <module>tech-geek-component</module>
-        <module>SpringBootRocketMqDemo</module>
     </modules>
 
     <scm>
