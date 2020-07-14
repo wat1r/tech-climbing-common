@@ -1,7 +1,11 @@
 package basic.stream;
 
+import lombok.extern.slf4j.Slf4j;
+
 import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collector;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
@@ -9,13 +13,15 @@ import java.util.stream.Stream;
  * Date 2019/5/27 21:07
  * Description
  */
+@Slf4j
 public class StreamTest {
 
 
     public static void main(String[] args) {
 
 //        testOne();
-        testTwo();
+//        testTwo();
+        testThree();
     }
 
 
@@ -40,7 +46,7 @@ public class StreamTest {
         stream.map(str -> Integer.toString(str)).forEach(System.out::println);
 
 
-        String[] strs = { "aaa", "bbb", "ccc" };
+        String[] strs = {"aaa", "bbb", "ccc"};
         Arrays.stream(strs).map(str -> str.split("")).forEach(System.out::println);// Ljava.lang.String;@53d8d10a
         Arrays.stream(strs).map(str -> str.split("")).flatMap(Arrays::stream).forEach(System.out::println);// aaabbbccc
         Arrays.stream(strs).map(str -> str.split("")).flatMap(str -> Arrays.stream(str)).forEach(System.out::println);// aaabbbccc
@@ -53,6 +59,32 @@ public class StreamTest {
          */
     }
 
+
+    public static void testThree() {
+        // 将Stream转换成容器或Map
+        Stream<String> stream = Stream.of("I", "love", "you", "too");
+        Map<String, Integer> map = stream.collect(Collectors.toMap(Function.identity(), String::length));
+
+        //---------------
+        Map<String, String> collect = Arrays.asList("a", "b", "c")
+                .stream()
+                .map(Function.identity()) // <- This,
+                .map(str -> str)          // <- is the same as this.
+                .collect(Collectors.toMap(
+                        Function.identity(), // <-- And this,
+                        str -> str));// <-- is the same as this.
+        //---------------
+        List list = new ArrayList<>();
+        list.add(1);
+        list.add(2);
+        int[] arrayOK = list.stream().mapToInt(i -> (int) i).toArray();
+
+        //---------------
+//        int[] arrayProblem = list.stream().mapToInt(Function.identity()).toArray();
+
+
+        log.debug("end");
+    }
 
 
 }
