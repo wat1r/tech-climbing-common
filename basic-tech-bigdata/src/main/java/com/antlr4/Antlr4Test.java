@@ -28,6 +28,5 @@ public class Antlr4Test {
         ListenerRewrite listener = new ListenerRewrite();
         //使用监听器初始化对词法分析树遍历
         ParseTreeWalker.DEFAULT.walk(listener, context);
-
     }
 }
