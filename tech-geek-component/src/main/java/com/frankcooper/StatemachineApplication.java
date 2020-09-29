@@ -8,6 +8,12 @@ import org.springframework.statemachine.StateMachine;
 import com.frankcooper.spring.stateMachine.turnstile.TurnstileEvents;
 import com.frankcooper.spring.stateMachine.turnstile.TurnstileStates;
 
+/**
+ * https://www.jianshu.com/p/
+ * https://www.jianshu.com/p/1a4947a099e9?from=singlemessage
+ * https://blog.csdn.net/guo_xl/article/details/83716342
+ * https://docs.spring.io/spring-statemachine/docs/2.0.3.BUILD-SNAPSHOT/reference/htmlsingle/#statemachine-examples-persist
+ */
 @SpringBootApplication
 public class StatemachineApplication implements CommandLineRunner {
     @Autowired
@@ -29,8 +35,7 @@ public class StatemachineApplication implements CommandLineRunner {
         stateMachine.sendEvent(TurnstileEvents.PUSH);
         System.out.println("--- push ---");
         stateMachine.sendEvent(TurnstileEvents.PUSH);
-        stateMachine.stop();  stateMachine.start();
-
+        stateMachine.stop();
 
     }
 }
