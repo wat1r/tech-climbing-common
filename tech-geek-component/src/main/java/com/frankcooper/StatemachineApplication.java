@@ -37,6 +37,5 @@ public class StatemachineApplication implements CommandLineRunner {
         System.out.println("--- push ---");
         stateMachine.sendEvent(TurnstileEvents.PUSH);
         stateMachine.stop();
-
     }
 }
