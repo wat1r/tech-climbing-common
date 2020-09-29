@@ -1,4 +1,4 @@
-package net.netty.action.three;
+package com.frankcooper.netty.action.three;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelPipeline;

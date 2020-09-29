@@ -1,4 +1,4 @@
-package message.rocketMQ.one;
+package com.frankcooper.message.rocketMQ.one;
 
 /**
  * Created by FrankCooper

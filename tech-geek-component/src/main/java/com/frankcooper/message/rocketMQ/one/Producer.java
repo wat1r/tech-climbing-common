@@ -1,4 +1,4 @@
-package message.rocketMQ.one;
+package com.frankcooper.message.rocketMQ.one;
 
 import com.alibaba.rocketmq.client.exception.MQClientException;
 import com.alibaba.rocketmq.client.producer.DefaultMQProducer;

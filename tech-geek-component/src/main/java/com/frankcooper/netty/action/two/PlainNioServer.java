@@ -1,4 +1,4 @@
-package net.netty.action.two;
+package com.frankcooper.netty.action.two;
 
 
 import java.io.IOException;

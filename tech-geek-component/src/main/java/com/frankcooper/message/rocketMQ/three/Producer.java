@@ -1,4 +1,4 @@
-package message.rocketMQ.three;
+package com.frankcooper.message.rocketMQ.three;
 
 
 import com.alibaba.rocketmq.client.producer.DefaultMQProducer;

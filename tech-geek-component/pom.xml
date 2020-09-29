@@ -9,7 +9,7 @@
     </parent>
     <!--<parent>-->
         <!--<groupId>org.springframework.boot</groupId>-->
-        <!--<artifactId>spring-boot-starter-parent</artifactId>-->
+        <!--<artifactId>com.frankcooper.spring-boot-starter-parent</artifactId>-->
         <!--<version>1.5.8.RELEASE</version>-->
         <!--<relativePath/> &lt;!&ndash; lookup parent from repository &ndash;&gt;-->
     <!--</parent>-->
@@ -52,6 +52,13 @@
             <groupId>org.apache.rocketmq</groupId>
             <artifactId>rocketmq-spring-boot-starter</artifactId>
             <version>2.0.1</version>
+        </dependency>
+
+        <!--com.frankcooper.spring statemachine-->
+        <dependency>
+            <groupId>org.springframework.statemachine</groupId>
+            <artifactId>spring-statemachine-core</artifactId>
+            <version>2.0.1.RELEASE</version>
         </dependency>
 
 

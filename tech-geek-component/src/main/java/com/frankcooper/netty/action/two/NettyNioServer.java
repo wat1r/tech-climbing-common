@@ -1,4 +1,4 @@
-package net.netty.action.two;
+package com.frankcooper.netty.action.two;
 
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.buffer.ByteBuf;

@@ -1,4 +1,4 @@
-package net.netty.action.one;
+package com.frankcooper.netty.action.one;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;

@@ -1,4 +1,4 @@
-package net.netty.action.one;
+package com.frankcooper.netty.action.one;
 
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
