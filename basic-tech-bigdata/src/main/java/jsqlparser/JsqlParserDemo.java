@@ -7,21 +7,27 @@ import net.sf.jsqlparser.statement.select.Select;
 
 public class JsqlParserDemo {
 
-    static  JsqlParserDemo handler = new JsqlParserDemo();
+    static JsqlParserDemo handler = new JsqlParserDemo();
 
     public static void main(String[] args) throws JSQLParserException {
         handler.testOne();
     }
 
 
+
+
+
+
+
+
+
+
+
     private void testOne() throws JSQLParserException {
         String sql = "SELECT  *  from dw_dev.gplusosm_deposit_log WHERE  app_id = 11";
+        sql = "SELECT * INTO newtable FROM table1 WHERE 1=1";
         Select select = (Select) CCJSqlParserUtil.parse(sql);
         PlainSelect plainSelect = (PlainSelect) select.getSelectBody();
-
-
-
-
         System.out.printf("SSS");
 
     }
