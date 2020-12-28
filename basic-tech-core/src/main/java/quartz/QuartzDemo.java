@@ -9,8 +9,9 @@ public class QuartzDemo {
 
 
     public static void main(String[] args) {
-        handler.validate("0 15 10 ? * *");
-        handler.validate("0 15 10 ? * 6#3");
+//        handler.validate("0 15 10 ? * *");
+//        handler.validate("0 15 10 ? * 6#3");
+        handler.validate("01 30 16 25 12 ? 2020");
     }
 
 
@@ -18,6 +19,11 @@ public class QuartzDemo {
         boolean f = CronExpression.isValidExpression(expression);
         System.out.printf("[%s]--->%s\n",expression,f);
     }
+
+
+
+
+
 
 
 }
