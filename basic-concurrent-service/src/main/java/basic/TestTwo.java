@@ -15,13 +15,13 @@ public class TestTwo {
      */
 
     public static void main(String[] args) throws InterruptedException {
-        //线程池10个线程
-        ExecutorService executorService = Executors.newFixedThreadPool(10);
+        //线程池3个线程
+        ExecutorService executorService = Executors.newFixedThreadPool(3);
         //十个任务
         List<List<Task>> task = new ArrayList<>();
         int cnt = 10;
         while (cnt-- > 0) {
-            List<Task> subTask = Lists.newArrayList(new Task(), new Task(), new Task(), new Task(), new Task(), new Task(), new Task(), new Task(), new Task(), new Task());
+            List<Task> subTask = Lists.newArrayList(new Task(), new Task(), new Task());
             task.add(subTask);
         }
         //记录任务执行时间
@@ -30,7 +30,7 @@ public class TestTwo {
         //循环任务组
         for (List<Task> startList : task) {
             //定义线程阻塞为10
-            c = new CountDownLatch(10);
+            c = new CountDownLatch(3);
             for (Task agent : startList) {
                 agent.setCountDownLatch(c);
                 executorService.submit(agent);
