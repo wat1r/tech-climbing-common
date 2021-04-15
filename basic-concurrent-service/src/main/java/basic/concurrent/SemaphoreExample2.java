@@ -39,7 +39,7 @@ public class SemaphoreExample2 {
 
 
     public static String getNow(){
-        SimpleDateFormat sdf = new SimpleDateFormat("mm:ss");
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
         return sdf.format(new Date());
     }
 
