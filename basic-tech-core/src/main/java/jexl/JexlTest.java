@@ -20,9 +20,9 @@ public class JexlTest {
         JexlEngine engine = new JexlEngine();
         String testStr = "测试";
         JexlContext context = new MapContext();
-        String jexlTest = "StringUtils.isEmpty(value)";
         context.set("value", testStr);
         context.set("StringUtils", StringUtils.class);
+        String jexlTest = "StringUtils.isEmpty(value)";
         boolean evaluate = (boolean) engine.createExpression(jexlTest).evaluate(context);
         log.info("\n 字符 【{}】是否为空 :{} ", testStr, evaluate ? "是" : "不是");
 
