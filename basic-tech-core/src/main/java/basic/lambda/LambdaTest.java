@@ -2,17 +2,16 @@ package basic.lambda;
 
 import org.springframework.util.CollectionUtils;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class LambdaTest {
 
 
     public static void main(String[] args) {
-        filterMap();
+//        filterMap();
+        buildList();
     }
 
 
@@ -39,6 +38,14 @@ public class LambdaTest {
 
         System.out.println("dd");
 
+    }
+
+
+    private static void buildList() {
+        int size = 10;
+        List<String> list = IntStream.range(0, size).mapToObj(k -> "?").collect(Collectors.toList());
+        List<String> list1 = Collections.nCopies(size, "?");
+        System.out.println("end");
     }
 
 
