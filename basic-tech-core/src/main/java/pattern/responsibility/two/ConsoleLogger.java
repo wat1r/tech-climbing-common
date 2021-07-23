@@ -1,4 +1,4 @@
-package pattern.responsibility;
+package pattern.responsibility.two;
 
 /**
  * @author: wangzhou(Frank Cooper)
