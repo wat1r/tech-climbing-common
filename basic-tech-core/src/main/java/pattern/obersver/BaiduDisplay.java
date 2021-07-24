@@ -5,12 +5,12 @@ package pattern.obersver;
  * Date 2019/5/3 19:52
  * Description
  */
-public class CurrentCondituonDisplay implements DisplayElement, Observer {
+public class BaiduDisplay implements DisplayElement, Observer {
     private float temperature;
     private float humidity;
     private Subject weatherData;
 
-    public CurrentCondituonDisplay(Subject weatherData) {
+    public BaiduDisplay(Subject weatherData) {
         this.weatherData = weatherData;
         weatherData.registerObserver(this);
     }
@@ -18,7 +18,7 @@ public class CurrentCondituonDisplay implements DisplayElement, Observer {
 
     @Override
     public void display() {
-        System.out.println("Current conditions:" + temperature + "F degrees and " + humidity + "% humidity");
+        System.out.println("[Baidu]-Current conditions:" + temperature + "F degrees and " + humidity + "% humidity");
     }
 
     @Override
