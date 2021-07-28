@@ -1,4 +1,4 @@
-package basic.concurrent;
+package basic.concurrent.lock_support.one;
 
 
 import java.util.Queue;
