@@ -1,4 +1,4 @@
-package pattern.decorator;
+package pattern.decorator.one;
 
 /**
  * Created by FrankCooper

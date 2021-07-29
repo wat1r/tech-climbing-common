@@ -1,25 +1,25 @@
-package pattern.decorator;
+package pattern.decorator.one;
 
 /**
  * Created by FrankCooper
  * Date 2019/5/3 18:19
  * Description
  */
-public class Whip extends CondimentDecorator {
+public class Soy extends CondimentDecorator {
     Beverage beverage;
 
-    public Whip(Beverage beverage) {
+    public Soy(Beverage beverage) {
         this.beverage = beverage;
     }
 
     @Override
     public String getDescription() {
-        return beverage.getDescription() + " , Whip";
+        return beverage.getDescription() + " , Soy";
     }
 
     @Override
     public double cost() {
-        return beverage.cost() + 0.20;
+        return beverage.cost() + 0.10;
     }
 
 }
