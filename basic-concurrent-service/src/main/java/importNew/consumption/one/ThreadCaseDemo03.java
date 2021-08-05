@@ -110,14 +110,18 @@ public class ThreadCaseDemo03 {
         Info info = new Info(); // 实例化Info对象
         Producer pro = new Producer(info); // 生产者
         Consumer con = new Consumer(info); // 消费者
-        new Thread(pro).start();
+        Thread p1 = new Thread(pro);
+        p1.setName("producer");
+        p1.start();
         //启动了生产者线程后，再启动消费者线程
         try {
             Thread.sleep(500);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+        Thread c1 = new Thread(con);
+        c1.setName("consumer");
+        c1.start();
 
-        new Thread(con).start();
     }
 }
