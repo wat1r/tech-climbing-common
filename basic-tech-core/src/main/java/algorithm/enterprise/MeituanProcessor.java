@@ -58,4 +58,53 @@ public class MeituanProcessor {
         }
     }
 
+
+    static class _9th {
+
+        final static int MOD = 998244353;
+
+        public static void main(String[] args) {
+            Scanner sc = new Scanner(System.in);
+            int n = sc.nextInt(), m = sc.nextInt();
+            //f[i][j]表示第i个装饰物 价格为j时的方案总数，对于i-1个装饰物 j，i装饰物价格必须是j的倍数 j*k
+            //需要累加组合数
+            int[][] f = new int[m + 1][n + 1];
+            //第1个装饰物在价格确定后，方案数为
+            for (int j = 1; j <= n; j++) {
+                f[1][j] = 1;
+            }
+            for (int i = 2; i <= m; i++) {
+                for (int j = 1; j <= n; j++) {
+                    for (int k = 1; k * j <= n; k++) {
+                        f[i][j * k] += f[i - 1][j];
+                        f[i][j * k] %= MOD;
+                    }
+                }
+            }
+            int res = 0;
+            for (int j = 1; j <= n; j++) {
+                res += f[m][j];
+                res %= MOD;
+            }
+            System.out.printf("%d", res);
+
+        }
+    }
+
+    //偏爱字母
+    static class _13th {
+        public static void main(String[] args) {
+            Scanner sc = new Scanner(System.in);
+            int n = sc.nextInt();
+            char[] chas = sc.next().toCharArray();
+            int sum = 0, res = 0;
+            for (char c : chas) {
+                if (c == 'E') sum++;
+                if (c == 'F') sum--;
+                res = Math.max(res, sum);
+                sum = Math.max(sum, 0);
+            }
+            System.out.printf("%d", res);
+        }
+    }
 }
