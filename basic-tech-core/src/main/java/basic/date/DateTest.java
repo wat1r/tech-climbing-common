@@ -1,5 +1,7 @@
 package basic.date;
 
+import java.util.Calendar;
+
 /**
  * @Date 2020/6/1
  * @Author Frank Cooper
@@ -9,11 +11,12 @@ public class DateTest {
     static DateTest handler = new DateTest();
 
     public static void main(String[] args) {
-        handler.reshapeDuration(530L);
-        handler.reshapeDuration(-4348L);
-        handler.reshapeDuration(28995L);
-        handler.reshapeDuration(34566621L);
-        handler.reshapeDuration(566621L);
+//        handler.reshapeDuration(530L);
+//        handler.reshapeDuration(-4348L);
+//        handler.reshapeDuration(28995L);
+//        handler.reshapeDuration(34566621L);
+//        handler.reshapeDuration(566621L);
+        handler.test();
 
     }
 
@@ -38,4 +41,25 @@ public class DateTest {
         return sb.toString();
     }
 
+
+    public void test() {
+        Calendar now = Calendar.getInstance();
+//一周第一天是否为星期天
+        boolean isFirstSunday = (now.getFirstDayOfWeek() == Calendar.SUNDAY);
+//获取周几
+        int weekDay = now.get(Calendar.DAY_OF_WEEK);
+//若一周第一天为星期天，则-1
+        if (isFirstSunday) {
+            weekDay = weekDay - 1;
+            if (weekDay == 0) {
+                weekDay = 7;
+            }
+        }
+//打印周几
+        System.out.println(weekDay);
+
+//若当天为2014年10月13日（星期一），则打印输出：1
+//若当天为2014年10月17日（星期五），则打印输出：5
+//若当天为2014年10月19日（星期日），则打印输出：7
+    }
 }
