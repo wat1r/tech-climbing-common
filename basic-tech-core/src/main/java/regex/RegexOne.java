@@ -16,6 +16,9 @@ public class RegexOne {
         for (String str : strs) {
             handler.process(str, pattern);
         }
+        /**
+         * ddd
+         */
     }
 
     public boolean process(String str, Pattern pattern) {
