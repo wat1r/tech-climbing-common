@@ -8,18 +8,32 @@ public class RegexOne {
     static RegexOne handler = new RegexOne();
 
     public static void main(String[] args) {
-        Pattern pattern = Pattern.compile("^(?!(_|-|\\.))([a-zA-Z0-9_-]|(\\.){0,1}).*(?<!(\\.|-|_))");
-//        pattern = Pattern.compile("^[A-Za-z0-9]{1}[A-Za-z0-9_-]*?\\.?[A-Za-z0-9_-]*?[A-Za-z0-9]{1}$");
-//        pattern = Pattern.compile("^(?![^.]*?\\.[^.]*?\\.)[a-zA-Z][a-zA-Z\\d_\\.-]*?(?<!(\\.|-|_))");
-        pattern = Pattern.compile("^(?![\\._-])[a-zA-Z0-9_-]*\\.?[a-zA-Z0-9_-]*?(?<![\\._-])$");
-        String[] strs = {"&a123456888", "a123456888_", "a123456 *", "Ua123456.", "Ua1.23456", "asdf.as.dfa", "as.df.as.dfa", "Ua1_2-3456", "Ua1大23.456"};
-        for (String str : strs) {
-            handler.process(str, pattern);
-        }
+//        Pattern pattern = Pattern.compile("^(?!(_|-|\\.))([a-zA-Z0-9_-]|(\\.){0,1}).*(?<!(\\.|-|_))");
+////        pattern = Pattern.compile("^[A-Za-z0-9]{1}[A-Za-z0-9_-]*?\\.?[A-Za-z0-9_-]*?[A-Za-z0-9]{1}$");
+////        pattern = Pattern.compile("^(?![^.]*?\\.[^.]*?\\.)[a-zA-Z][a-zA-Z\\d_\\.-]*?(?<!(\\.|-|_))");
+//        pattern = Pattern.compile("^(?![\\._-])[a-zA-Z0-9_-]*\\.?[a-zA-Z0-9_-]*?(?<![\\._-])$");
+//        String[] strs = {"&a123456888", "a123456888_", "a123456 *", "Ua123456.", "Ua1.23456", "asdf.as.dfa", "as.df.as.dfa", "Ua1_2-3456", "Ua1大23.456"};
+//        for (String str : strs) {
+//            handler.process(str, pattern);
+//        }
+        System.out.println("dddd");
+        /**
+         * dddd
+         */
+        System.out.println("dddd");
+
+
+    }
+
+    public void removeAnnotation(String src) {
+        String dest = null;
+
+
         /**
          * ddd
          */
     }
+
 
     public boolean process(String str, Pattern pattern) {
         Matcher matcher = pattern.matcher(str);
