@@ -1,5 +1,6 @@
 package serailize.jackson;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
@@ -13,6 +14,11 @@ import java.util.List;
  */
 public class TestJackson {
     public static void main(String[] args) throws IOException {
+        test1();
+
+    }
+
+    private static void test1() throws IOException {
         View v = new View();
 
 
@@ -30,7 +36,14 @@ public class TestJackson {
         System.out.println(s);
 
         System.out.println("-- deserializing --");
-        View view = om.readValue(s, View.class);
-        System.out.println(view);
+//        View view = om.readValue(s, View.class);
+//        System.out.println(view);
+
+//        JsonNode jsonNode = om.readTree();
+//
+//        System.out.printf("");
     }
+
+
+
 }

@@ -1,5 +1,7 @@
 package serailize.jackson;
 
+import lombok.ToString;
+
 import java.util.List;
 
 /**
@@ -7,6 +9,7 @@ import java.util.List;
  * @Author Frank Cooper
  * @Description
  */
+@ToString
 public class View {
     private List<Shape> shapes;
 
