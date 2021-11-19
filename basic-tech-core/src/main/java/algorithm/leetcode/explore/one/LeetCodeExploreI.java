@@ -767,6 +767,23 @@ public class LeetCodeExploreI {
         return res;
     }
 
+
+    public int[] twoSumIII(int[] nums, int target) {
+        int l = 0, r = nums.length - 1;
+        while (l < r) {
+            int t = nums[l] + nums[r];
+            if (t == target) {
+                return new int[]{l + 1, r + 1};
+            } else if (t > target) {
+                r--;
+            } else {
+                l++;
+            }
+        }
+
+        return new int[]{-1, -1};
+    }
+
     /**
      * 18. 四数之和 Medium
      *
