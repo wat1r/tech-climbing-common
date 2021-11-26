@@ -1,7 +1,14 @@
 package serailize.jackson;
 
+import com.alibaba.fastjson.JSON;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.collect.Lists;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.apache.commons.lang3.StringEscapeUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -14,7 +21,12 @@ import java.util.List;
  */
 public class TestJackson {
     public static void main(String[] args) throws IOException {
-        test1();
+//        test1();
+
+//        test2();
+
+        Long id = 210L;
+        System.out.println(id== 210);
 
     }
 
@@ -44,6 +56,40 @@ public class TestJackson {
 //        System.out.printf("");
     }
 
+
+    private static void test2() {
+        List<Person> list = Lists.newArrayList();
+        list.add(new Person("张三", 18));
+        list.add(new Person("张三", 18));
+        list.add(new Person("张三", 18));
+        list.add(new Person("张三         电话的    ", 18));
+        list.add(new Person("张三" +
+                "" +
+                "的的             的的" +
+                " " +
+                "" +
+                "\n" +
+                "这是", 18));
+        list.add(new Person("张三", 18));
+        list.add(new Person("张三", 18));
+        list.add(new Person("张三", 18));
+        String s = JSON.toJSONString(list);
+        String s1 = StringEscapeUtils.unescapeEcmaScript(s);
+        System.out.println(s1);
+        System.out.println("---------------");
+        System.out.println(JSON.toJSONString(list));
+
+
+    }
+
+
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    static class Person {
+        private String name;
+        private Integer age;
+    }
 
 
 }
