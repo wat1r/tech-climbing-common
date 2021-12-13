@@ -21,6 +21,23 @@ public class RegexOne {
          * dddd
          */
         System.out.println("dddd");
+        String src = "requestId=020229163913275810410000,\n" +
+                "connId=10.129.20.175:56517:1519812048,\n" +
+                "sequence=70585059,\n" +
+                "encoding=1,serviceId=52,msgId=2,\n" +
+                "xhead={firstAddr=49.234.16.109:26698,\n" +
+                "        addrs=[49.234.16.109:26698, 10.129.20.175:56517],\n" +
+                "        groupId=0, hostId=0, socId=MEIYU_991000801, spId=0, areaId=0,\n" +
+                "        httpType=5866078, appId=991000801, spsId=, businessType=, lastAddr=10.129.20.175:56517,\n" +
+                "        uniqueId=5CA115E9B68AD0418AB1DFF9A83D53B8\n" +
+                "       },\n" +
+                "body={endPointIp=223.104.1.201, areaId=572, accountType=25, appId=991000801, groupId=101,\n" +
+                "        guid=8418903868447824755, endPointPort=30629, eventtime=2021-12-10 18:39:18,\n" +
+                "        characterId=28431429369071320, userId=2630348279\n" +
+                "        },\n" +
+                "toAddr=null,receivedTime=1639132758104";
+
+        handler.reshape(src);
 
 
     }
@@ -56,5 +73,31 @@ public class RegexOne {
         return false;
     }
 
+
+    public String reshape(String src) {
+        StringBuilder res = new StringBuilder();
+        Pattern pattern = Pattern.compile("(?:([a-zA-Z]+)([={\\[]+))?([a-zA-Z]+)(=)([^=,\\n]+)?[,\\n](\\s*\\},)?");
+        Matcher matcher = pattern.matcher(src);
+
+        while (matcher.find()) {
+            for (int i = 1; i < matcher.groupCount(); i++) {
+                String cur = matcher.group(i);
+                if (cur != null && cur.equals("=")) {
+                    res.append(":");
+                } else if (cur != null && (cur.contains("{"))) {
+                    res.append(cur).append("=\"{");
+                } else if (cur != null && (cur.contains("["))) {
+                    res.append(cur).append("=\"[");
+                } else if (cur != null) {
+                    res.append("\"").append(cur).append("\"");
+                }
+            }
+            res.append(",");
+        }
+        res.deleteCharAt(res.length() - 1);
+        System.out.println(res.toString());
+        return res.toString();
+
+    }
 
 }
