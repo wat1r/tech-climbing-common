@@ -11,6 +11,10 @@ public class LongTest {
         test1();
     }
 
+   private static void test(){
+
+   }
+
     private static void test1() {
         Long a = 10000L;
         Long b = 10000L;

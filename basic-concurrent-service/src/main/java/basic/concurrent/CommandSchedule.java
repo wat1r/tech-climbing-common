@@ -38,6 +38,7 @@ public class CommandSchedule {
                     e.printStackTrace();
                 }
 
+
             }
         }, 0, 30, TimeUnit.MILLISECONDS);
     }
@@ -61,6 +62,7 @@ public class CommandSchedule {
         CommandSchedule schedule = new CommandSchedule();
         try {
             Thread.sleep(1000);
+            System.out.println("test");
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
