@@ -12,7 +12,8 @@ public class LongTest {
     }
 
    private static void test(){
-
+	int  d= 1;
+	
    }
 
     private static void test1() {
