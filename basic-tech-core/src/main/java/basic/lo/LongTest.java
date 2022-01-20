@@ -8,8 +8,13 @@ package basic.lo;
 public class LongTest {
 
     public static void main(String[] args) {
-        test1();
+//        test1();
+        test2();
     }
+
+
+
+
 
    private static void test(){
 	int  d= 1;
@@ -26,5 +31,10 @@ public class LongTest {
         c= 128;
         d = 128;
         System.out.println(c == d);
+    }
+
+    private static void test2(){
+        Integer num = 0;
+        System.out.println(num ==0 );
     }
 }

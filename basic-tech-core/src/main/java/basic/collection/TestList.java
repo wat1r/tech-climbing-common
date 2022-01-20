@@ -14,11 +14,13 @@ public class TestList {
 
     public static void main(String[] args) {
 
-        handler.testOne();
+//        handler.testOne();
+
+        handler.testTwo();
     }
 
 
-    private void testOne(){
+    private void testOne() {
         List<String> list1 = new ArrayList<String>();
         list1.add("1");
         list1.add("2");
@@ -62,9 +64,22 @@ public class TestList {
         List<String> collect4 = list1.stream().distinct().collect(Collectors.toList());
         System.out.println("并集  去重");
         collect4.stream().forEach(System.out::println);
-
-
     }
 
 
+    public void testTwo() {
+        ArrayList<Integer> list = new ArrayList<Integer>();
+        list.add(2);
+        Iterator<Integer> iterator = list.iterator();
+        while (iterator.hasNext()) {
+            Integer integer = iterator.next();
+            if (integer == 2)
+                iterator.remove();   //注意这个地方
+        }
+    }
+
+
+
 }
+
+
