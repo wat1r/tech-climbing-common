@@ -45,7 +45,7 @@ public class RepeativeCaseIV {
     //spring
     public static void main(String[] args) {
         int[] nums = {-1, 0, 1, 2, -1, -4};
-        handler.threeSum(nums);
+//        handler.threeSum(nums);
     }
 //    winter
 
