@@ -20,8 +20,8 @@ public class StreamTest {
     public static void main(String[] args) {
 
 //        testOne();
-//        testTwo();
-        testThree();
+        testTwo();
+//        testThree();
     }
 
 
