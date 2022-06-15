@@ -1,11 +1,11 @@
 package basic.collection;
 
-import com.google.common.collect.Maps;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeMap;
 
 /**
  * @author: wangzhou(Frank Cooper)
@@ -18,7 +18,8 @@ public class MapTest {
 
     public static void main(String[] args) {
 //        handler.testOne();
-        handler.testTwo();
+//        handler.testTwo();
+        handler.testMapKeyOrder();
     }
 
     @Data
@@ -73,5 +74,18 @@ public class MapTest {
         Person p = map.get(1);
         p.setName("Alice_1");
         System.out.println(map.toString());
+    }
+
+
+    private void testMapKeyOrder() {
+        Map<String, String> tm = new HashMap<>();
+        tm.put("fsol_gamesvrstate_glog_cooper_a", "测试2");
+        tm.put("fsol_databaseerror_glog_cooper_a", "测试3");
+        tm.put("swy_databaseerror_glog_cooper_a", "测试3");
+        tm.put("MISC_TABLE", "测试1");
+        tm.put("NISC_TABLE", "测试1");
+        tm.put("SWY_DATABASEERROR_GLOG_COOPER_A", "测试1");
+
+        System.out.println();
     }
 }
