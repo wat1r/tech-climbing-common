@@ -1,7 +1,6 @@
 package algorithm.leetcode.case1;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created by FrankCooper
@@ -43,15 +42,55 @@ public class RepeativeCaseIV {
     }
 
 
-
-
-
-
     //spring
     public static void main(String[] args) {
-
+        int[] nums = {-1, 0, 1, 2, -1, -4};
+//        handler.threeSum(nums);
     }
 //    winter
+
+
+    static class _1st {
+        public static void main(String[] args) {
+            _1st handler = new _1st();
+            Scanner sc = new Scanner(System.in);
+            int n = sc.nextInt(), k = sc.nextInt();
+            String s = sc.next();
+            process(n, k, s);
+        }
+
+
+        private static void process(int n, int k, String s) {
+            Map<Integer, Integer> map = new HashMap<>();
+            map.put(0, 1);
+            List<Integer> list = new ArrayList<>();
+            int res = 0;
+            for (int i = 0; i < n; i++) {
+                list.add(s.charAt(i) - '0');
+                int t = rmod(list, k);
+                if (map.containsKey(t)) res += map.get(t);
+                map.put(t, map.getOrDefault(t, 0) + 1);
+            }
+            System.out.println(res);
+
+        }
+
+        //求模的函数
+        private static int rmod(List<Integer> list, int k) {
+            int res = 0;
+            for (int x : list) {
+                res = res * 10 + x;
+                res %= k;
+            }
+            return res;
+        }
+
+    }
+
+
+//    int calculateDaysBetweenDates(){
+//
+//    }
 
 
 }
