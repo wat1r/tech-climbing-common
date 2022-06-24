@@ -70,7 +70,7 @@ public class RegexOne {
         if (matcher.matches()) {
             System.out.println("dd");
         }
-         return false;
+        return false;
     }
 
 
@@ -99,5 +99,25 @@ public class RegexOne {
         return res.toString();
 
     }
+
+
+    static class _1st {
+        public static void main(String[] args) {
+            _1st handler = new _1st();
+            String line = "hadoop job  -kill  job_1655360675765_172628";
+            handler.getJobId(line);
+        }
+
+        public String getJobId(String line) {
+            String p = "(?<=-kill)(.*)";
+            Matcher matcher = Pattern.compile(p).matcher(line);
+            if (matcher.find()) {
+                return matcher.group(1);
+            }
+            return null;
+        }
+    }
+
+
 
 }

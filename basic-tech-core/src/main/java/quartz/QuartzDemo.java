@@ -16,7 +16,8 @@ public class QuartzDemo {
 //        handler.validate("0 15 10 ? * 6#3");
 //        handler.validate("01 30 16 25 12 ? 2020");
 //        handler.validate("0/15 5-10 9,18 1,15 * ? 2018-2023");
-        handler.validate("*/5 * * * * ?");
+//        handler.validate("*/5 * * * * ?");
+        handler.validate("00 00 08 ? * 1");
 //
 //        HashMap<String,String>map = new HashMap<>();
 //        map.put("a","1");
@@ -63,15 +64,13 @@ public class QuartzDemo {
 
         Date first = cronExpression.getTimeAfter(new Date());
         Date second = cronExpression.getTimeAfter(first);
-
-
-
-
-
-
-
-
         System.out.printf("[%s]--->%s\n", expression, f);
+    }
+
+
+    private void testMonSun() {
+        String expression = "";
+
     }
 
 
