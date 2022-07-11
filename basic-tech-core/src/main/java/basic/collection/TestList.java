@@ -16,7 +16,8 @@ public class TestList {
 
 //        handler.testOne();
 
-        handler.testTwo();
+//        handler.testTwo();
+        handler.testThree();
     }
 
 
@@ -78,6 +79,21 @@ public class TestList {
         }
     }
 
+
+    public void testThree() {
+        Set<String> set1 = new HashSet<>(Arrays.asList("A"));
+        Set<String> set2 = new HashSet<>(Arrays.asList("A", "B"));
+        System.out.println(set1.retainAll(set2));//false
+        System.out.println(set2.retainAll(set1));//true
+        set1 = new HashSet<>(Arrays.asList("A", "B"));
+        set2 = new HashSet<>(Arrays.asList("A", "B"));
+        System.out.println(set1.retainAll(set2));//false
+        System.out.println(set2.retainAll(set1));//false
+        set1 = new HashSet<>(Arrays.asList("A"));
+        set2 = new HashSet<>(Arrays.asList("B"));
+        System.out.println(set1.retainAll(set2));//true
+        System.out.println(set2.retainAll(set1));//true
+    }
 
 
 }

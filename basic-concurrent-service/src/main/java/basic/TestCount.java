@@ -8,8 +8,8 @@ public class TestCount {
 
     public static void main(String[] args) throws InterruptedException {
         TestCount handler = new TestCount();
-//        handler.test();
-        handler.testOne();
+        handler.test();
+//        handler.testOne();
     }
 
     private void testOne() throws InterruptedException {
@@ -85,4 +85,11 @@ public class TestCount {
             }
         }
     }
+
+
+    private void testThree() {
+        CountDownLatch latch = new CountDownLatch(3);
+
+    }
+
 }
