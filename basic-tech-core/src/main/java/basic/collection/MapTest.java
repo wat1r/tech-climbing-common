@@ -4,8 +4,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
-import java.util.TreeMap;
+import java.util.Set;
 
 /**
  * @author: wangzhou(Frank Cooper)
@@ -19,7 +20,8 @@ public class MapTest {
     public static void main(String[] args) {
 //        handler.testOne();
 //        handler.testTwo();
-        handler.testMapKeyOrder();
+//        handler.testMapKeyOrder();
+        handler.testFour();
     }
 
     @Data
@@ -79,13 +81,23 @@ public class MapTest {
 
     private void testMapKeyOrder() {
         Map<String, String> tm = new HashMap<>();
-        tm.put("fsol_gamesvrstate_glog_cooper_a", "测试2");
-        tm.put("fsol_databaseerror_glog_cooper_a", "测试3");
-        tm.put("swy_databaseerror_glog_cooper_a", "测试3");
+        tm.put("dd_cooper_a", "测试2");
+        tm.put("cc_cooper_a", "测试3");
+        tm.put("ee_cooper_a", "测试3");
         tm.put("MISC_TABLE", "测试1");
         tm.put("NISC_TABLE", "测试1");
-        tm.put("SWY_DATABASEERROR_GLOG_COOPER_A", "测试1");
+        tm.put("ff_COOPER_A", "测试1");
 
+        System.out.println();
+    }
+
+    private void testFour() {
+        Map<Integer, Set<Integer>> map = new HashMap<>();
+//        Set<Integer> set = map.getOrDefault(1, new HashSet<>());
+//        set.add(2);
+//        set.add(3);
+//        map.put(1,set);
+        map.putIfAbsent(1,new HashSet<>());
         System.out.println();
     }
 }
