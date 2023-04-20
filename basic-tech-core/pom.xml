@@ -12,7 +12,7 @@
     <artifactId>basic-tech-core</artifactId>
     <packaging>jar</packaging>
 
-    <name>basic-tech-core Maven Webapp</name>
+    <name>basic-tech-core</name>
     <!-- FIXME change it to the project's website -->
     <url>http://www.example.com</url>
 

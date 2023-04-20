@@ -2,15 +2,10 @@
 
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <!--    <parent>-->
-    <!--        <artifactId>tech-climbing-common</artifactId>-->
-    <!--        <groupId>com.cooper</groupId>-->
-    <!--        <version>1.0-SNAPSHOT</version>-->
-    <!--    </parent>-->
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.1.0.RELEASE</version>
+        <version>2.0.0.RELEASE</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
@@ -19,7 +14,7 @@
     <artifactId>tech-geek-component</artifactId>
     <packaging>war</packaging>
 
-    <name>tech-geek-component Maven Webapp</name>
+    <name>tech-geek-component</name>
     <!-- FIXME change it to the project's website -->
     <url>http://www.example.com</url>
 

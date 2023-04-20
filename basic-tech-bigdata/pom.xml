@@ -12,7 +12,7 @@
     <artifactId>basic-tech-bigdata</artifactId>
     <packaging>war</packaging>
 
-    <name>basic-tech-bigdata Maven Webapp</name>
+    <name>basic-tech-bigdata</name>
     <!-- FIXME change it to the project's website -->
     <url>http://www.example.com</url>
 
