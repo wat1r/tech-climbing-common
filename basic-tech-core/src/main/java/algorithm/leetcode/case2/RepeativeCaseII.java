@@ -5482,7 +5482,7 @@ public class RepeativeCaseII {
 //        handler.testTreeMap();
 //
 //        handler.restoreIpAddresses("25525511135");
-        handler.distributeCandies(10, 3);
+//        handler.distributeCandies(10, 3);
 // handler.constructArr(new int[]{1, 2, 3, 4, 5});
 //        handler.missingNumber(new int[]{0, 1, 2, 3, 4, 5, 6, 7, 9});
 //        handler.missingNumber(new int[]{0});
@@ -5490,7 +5490,7 @@ public class RepeativeCaseII {
 //        handler.numDecodings1st("11204");
 //        handler.numDecodings1st("200");
 //        handler.numDecodings1st("170");
-        handler.decodeString("3[a]2[bc]");
+//        handler.decodeString("3[a]2[bc]");
 //        handler.singleNumberII(new int[]{1, 2, 6, 1, 1, 2, 2, 3, 3, 3});
 //        handler.nE
 //        int[] nums = {1, 2, 3};
@@ -5664,6 +5664,7 @@ public class RepeativeCaseII {
 //        handler.findNumberIn2DArray(matrix, 20);
         matrix = new int[][]{{-5}};
 //        handler.findNumberIn2DArray(matrix, -10);
+
     }
 //winter
 
