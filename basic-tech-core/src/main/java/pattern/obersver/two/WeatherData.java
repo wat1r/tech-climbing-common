@@ -1,4 +1,4 @@
-package pattern.obersver;
+package pattern.obersver.two;
 
 import java.util.ArrayList;
 import java.util.List;

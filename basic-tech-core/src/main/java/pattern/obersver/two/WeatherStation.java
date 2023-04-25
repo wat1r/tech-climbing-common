@@ -1,4 +1,4 @@
-package pattern.obersver;
+package pattern.obersver.two;
 
 /**
  * Created by FrankCooper
