@@ -1,7 +1,7 @@
 grammar Calculator;
 
 @header {
-    package com.frankcooper.antlr4.calculator;
+    package com.com.frankcooper.antlr4.calculator;
 }
 
 // stmt是语法树的根

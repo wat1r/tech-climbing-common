@@ -23,6 +23,10 @@
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
         <antlr.version>4.11.1</antlr.version>
+<!--        <antlr.version>4.7</antlr.version>-->
+        <spark.version>2.4.1</spark.version>
+        <scala.version>2.11.8</scala.version>
+        <scala.scope>compile</scala.scope>
     </properties>
 
     <dependencies>
@@ -50,7 +54,7 @@
             <version>2.0.1</version>
         </dependency>
 
-        <!--com.frankcooper.spring statemachine-->
+        <!--com.com.frankcooper.spring statemachine-->
         <dependency>
             <groupId>org.springframework.statemachine</groupId>
             <artifactId>spring-statemachine-core</artifactId>
@@ -81,6 +85,24 @@
             <groupId>org.antlr</groupId>
             <artifactId>antlr4-runtime</artifactId>
             <version>${antlr.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.scala-lang</groupId>
+            <artifactId>scala-library</artifactId>
+            <version>${scala.version}</version>
+        </dependency>
+
+
+        <dependency>
+            <groupId>org.apache.spark</groupId>
+            <artifactId>spark-sql_2.11</artifactId>
+            <version>${spark.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.spark</groupId>
+            <artifactId>spark-catalyst_2.11</artifactId>
+            <version>${spark.version}</version>
         </dependency>
 
 

@@ -13,6 +13,7 @@
         <module>basic-concurrent-service</module>
         <module>basic-tech-bigdata</module>
         <module>tech-geek-component</module>
+        <module>spark-catalyst-explore</module>
     </modules>
 
     <scm>
