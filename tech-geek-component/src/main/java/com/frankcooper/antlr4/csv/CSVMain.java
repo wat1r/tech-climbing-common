@@ -13,6 +13,12 @@ import java.util.Map;
 
 public class CSVMain {
     public static void main(String[] args) throws IOException {
+        /**
+         Details,Month,Amount
+         Mid Bonus,June,"$2,000"
+         ,January,"""zippo"""
+         Total Bonuses,"","$5,000"
+         */
         BufferedReader reader = new BufferedReader(new FileReader("D:\\Dev\\Documents\\GFile\\dev\\antlr4\\csv\\data.csv"));
 
         ANTLRInputStream inputStream = new ANTLRInputStream(reader);
