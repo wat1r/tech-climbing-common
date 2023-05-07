@@ -54,7 +54,7 @@
             <version>2.0.1</version>
         </dependency>
 
-        <!--com.com.frankcooper.spring statemachine-->
+        <!--com.com.com.frankcooper.spring statemachine-->
         <dependency>
             <groupId>org.springframework.statemachine</groupId>
             <artifactId>spring-statemachine-core</artifactId>

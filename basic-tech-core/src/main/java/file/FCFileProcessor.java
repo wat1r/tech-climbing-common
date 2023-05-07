@@ -16,14 +16,14 @@ public class FCFileProcessor {
         processor.removeDuplicateFile();
     }
 
-    ///Users/com.frankcooper/Data/08huawei_mate10/1Pictures/.DS_Store
+    ///Users/com.com.frankcooper/Data/08huawei_mate10/1Pictures/.DS_Store
     //.DS_Store
     //file.getPath()
-    ///Users/com.frankcooper/Data/08huawei_mate10/1Pictures/.DS_Store
+    ///Users/com.com.frankcooper/Data/08huawei_mate10/1Pictures/.DS_Store
 
     private void removeDuplicateFile() {
-//        String path = "/Users/com.frankcooper/Data/08huawei_mate10/1Pictures";
-        String path = "/Users/com.frankcooper/Data/08huawei_mate10";
+//        String path = "/Users/com.com.frankcooper/Data/08huawei_mate10/1Pictures";
+        String path = "/Users/com.com.frankcooper/Data/08huawei_mate10";
         Map<String, String> fileMap = new TreeMap<>();
         Collection<File> files = FileUtils.listFiles(new File(path), null, true);
         int moveFileCount = 0;
