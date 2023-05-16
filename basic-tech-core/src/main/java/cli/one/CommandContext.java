@@ -96,8 +96,8 @@ public class CommandContext {
 	}
 	
 	@SuppressWarnings("unchecked")
-  public List<Object> getArgList() {
-		return (List<Object>)_commandLine.getArgList();
+  public List<String> getArgList() {
+		return (List<String>)_commandLine.getArgList();
 	}
 	
 	public String[] getArgs() {
@@ -262,8 +262,8 @@ public class CommandContext {
 	}
 	
 	@SuppressWarnings("unchecked")
-  public Iterator<Object> iterator() {
-		return (Iterator<Object>)_commandLine.iterator();
+  public Iterator<Option> iterator() {
+		return (Iterator<Option>)_commandLine.iterator();
 	}
 
 	/*
