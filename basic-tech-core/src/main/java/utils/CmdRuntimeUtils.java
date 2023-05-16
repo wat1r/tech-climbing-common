@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.concurrent.*;
 
 /**
@@ -121,4 +122,58 @@ public class CmdRuntimeUtils {
             }
         });
     }
+
+    public boolean exec(String sql) throws Exception {
+
+        Process process = null;
+        String params[] = {"hive", "-e", sql};
+
+        LOGGER.info("hive cli exec -> hive -e \"{}\"", sql);
+        process = Runtime.getRuntime().exec(params);
+
+        ForkJoinPool pool = new ForkJoinPool(2);
+        StringBuilder sb = new StringBuilder();
+        boolean result = false;
+        try (InputStream is = process.getInputStream(); InputStream es = process.getErrorStream()) {
+            pool.execute(() -> {
+                String line;
+                try (BufferedReader br = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8))) {
+                    int i = 0;
+                    while ((line = br.readLine()) != null) {
+                        LOGGER.info("result {} -> {}", i++, line);
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    LOGGER.error("执行失败1, {}", e.getMessage());
+                }
+            });
+
+            pool.execute(() -> {
+                String line;
+                try (BufferedReader br = new BufferedReader(new InputStreamReader(es, StandardCharsets.UTF_8))) {
+                    while ((line = br.readLine()) != null) {
+                        LOGGER.info("{}", line);
+                        try {
+                            LOGGER.info("{}", line);
+                        } catch (Exception cat) {
+                            LOGGER.info("this is a exception:{}", cat.getMessage());
+                            cat.printStackTrace();
+                        }
+                        if (line.contains("FAILED")) {
+                            sb.append(line);
+                        }
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    LOGGER.error("执行失败2, {}", e.getMessage());
+                }
+            });
+            result = process.waitFor() == 0;
+        }
+        if (sb.length() > 0) {
+            throw new Exception(String.format("HiveCli exec error->%s", sb.toString()));
+        }
+        return result;
+    }
+
 }
