@@ -1,5 +1,8 @@
 package basic.collection;
 
+import com.alibaba.fastjson.JSONObject;
+import netscape.javascript.JSObject;
+
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -17,7 +20,8 @@ public class TestList {
 //        handler.testOne();
 
 //        handler.testTwo();
-        handler.testThree();
+//        handler.testThree();
+        handler.testFour();
     }
 
 
@@ -95,6 +99,18 @@ public class TestList {
         System.out.println(set2.retainAll(set1));//true
     }
 
+    public void testFour() {
+        List<Integer> l1 = new ArrayList<Integer>() {{
+            add(1);
+            add(2);
+            add(3);
+        }};
+        List<Integer> l2 = new ArrayList<>(l1);
+        l2.remove(2);
+        System.out.println(JSONObject.toJSONString(l1));
+        System.out.println(JSONObject.toJSONString(l2));
+
+    }
 
 }
 

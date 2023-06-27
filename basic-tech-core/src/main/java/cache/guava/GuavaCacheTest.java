@@ -1,11 +1,15 @@
 package cache.guava;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.google.common.cache.*;
+import com.google.common.collect.Sets;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
+import java.time.Duration;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.ExecutionException;
@@ -28,7 +32,8 @@ public class GuavaCacheTest {
 //        handler.test2();
 //        handler.test3();
 //        handler.test4();
-        handler.test5();
+//        handler.test5();
+        handler.test6();
     }
 
     private void test1() throws ExecutionException {
@@ -167,6 +172,32 @@ public class GuavaCacheTest {
 //        }
 
 
+    }
+
+
+    public void test6() {
+        Cache<Long, Set<Long>> counter = CacheBuilder.newBuilder().expireAfterAccess(1, TimeUnit.HOURS).build();
+        put(counter, 552656521549317888L, 1624L);
+        put(counter, 552656521549317888L, 1625L);
+        put(counter, 552279701758936832L, 1625L);
+        ConcurrentMap<Long, Set<Long>> result = counter.asMap();
+        for (Map.Entry<Long, Set<Long>> e : result.entrySet()) {
+            Set<Long> v = e.getValue();
+            v.remove(1624L);
+        }
+        System.out.println(JSONObject.toJSONString(counter));
+
+
+    }
+
+
+    public synchronized void put(Cache<Long, Set<Long>> counter, Long wfInstanceId, Long batchId) {
+        Set<Long> batchIdSet = counter.getIfPresent(wfInstanceId);
+        if (batchIdSet == null) {
+            batchIdSet = Sets.newHashSet();
+        }
+        batchIdSet.add(batchId);
+        counter.put(wfInstanceId, batchIdSet);
     }
 
     @Data
