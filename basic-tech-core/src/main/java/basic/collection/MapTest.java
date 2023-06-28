@@ -1,12 +1,10 @@
 package basic.collection;
 
+import com.alibaba.fastjson.JSONObject;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * @author: wangzhou(Frank Cooper)
@@ -21,7 +19,8 @@ public class MapTest {
 //        handler.testOne();
 //        handler.testTwo();
 //        handler.testMapKeyOrder();
-        handler.testFour();
+//        handler.testFour();
+        handler.testFive();
     }
 
     @Data
@@ -97,7 +96,38 @@ public class MapTest {
 //        set.add(2);
 //        set.add(3);
 //        map.put(1,set);
-        map.putIfAbsent(1,new HashSet<>());
+        map.putIfAbsent(1, new HashSet<>());
         System.out.println();
+    }
+
+    private void testFive() {
+        Long key = 545403706309347072L;
+        WorkflowInstanceDAGVO dagvo = new WorkflowInstanceDAGVO();
+        List<Map<Long, List<Long>>> adjMapsList = new ArrayList<>();
+
+        Map<Long, List<Long>> m1 = new HashMap<>();
+        List<Long> l1 = new ArrayList<Long>() {{
+            add(545705697296254720L);
+            add(545796293683840768L);
+            add(545584885796964096L);
+            add(545394144227362560L);
+        }};
+        m1.put(key, l1);
+        adjMapsList.add(m1);
+
+        Map<Long, List<Long>> m2 = new HashMap<>();
+        List<Long> l2 = new ArrayList<Long>() {{
+            add(545403704669374208L);
+            add(545766093910705920L);
+        }};
+        m2.put(key, l2);
+        adjMapsList.add(m2);
+
+        for (Map<Long, List<Long>> list : adjMapsList) {
+            dagvo.addAdjMap(list);
+        }
+
+
+        System.out.println(JSONObject.toJSONString(dagvo));
     }
 }
