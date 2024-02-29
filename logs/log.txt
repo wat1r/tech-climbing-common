@@ -1,0 +1,143 @@
+2023-11-16 08:46:36,218 [main] INFO [org.apache.spark.SparkContext] - Running Spark version 2.2.0
+2023-11-16 08:46:36,772 [main] INFO [org.apache.spark.SparkContext] - Submitted application: SparkChargePoints
+2023-11-16 08:46:36,807 [main] INFO [org.apache.spark.SecurityManager] - Changing view acls to: wangzhou
+2023-11-16 08:46:36,808 [main] INFO [org.apache.spark.SecurityManager] - Changing modify acls to: wangzhou
+2023-11-16 08:46:36,809 [main] INFO [org.apache.spark.SecurityManager] - Changing view acls groups to: 
+2023-11-16 08:46:36,809 [main] INFO [org.apache.spark.SecurityManager] - Changing modify acls groups to: 
+2023-11-16 08:46:36,810 [main] INFO [org.apache.spark.SecurityManager] - SecurityManager: authentication disabled; ui acls disabled; users  with view permissions: Set(wangzhou); groups with view permissions: Set(); users  with modify permissions: Set(wangzhou); groups with modify permissions: Set()
+2023-11-16 08:46:37,375 [main] INFO [org.apache.spark.util.Utils] - Successfully started service 'sparkDriver' on port 14145.
+2023-11-16 08:46:37,451 [main] INFO [org.apache.spark.SparkEnv] - Registering MapOutputTracker
+2023-11-16 08:46:37,478 [main] INFO [org.apache.spark.SparkEnv] - Registering BlockManagerMaster
+2023-11-16 08:46:37,483 [main] INFO [org.apache.spark.storage.BlockManagerMasterEndpoint] - Using org.apache.spark.storage.DefaultTopologyMapper for getting topology information
+2023-11-16 08:46:37,483 [main] INFO [org.apache.spark.storage.BlockManagerMasterEndpoint] - BlockManagerMasterEndpoint up
+2023-11-16 08:46:37,499 [main] INFO [org.apache.spark.storage.DiskBlockManager] - Created local directory at C:\Users\wangzhou\AppData\Local\Temp\blockmgr-6b88de6c-576b-4bce-b563-ab1712da53bf
+2023-11-16 08:46:37,534 [main] INFO [org.apache.spark.storage.memory.MemoryStore] - MemoryStore started with capacity 4.1 GB
+2023-11-16 08:46:37,636 [main] INFO [org.apache.spark.SparkEnv] - Registering OutputCommitCoordinator
+2023-11-16 08:46:37,793 [main] INFO [org.spark_project.jetty.util.log] - Logging initialized @2925ms
+2023-11-16 08:46:37,891 [main] INFO [org.spark_project.jetty.server.Server] - jetty-9.3.z-SNAPSHOT
+2023-11-16 08:46:37,923 [main] INFO [org.spark_project.jetty.server.Server] - Started @3055ms
+2023-11-16 08:46:37,943 [main] INFO [org.spark_project.jetty.server.AbstractConnector] - Started ServerConnector@1ba05e38{HTTP/1.1,[http/1.1]}{0.0.0.0:4040}
+2023-11-16 08:46:37,943 [main] INFO [org.apache.spark.util.Utils] - Successfully started service 'SparkUI' on port 4040.
+2023-11-16 08:46:37,965 [main] INFO [org.spark_project.jetty.server.handler.ContextHandler] - Started o.s.j.s.ServletContextHandler@4c0884e8{/jobs,null,AVAILABLE,@Spark}
+2023-11-16 08:46:37,966 [main] INFO [org.spark_project.jetty.server.handler.ContextHandler] - Started o.s.j.s.ServletContextHandler@425d5d46{/jobs/json,null,AVAILABLE,@Spark}
+2023-11-16 08:46:37,967 [main] INFO [org.spark_project.jetty.server.handler.ContextHandler] - Started o.s.j.s.ServletContextHandler@24a298a6{/jobs/job,null,AVAILABLE,@Spark}
+2023-11-16 08:46:37,969 [main] INFO [org.spark_project.jetty.server.handler.ContextHandler] - Started o.s.j.s.ServletContextHandler@4bb8855f{/jobs/job/json,null,AVAILABLE,@Spark}
+2023-11-16 08:46:37,970 [main] INFO [org.spark_project.jetty.server.handler.ContextHandler] - Started o.s.j.s.ServletContextHandler@b9dfc5a{/stages,null,AVAILABLE,@Spark}
+2023-11-16 08:46:37,972 [main] INFO [org.spark_project.jetty.server.handler.ContextHandler] - Started o.s.j.s.ServletContextHandler@426e505c{/stages/json,null,AVAILABLE,@Spark}
+2023-11-16 08:46:37,973 [main] INFO [org.spark_project.jetty.server.handler.ContextHandler] - Started o.s.j.s.ServletContextHandler@1bc425e7{/stages/stage,null,AVAILABLE,@Spark}
+2023-11-16 08:46:37,974 [main] INFO [org.spark_project.jetty.server.handler.ContextHandler] - Started o.s.j.s.ServletContextHandler@6ceb7b5e{/stages/stage/json,null,AVAILABLE,@Spark}
+2023-11-16 08:46:37,976 [main] INFO [org.spark_project.jetty.server.handler.ContextHandler] - Started o.s.j.s.ServletContextHandler@4784013e{/stages/pool,null,AVAILABLE,@Spark}
+2023-11-16 08:46:37,977 [main] INFO [org.spark_project.jetty.server.handler.ContextHandler] - Started o.s.j.s.ServletContextHandler@aa004a0{/stages/pool/json,null,AVAILABLE,@Spark}
+2023-11-16 08:46:37,978 [main] INFO [org.spark_project.jetty.server.handler.ContextHandler] - Started o.s.j.s.ServletContextHandler@1bbae752{/storage,null,AVAILABLE,@Spark}
+2023-11-16 08:46:37,980 [main] INFO [org.spark_project.jetty.server.handler.ContextHandler] - Started o.s.j.s.ServletContextHandler@3a4ba480{/storage/json,null,AVAILABLE,@Spark}
+2023-11-16 08:46:37,981 [main] INFO [org.spark_project.jetty.server.handler.ContextHandler] - Started o.s.j.s.ServletContextHandler@ccd1bc3{/storage/rdd,null,AVAILABLE,@Spark}
+2023-11-16 08:46:37,982 [main] INFO [org.spark_project.jetty.server.handler.ContextHandler] - Started o.s.j.s.ServletContextHandler@4d0b0fd4{/storage/rdd/json,null,AVAILABLE,@Spark}
+2023-11-16 08:46:37,982 [main] INFO [org.spark_project.jetty.server.handler.ContextHandler] - Started o.s.j.s.ServletContextHandler@4a9486c0{/environment,null,AVAILABLE,@Spark}
+2023-11-16 08:46:37,983 [main] INFO [org.spark_project.jetty.server.handler.ContextHandler] - Started o.s.j.s.ServletContextHandler@15923407{/environment/json,null,AVAILABLE,@Spark}
+2023-11-16 08:46:37,984 [main] INFO [org.spark_project.jetty.server.handler.ContextHandler] - Started o.s.j.s.ServletContextHandler@963176{/executors,null,AVAILABLE,@Spark}
+2023-11-16 08:46:37,985 [main] INFO [org.spark_project.jetty.server.handler.ContextHandler] - Started o.s.j.s.ServletContextHandler@67001148{/executors/json,null,AVAILABLE,@Spark}
+2023-11-16 08:46:37,986 [main] INFO [org.spark_project.jetty.server.handler.ContextHandler] - Started o.s.j.s.ServletContextHandler@2032e725{/executors/threadDump,null,AVAILABLE,@Spark}
+2023-11-16 08:46:37,987 [main] INFO [org.spark_project.jetty.server.handler.ContextHandler] - Started o.s.j.s.ServletContextHandler@73a00e09{/executors/threadDump/json,null,AVAILABLE,@Spark}
+2023-11-16 08:46:37,994 [main] INFO [org.spark_project.jetty.server.handler.ContextHandler] - Started o.s.j.s.ServletContextHandler@773c0293{/static,null,AVAILABLE,@Spark}
+2023-11-16 08:46:37,996 [main] INFO [org.spark_project.jetty.server.handler.ContextHandler] - Started o.s.j.s.ServletContextHandler@4cdd2c73{/,null,AVAILABLE,@Spark}
+2023-11-16 08:46:37,998 [main] INFO [org.spark_project.jetty.server.handler.ContextHandler] - Started o.s.j.s.ServletContextHandler@37fdfb05{/api,null,AVAILABLE,@Spark}
+2023-11-16 08:46:37,999 [main] INFO [org.spark_project.jetty.server.handler.ContextHandler] - Started o.s.j.s.ServletContextHandler@41c204a0{/jobs/job/kill,null,AVAILABLE,@Spark}
+2023-11-16 08:46:38,000 [main] INFO [org.spark_project.jetty.server.handler.ContextHandler] - Started o.s.j.s.ServletContextHandler@73ba6fe6{/stages/stage/kill,null,AVAILABLE,@Spark}
+2023-11-16 08:46:38,002 [main] INFO [org.apache.spark.ui.SparkUI] - Bound SparkUI to 0.0.0.0, and started at http://10.246.54.13:4040
+2023-11-16 08:46:38,164 [main] INFO [org.apache.spark.executor.Executor] - Starting executor ID driver on host localhost
+2023-11-16 08:46:38,186 [main] INFO [org.apache.spark.util.Utils] - Successfully started service 'org.apache.spark.network.netty.NettyBlockTransferService' on port 14161.
+2023-11-16 08:46:38,186 [main] INFO [org.apache.spark.network.netty.NettyBlockTransferService] - Server created on 10.246.54.13:14161
+2023-11-16 08:46:38,188 [main] INFO [org.apache.spark.storage.BlockManager] - Using org.apache.spark.storage.RandomBlockReplicationPolicy for block replication policy
+2023-11-16 08:46:38,191 [main] INFO [org.apache.spark.storage.BlockManagerMaster] - Registering BlockManager BlockManagerId(driver, 10.246.54.13, 14161, None)
+2023-11-16 08:46:38,209 [dispatcher-event-loop-10] INFO [org.apache.spark.storage.BlockManagerMasterEndpoint] - Registering block manager 10.246.54.13:14161 with 4.1 GB RAM, BlockManagerId(driver, 10.246.54.13, 14161, None)
+2023-11-16 08:46:38,211 [main] INFO [org.apache.spark.storage.BlockManagerMaster] - Registered BlockManager BlockManagerId(driver, 10.246.54.13, 14161, None)
+2023-11-16 08:46:38,212 [main] INFO [org.apache.spark.storage.BlockManager] - Initialized BlockManager: BlockManagerId(driver, 10.246.54.13, 14161, None)
+2023-11-16 08:46:38,419 [main] INFO [org.spark_project.jetty.server.handler.ContextHandler] - Started o.s.j.s.ServletContextHandler@6b52dd31{/metrics/json,null,AVAILABLE,@Spark}
+2023-11-16 08:46:38,472 [main] INFO [org.apache.spark.sql.internal.SharedState] - Setting hive.metastore.warehouse.dir ('null') to the value of spark.sql.warehouse.dir ('file:/D:/Dev/wat1r/tech-climbing-common/spark-warehouse').
+2023-11-16 08:46:38,473 [main] INFO [org.apache.spark.sql.internal.SharedState] - Warehouse path is 'file:/D:/Dev/wat1r/tech-climbing-common/spark-warehouse'.
+2023-11-16 08:46:38,477 [main] INFO [org.spark_project.jetty.server.handler.ContextHandler] - Started o.s.j.s.ServletContextHandler@7e7f0216{/SQL,null,AVAILABLE,@Spark}
+2023-11-16 08:46:38,478 [main] INFO [org.spark_project.jetty.server.handler.ContextHandler] - Started o.s.j.s.ServletContextHandler@6724cdec{/SQL/json,null,AVAILABLE,@Spark}
+2023-11-16 08:46:38,479 [main] INFO [org.spark_project.jetty.server.handler.ContextHandler] - Started o.s.j.s.ServletContextHandler@35d5ac51{/SQL/execution,null,AVAILABLE,@Spark}
+2023-11-16 08:46:38,479 [main] INFO [org.spark_project.jetty.server.handler.ContextHandler] - Started o.s.j.s.ServletContextHandler@30364216{/SQL/execution/json,null,AVAILABLE,@Spark}
+2023-11-16 08:46:38,481 [main] INFO [org.spark_project.jetty.server.handler.ContextHandler] - Started o.s.j.s.ServletContextHandler@1907874b{/static/sql,null,AVAILABLE,@Spark}
+2023-11-16 08:46:38,982 [main] INFO [org.apache.spark.sql.execution.streaming.state.StateStoreCoordinatorRef] - Registered StateStoreCoordinator endpoint
+2023-11-16 08:46:40,290 [main] INFO [org.apache.spark.sql.execution.datasources.FileSourceStrategy] - Pruning directories with: 
+2023-11-16 08:46:40,291 [main] INFO [org.apache.spark.sql.execution.datasources.FileSourceStrategy] - Post-Scan Filters: (length(trim(value#0)) > 0)
+2023-11-16 08:46:40,292 [main] INFO [org.apache.spark.sql.execution.datasources.FileSourceStrategy] - Output Data Schema: struct<value: string>
+2023-11-16 08:46:40,297 [main] INFO [org.apache.spark.sql.execution.FileSourceScanExec] - Pushed Filters: 
+2023-11-16 08:46:40,643 [main] INFO [org.apache.spark.sql.catalyst.expressions.codegen.CodeGenerator] - Code generated in 126.585 ms
+2023-11-16 08:46:40,777 [main] INFO [org.apache.spark.storage.memory.MemoryStore] - Block broadcast_0 stored as values in memory (estimated size 195.3 KB, free 4.1 GB)
+2023-11-16 08:46:40,819 [main] INFO [org.apache.spark.storage.memory.MemoryStore] - Block broadcast_0_piece0 stored as bytes in memory (estimated size 18.7 KB, free 4.1 GB)
+2023-11-16 08:46:40,820 [dispatcher-event-loop-1] INFO [org.apache.spark.storage.BlockManagerInfo] - Added broadcast_0_piece0 in memory on 10.246.54.13:14161 (size: 18.7 KB, free: 4.1 GB)
+2023-11-16 08:46:40,823 [main] INFO [org.apache.spark.SparkContext] - Created broadcast 0 from csv at SparkChargePoints.java:26
+2023-11-16 08:46:40,830 [main] INFO [org.apache.spark.sql.execution.FileSourceScanExec] - Planning scan with bin packing, max size: 4498673 bytes, open cost is considered as scanning 4194304 bytes.
+2023-11-16 08:46:40,941 [main] INFO [org.apache.spark.SparkContext] - Starting job: csv at SparkChargePoints.java:26
+2023-11-16 08:46:40,956 [dag-scheduler-event-loop] INFO [org.apache.spark.scheduler.DAGScheduler] - Got job 0 (csv at SparkChargePoints.java:26) with 1 output partitions
+2023-11-16 08:46:40,956 [dag-scheduler-event-loop] INFO [org.apache.spark.scheduler.DAGScheduler] - Final stage: ResultStage 0 (csv at SparkChargePoints.java:26)
+2023-11-16 08:46:40,956 [dag-scheduler-event-loop] INFO [org.apache.spark.scheduler.DAGScheduler] - Parents of final stage: List()
+2023-11-16 08:46:40,958 [dag-scheduler-event-loop] INFO [org.apache.spark.scheduler.DAGScheduler] - Missing parents: List()
+2023-11-16 08:46:40,963 [dag-scheduler-event-loop] INFO [org.apache.spark.scheduler.DAGScheduler] - Submitting ResultStage 0 (MapPartitionsRDD[2] at csv at SparkChargePoints.java:26), which has no missing parents
+2023-11-16 08:46:41,001 [dag-scheduler-event-loop] INFO [org.apache.spark.storage.memory.MemoryStore] - Block broadcast_1 stored as values in memory (estimated size 8.2 KB, free 4.1 GB)
+2023-11-16 08:46:41,002 [dag-scheduler-event-loop] INFO [org.apache.spark.storage.memory.MemoryStore] - Block broadcast_1_piece0 stored as bytes in memory (estimated size 4.3 KB, free 4.1 GB)
+2023-11-16 08:46:41,002 [dispatcher-event-loop-2] INFO [org.apache.spark.storage.BlockManagerInfo] - Added broadcast_1_piece0 in memory on 10.246.54.13:14161 (size: 4.3 KB, free: 4.1 GB)
+2023-11-16 08:46:41,003 [dag-scheduler-event-loop] INFO [org.apache.spark.SparkContext] - Created broadcast 1 from broadcast at DAGScheduler.scala:1006
+2023-11-16 08:46:41,014 [dag-scheduler-event-loop] INFO [org.apache.spark.scheduler.DAGScheduler] - Submitting 1 missing tasks from ResultStage 0 (MapPartitionsRDD[2] at csv at SparkChargePoints.java:26) (first 15 tasks are for partitions Vector(0))
+2023-11-16 08:46:41,015 [dag-scheduler-event-loop] INFO [org.apache.spark.scheduler.TaskSchedulerImpl] - Adding task set 0.0 with 1 tasks
+2023-11-16 08:46:41,064 [dispatcher-event-loop-3] INFO [org.apache.spark.scheduler.TaskSetManager] - Starting task 0.0 in stage 0.0 (TID 0, localhost, executor driver, partition 0, PROCESS_LOCAL, 5293 bytes)
+2023-11-16 08:46:41,072 [Executor task launch worker for task 0] INFO [org.apache.spark.executor.Executor] - Running task 0.0 in stage 0.0 (TID 0)
+2023-11-16 08:46:41,121 [Executor task launch worker for task 0] INFO [org.apache.spark.sql.execution.datasources.FileScanRDD] - Reading File path: file:///D:/Dev/Data/input/electric-chargepoints-2017.csv, range: 0-304369, partition values: [empty row]
+2023-11-16 08:46:41,133 [Executor task launch worker for task 0] INFO [org.apache.spark.sql.catalyst.expressions.codegen.CodeGenerator] - Code generated in 7.1046 ms
+2023-11-16 08:46:41,161 [Executor task launch worker for task 0] INFO [org.apache.spark.executor.Executor] - Finished task 0.0 in stage 0.0 (TID 0). 1271 bytes result sent to driver
+2023-11-16 08:46:41,167 [task-result-getter-0] INFO [org.apache.spark.scheduler.TaskSetManager] - Finished task 0.0 in stage 0.0 (TID 0) in 121 ms on localhost (executor driver) (1/1)
+2023-11-16 08:46:41,169 [task-result-getter-0] INFO [org.apache.spark.scheduler.TaskSchedulerImpl] - Removed TaskSet 0.0, whose tasks have all completed, from pool 
+2023-11-16 08:46:41,172 [dag-scheduler-event-loop] INFO [org.apache.spark.scheduler.DAGScheduler] - ResultStage 0 (csv at SparkChargePoints.java:26) finished in 0.139 s
+2023-11-16 08:46:41,176 [main] INFO [org.apache.spark.scheduler.DAGScheduler] - Job 0 finished: csv at SparkChargePoints.java:26, took 0.235481 s
+2023-11-16 08:46:41,191 [main] INFO [org.apache.spark.sql.catalyst.expressions.codegen.CodeGenerator] - Code generated in 7.385 ms
+2023-11-16 08:46:41,222 [main] INFO [org.apache.spark.sql.execution.datasources.FileSourceStrategy] - Pruning directories with: 
+2023-11-16 08:46:41,222 [main] INFO [org.apache.spark.sql.execution.datasources.FileSourceStrategy] - Post-Scan Filters: 
+2023-11-16 08:46:41,223 [main] INFO [org.apache.spark.sql.execution.datasources.FileSourceStrategy] - Output Data Schema: struct<value: string>
+2023-11-16 08:46:41,223 [main] INFO [org.apache.spark.sql.execution.FileSourceScanExec] - Pushed Filters: 
+2023-11-16 08:46:41,230 [main] INFO [org.apache.spark.sql.catalyst.expressions.codegen.CodeGenerator] - Code generated in 4.7887 ms
+2023-11-16 08:46:41,234 [main] INFO [org.apache.spark.storage.memory.MemoryStore] - Block broadcast_2 stored as values in memory (estimated size 195.3 KB, free 4.1 GB)
+2023-11-16 08:46:41,243 [main] INFO [org.apache.spark.storage.memory.MemoryStore] - Block broadcast_2_piece0 stored as bytes in memory (estimated size 18.7 KB, free 4.1 GB)
+2023-11-16 08:46:41,244 [dispatcher-event-loop-6] INFO [org.apache.spark.storage.BlockManagerInfo] - Added broadcast_2_piece0 in memory on 10.246.54.13:14161 (size: 18.7 KB, free: 4.1 GB)
+2023-11-16 08:46:41,245 [main] INFO [org.apache.spark.SparkContext] - Created broadcast 2 from csv at SparkChargePoints.java:26
+2023-11-16 08:46:41,245 [main] INFO [org.apache.spark.sql.execution.FileSourceScanExec] - Planning scan with bin packing, max size: 4498673 bytes, open cost is considered as scanning 4194304 bytes.
+2023-11-16 08:46:43,485 [main] INFO [org.apache.spark.sql.execution.datasources.FileSourceStrategy] - Pruning directories with: 
+2023-11-16 08:46:43,486 [main] INFO [org.apache.spark.sql.execution.datasources.FileSourceStrategy] - Post-Scan Filters: 
+2023-11-16 08:46:43,489 [main] INFO [org.apache.spark.sql.execution.datasources.FileSourceStrategy] - Output Data Schema: struct<_c0: string, _c1: string, _c2: string, _c3: string, _c4: string ... 5 more fields>
+2023-11-16 08:46:43,489 [main] INFO [org.apache.spark.sql.execution.FileSourceScanExec] - Pushed Filters: 
+2023-11-16 08:48:39,992 [dispatcher-event-loop-7] WARN [org.apache.spark.HeartbeatReceiver] - Removing executor driver with no recent heartbeats: 121545 ms exceeds timeout 120000 ms
+2023-11-16 08:48:40,001 [Thread-2] INFO [org.apache.spark.SparkContext] - Invoking stop() from shutdown hook
+2023-11-16 08:48:40,002 [dispatcher-event-loop-7] ERROR [org.apache.spark.scheduler.TaskSchedulerImpl] - Lost executor driver on localhost: Executor heartbeat timed out after 121545 ms
+2023-11-16 08:48:40,016 [dag-scheduler-event-loop] INFO [org.apache.spark.scheduler.DAGScheduler] - Executor lost: driver (epoch 0)
+2023-11-16 08:48:40,025 [driver-heartbeater] INFO [org.apache.spark.executor.Executor] - Told to re-register on heartbeat
+2023-11-16 08:48:40,025 [driver-heartbeater] INFO [org.apache.spark.storage.BlockManager] - BlockManager BlockManagerId(driver, 10.246.54.13, 14161, None) re-registering with master
+2023-11-16 08:48:40,025 [driver-heartbeater] INFO [org.apache.spark.storage.BlockManagerMaster] - Registering BlockManager BlockManagerId(driver, 10.246.54.13, 14161, None)
+2023-11-16 08:48:40,027 [Thread-2] INFO [org.spark_project.jetty.server.AbstractConnector] - Stopped Spark@1ba05e38{HTTP/1.1,[http/1.1]}{0.0.0.0:4040}
+2023-11-16 08:48:40,034 [Thread-2] INFO [org.apache.spark.ui.SparkUI] - Stopped Spark web UI at http://10.246.54.13:4040
+2023-11-16 08:48:40,036 [kill-executor-thread] WARN [org.apache.spark.SparkContext] - Killing executors is only supported in coarse-grained mode
+2023-11-16 08:48:40,048 [dispatcher-event-loop-11] INFO [org.apache.spark.storage.BlockManagerMasterEndpoint] - Trying to remove executor driver from BlockManagerMaster.
+2023-11-16 08:48:40,050 [dispatcher-event-loop-11] WARN [org.apache.spark.storage.BlockManagerMasterEndpoint] - No more replicas available for broadcast_2_piece0 !
+2023-11-16 08:48:40,050 [dispatcher-event-loop-11] WARN [org.apache.spark.storage.BlockManagerMasterEndpoint] - No more replicas available for broadcast_0_piece0 !
+2023-11-16 08:48:40,050 [dispatcher-event-loop-11] WARN [org.apache.spark.storage.BlockManagerMasterEndpoint] - No more replicas available for broadcast_1_piece0 !
+2023-11-16 08:48:40,055 [dispatcher-event-loop-11] ERROR [org.apache.spark.scheduler.LiveListenerBus] - SparkListenerBus has already stopped! Dropping event SparkListenerBlockManagerRemoved(1700095720050,BlockManagerId(driver, 10.246.54.13, 14161, None))
+2023-11-16 08:48:40,066 [dispatcher-event-loop-11] INFO [org.apache.spark.storage.BlockManagerMasterEndpoint] - Removing block manager BlockManagerId(driver, 10.246.54.13, 14161, None)
+2023-11-16 08:48:40,066 [dispatcher-event-loop-11] INFO [org.apache.spark.storage.BlockManagerMasterEndpoint] - Registering block manager 10.246.54.13:14161 with 4.1 GB RAM, BlockManagerId(driver, 10.246.54.13, 14161, None)
+2023-11-16 08:48:40,066 [dispatcher-event-loop-11] ERROR [org.apache.spark.scheduler.LiveListenerBus] - SparkListenerBus has already stopped! Dropping event SparkListenerBlockManagerAdded(1700095720066,BlockManagerId(driver, 10.246.54.13, 14161, None),4362495590,Some(4362495590),Some(0))
+2023-11-16 08:48:40,066 [driver-heartbeater] INFO [org.apache.spark.storage.BlockManagerMaster] - Registered BlockManager BlockManagerId(driver, 10.246.54.13, 14161, None)
+2023-11-16 08:48:40,066 [driver-heartbeater] INFO [org.apache.spark.storage.BlockManager] - Reporting 6 blocks to the master.
+2023-11-16 08:48:40,066 [dispatcher-event-loop-3] INFO [org.apache.spark.MapOutputTrackerMasterEndpoint] - MapOutputTrackerMasterEndpoint stopped!
+2023-11-16 08:48:40,072 [dispatcher-event-loop-5] INFO [org.apache.spark.storage.BlockManagerInfo] - Added broadcast_0_piece0 in memory on 10.246.54.13:14161 (size: 18.7 KB, free: 4.1 GB)
+2023-11-16 08:48:40,072 [dispatcher-event-loop-5] ERROR [org.apache.spark.scheduler.LiveListenerBus] - SparkListenerBus has already stopped! Dropping event SparkListenerBlockUpdated(BlockUpdatedInfo(BlockManagerId(driver, 10.246.54.13, 14161, None),broadcast_0_piece0,StorageLevel(memory, 1 replicas),19111,0))
+2023-11-16 08:48:40,073 [dispatcher-event-loop-6] INFO [org.apache.spark.storage.BlockManagerInfo] - Added broadcast_2_piece0 in memory on 10.246.54.13:14161 (size: 18.7 KB, free: 4.1 GB)
+2023-11-16 08:48:40,073 [dispatcher-event-loop-6] ERROR [org.apache.spark.scheduler.LiveListenerBus] - SparkListenerBus has already stopped! Dropping event SparkListenerBlockUpdated(BlockUpdatedInfo(BlockManagerId(driver, 10.246.54.13, 14161, None),broadcast_2_piece0,StorageLevel(memory, 1 replicas),19111,0))
+2023-11-16 08:48:40,074 [dispatcher-event-loop-8] INFO [org.apache.spark.storage.BlockManagerInfo] - Added broadcast_1_piece0 in memory on 10.246.54.13:14161 (size: 4.3 KB, free: 4.1 GB)
+2023-11-16 08:48:40,074 [dispatcher-event-loop-8] ERROR [org.apache.spark.scheduler.LiveListenerBus] - SparkListenerBus has already stopped! Dropping event SparkListenerBlockUpdated(BlockUpdatedInfo(BlockManagerId(driver, 10.246.54.13, 14161, None),broadcast_1_piece0,StorageLevel(memory, 1 replicas),4375,0))
+2023-11-16 08:48:40,078 [Thread-2] INFO [org.apache.spark.storage.memory.MemoryStore] - MemoryStore cleared
+2023-11-16 08:48:40,079 [Thread-2] INFO [org.apache.spark.storage.BlockManager] - BlockManager stopped
+2023-11-16 08:48:40,099 [Thread-2] INFO [org.apache.spark.storage.BlockManagerMaster] - BlockManagerMaster stopped
+2023-11-16 08:48:40,101 [dispatcher-event-loop-0] INFO [org.apache.spark.scheduler.OutputCommitCoordinator$OutputCommitCoordinatorEndpoint] - OutputCommitCoordinator stopped!
+2023-11-16 08:48:40,103 [Thread-2] INFO [org.apache.spark.SparkContext] - Successfully stopped SparkContext
+2023-11-16 08:48:40,103 [Thread-2] INFO [org.apache.spark.util.ShutdownHookManager] - Shutdown hook called
+2023-11-16 08:48:40,104 [Thread-2] INFO [org.apache.spark.util.ShutdownHookManager] - Deleting directory C:\Users\wangzhou\AppData\Local\Temp\spark-22f26224-945d-47e9-a9e7-b612f447240e

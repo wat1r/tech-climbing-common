@@ -21,7 +21,8 @@ public class TestList {
 
 //        handler.testTwo();
 //        handler.testThree();
-        handler.testFour();
+//        handler.testFour();
+        handler.testFive();
     }
 
 
@@ -109,6 +110,29 @@ public class TestList {
         l2.remove(2);
         System.out.println(JSONObject.toJSONString(l1));
         System.out.println(JSONObject.toJSONString(l2));
+
+    }
+
+    public void testFive() {
+        List<String> sourceList = new ArrayList<String>() {{
+            add("H");
+            add("O");
+            add("L");
+            add("L");
+            add("I");
+            add("S");
+        }};
+
+        List subList = sourceList.subList(2, 5);
+
+        System.out.println("sourceList ： " + sourceList);
+        System.out.println("sourceList.subList(2, 5) 得到List ：");
+        System.out.println("subList ： " + subList);
+
+        subList.set(1, "666");
+
+        System.out.println("subList.set(3,666) 得到List ：");
+        System.out.println("subList ： " + subList);
 
     }
 
