@@ -2,6 +2,9 @@ package basic;
 
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * @Date 2020/9/8
  * @Author Frank Cooper
@@ -15,7 +18,8 @@ public class BasicTestOne {
 
     public static void main(String[] args) {
 //        handler.testOne();
-        handler.testStrip();
+//        handler.testStrip();
+        handler.testSubList();
     }
 
 
@@ -35,5 +39,22 @@ public class BasicTestOne {
         System.out.printf("%s\n", unit);
     }
 
+
+    private void testSubList() {
+        List<String> parentList = new ArrayList<String>();
+
+        for (int i = 0; i < 5; i++) {
+            parentList.add(String.valueOf(i));
+        }
+
+        List<String> subList = parentList.subList(1, 3);
+        for (String s : subList) {
+            System.out.println(s);//output: 1, 2
+        }
+        subList.clear();
+
+        System.out.println(parentList.size());//output: 3
+//        List<String> subList = parentList.subList(1, 3);
+    }
 
 }
