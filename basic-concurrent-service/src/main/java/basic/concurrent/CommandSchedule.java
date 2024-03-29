@@ -2,6 +2,10 @@ package basic.concurrent;
 
 import com.google.common.base.Stopwatch;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.concurrent.*;
 
 
@@ -60,16 +64,57 @@ public class CommandSchedule {
 //        Stopwatch stopwatch
 
         CommandSchedule schedule = new CommandSchedule();
+//        try {
+//            Thread.sleep(1000);
+//            System.out.println("test");
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
+//        for (int i = 0; i < 10; i++) {
+//            schedule.postQueue("");
+//        }
+        executeEightAtNightPerDay();
+    }
+
+
+    /**
+     * 每天晚上8点执行一次
+     * 每天定时安排任务进行执行
+     */
+    public static void executeEightAtNightPerDay() {
+        ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
+        long oneDay = 24 * 60 * 60 * 1000;
+        long initDelay = getTimeMillis("15:08:00") - System.currentTimeMillis();
+        initDelay = initDelay > 0 ? initDelay : oneDay + initDelay;
+
+        executor.scheduleAtFixedRate(
+                new EchoServer(),
+                initDelay,
+                oneDay,
+                TimeUnit.MILLISECONDS);
+    }
+
+
+    /**
+     * 获取指定时间对应的毫秒数
+     *
+     * @param time "HH:mm:ss"
+     * @return
+     */
+    private static long getTimeMillis(String time) {
         try {
-            Thread.sleep(1000);
-            System.out.println("test");
-        } catch (InterruptedException e) {
+            DateFormat dateFormat = new SimpleDateFormat("yy-MM-dd HH:mm:ss");
+            DateFormat dayFormat = new SimpleDateFormat("yy-MM-dd");
+            Date curDate = dateFormat.parse(dayFormat.format(new Date()) + " " + time);
+            return curDate.getTime();
+        } catch (ParseException e) {
             e.printStackTrace();
         }
-        for (int i = 0; i < 10; i++) {
-            schedule.postQueue("");
-        }
+        return 0;
     }
+
+
+
 
 
 }
