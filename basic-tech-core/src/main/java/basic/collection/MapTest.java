@@ -20,7 +20,8 @@ public class MapTest {
 //        handler.testTwo();
 //        handler.testMapKeyOrder();
 //        handler.testFour();
-        handler.testFive();
+//        handler.testFive();
+        handler.testSix();
     }
 
     @Data
@@ -129,5 +130,31 @@ public class MapTest {
 
 
         System.out.println(JSONObject.toJSONString(dagvo));
+    }
+
+
+    public void testSix() {
+        first:
+        for (int i = 0; i < 5; i++) { // 第一层循环
+            System.out.println("Outer loop: " + i);
+            second:
+            for (int j = 0; j < 5; j++) { // 第二层循环
+                System.out.println("Middle loop: " + j);
+                third:
+                for (int k = 0; k < 5; k++) { // 第三层循环
+                    if (k == 1) {
+                        System.out.println("third loop: " + k);
+                        break second;
+                    }
+
+                }
+
+            }
+            System.out.println();
+
+            // 重置标志，以便下次外层循环迭代
+        }
+
+        System.out.println("Exited all loops");
     }
 }
