@@ -84,7 +84,7 @@ public class CommandSchedule {
     public static void executeEightAtNightPerDay() {
         ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
         long oneDay = 24 * 60 * 60 * 1000;
-        long initDelay = getTimeMillis("15:08:00") - System.currentTimeMillis();
+        long initDelay = getTimeMillis("11:01:00") - System.currentTimeMillis();
         initDelay = initDelay > 0 ? initDelay : oneDay + initDelay;
 
         executor.scheduleAtFixedRate(

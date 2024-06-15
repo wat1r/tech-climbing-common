@@ -19,7 +19,12 @@ public class BasicTestOne {
     public static void main(String[] args) {
 //        handler.testOne();
 //        handler.testStrip();
-        handler.testSubList();
+//        handler.testSubList();
+
+
+        boolean aTrue = Boolean.parseBoolean("true");
+
+        System.out.println();
     }
 
 

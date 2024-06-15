@@ -28,6 +28,8 @@ public class JsqlParserDemo {
     public static void main(String[] args) throws JSQLParserException {
 //        handler.testOne();
         handler.testTwo();
+
+
     }
 
 
