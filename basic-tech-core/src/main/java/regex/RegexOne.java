@@ -2,10 +2,7 @@ package regex;
 
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -175,6 +172,51 @@ public class RegexOne {
                 return !StringUtils.isEmpty(matcher.group(1)) ? matcher.group(1) : (matcher.groupCount() >= 2 ? matcher.group(2) : input);
             }
             return input;
+        }
+    }
+
+    static class _4th {
+        public static void main(String[] args) {
+            String input = "SELECT aes_de(nvl(b.mobile_account,b.mobile), 'slpLO4$^VHuEMMA$'), a.user_id, a.deposit_amount,aes_de('xzxzxzsasca', 'slpLO4$^VHuEMMA$') b.snda_id FROM (SELECT user_id, sum(deposit_amount) deposit_amount FROM dw.mobile_app_deposit_mid WHERE part_date >= '2019-06-20' AND part_date <= '2024-06-21' AND deposit_time < '2024-06-21 10:08:00' AND game_id = 791000287 GROUP BY user_id) aes_de(nvl(b.mobile_account,b.mobile), 'slpLO4xxx^VHuEMMA$'), a LEFT JOIN (SELECT * FROM dw.pt_account_mid WHERE part_date = '2024-06-21' AND mid IS NOT NULL) b ON a.user_id = b.mid WHERE b.snda_id IS NOT NULL LIMIT 10000000";
+
+            // 正则表达式：匹配aes_de函数中的秘钥
+            String regex = "aes_de\\(.*?'(.*?)'.*?\\)";
+
+            Pattern pattern = Pattern.compile(regex, Pattern.DOTALL);
+            Matcher matcher = pattern.matcher(input);
+
+            while (matcher.find()) {
+                for (int i = 0; i < matcher.groupCount(); i++) {
+                    System.out.println("Found key: " + matcher.group(1));
+                }
+
+                // 打印找到的秘钥
+            }
+        }
+    }
+
+    static class _5th {
+        public static void main(String[] args) {
+            String s = "usr/java/jdk1.8.0_60/bin/java -cp dw-hive2hbase-cdh5-0.0.2.jar com.sdo.hiveops.HiveShellGetData 693816617246656448 20240716140131 hive set mapreduce.map.java.opts=-Djava.net.preferIPv4Stack=true -Xmx2500m -XX:+UseG1GC;set mapreduce.map.memory.mb=3072;insert overwrite directory '/user/hive/warehouse/dw.db/ff14_stage_end_oldhbaseapi/sequenceTmp/part_date=2024-07-16_693816617246656448' row format delimited fields terminated by '\\t' select last_end_time,territory_type,stage_type,stage_index,map_name,territory_name,end_time,character_id,area_id,event_index,result,start_time,event_type,event_id,group_id,map_id,elapsed_time,character_name_str,next_start_time,territory_index,territory_id from dw.ff14_stage_end_mid where part_date='${date}' hbase ff14_stage_end_oldhbaseapi(last_end_time,territory_type,stage_type,stage_index,map_name,territory_name,end_time,character_id,area_id,event_index,result,start_time,event_type,event_id,group_id,map_id,elapsed_time,character_name_str,next_start_time,territory_index,territory_id)";
+            System.out.println(s.substring(0, 10000));
+        }
+    }
+
+    static class _6th {
+        public static void main(String[] args) {
+            tableManualGrading();
+        }
+
+        public static Integer tableManualGrading() {
+            Integer tableManualGrading = 5;
+            tableManualGrading = set(tableManualGrading);
+            System.out.println(tableManualGrading);
+            return tableManualGrading;
+        }
+
+        public static Integer set(Integer tableManualGrading) {
+            tableManualGrading = Math.min(tableManualGrading, 1);
+            return tableManualGrading;
         }
     }
 
